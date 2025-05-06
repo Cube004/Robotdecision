@@ -37,7 +37,7 @@ namespace thread_pool{
                             cv.wait(lock, [this] { return stop || !tasks.empty(); });
                             if (stop) return;
                             task = std::move(tasks.front());
-                            tasks.erase(tasks.begin());
+                            tasks.pop_front();
                             func = task.func;
                         }
                         if (task.loop && get_current_time() - task.last_time > task.interval) func(); 
@@ -94,7 +94,7 @@ namespace thread_pool{
 
     private:
         std::vector<std::thread> workers;
-        std::vector<Task> tasks;
+        std::deque<Task> tasks;
         std::mutex queue_mutex;
         std::condition_variable cv;
         bool stop;

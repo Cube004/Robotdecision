@@ -1,16 +1,20 @@
 import { ref, watch } from 'vue';
-import { Node } from '@/types/Node';
+import { Node , type NodeGroup} from '@/types/Node';
 import { Edge } from '@/types/Edge';
 import { Point } from '@/types/Point';
+import { type Area } from '@/types/Area';
 
 export const activeToolId = ref<string>('cursor');
 
 
-// ----------------------------节点设置----------------------------
+// ----------------------------对象管理----------------------------
 export const nodes = ref<Node[]>([]);
 export const edges = ref<Edge[]>([]);
 export const points = ref<Point[]>([]);
-// ----------------------------节点设置----------------------------
+export const areas = ref<Area[]>([]);
+export const NodeGroups = ref<NodeGroup[]>([]);
+// ----------------------------对象管理----------------------------
+
 
 // ----------------------------地图设置----------------------------
 export const mapWidth = ref(28);
@@ -110,3 +114,9 @@ watch(points, (newVal) => {
 document.addEventListener('contextmenu', function(event) {
   event.preventDefault(); // 阻止默认行为,鼠标右键被屏蔽
 });
+
+export function showError(message: string) {
+  window.dispatchEvent(new CustomEvent('custom-error', {
+    detail: { message: message }
+  }));
+}

@@ -31,6 +31,7 @@
         @mouseover="() => handleEdgeHover(edge, true)"
         @mouseleave="() => handleEdgeHover(edge, false)"
         :class="{ 'hovered': hoveredEdgeId === edge.id.value }"
+        style="z-index: -5;"
       />
 
       <!-- 为连接线添加透明但更宽的路径用于更容易点击 -->
@@ -39,7 +40,7 @@
         stroke="transparent"
         stroke-width="15"
         fill="none"
-        style="pointer-events: all; cursor: pointer;"
+        style="pointer-events: all; cursor: pointer; z-index: 10;"
         @click="(e) => handleEdgeClick(edge, e)"
         @mouseover="() => handleEdgeHover(edge, true)"
         @mouseleave="() => handleEdgeHover(edge, false)"

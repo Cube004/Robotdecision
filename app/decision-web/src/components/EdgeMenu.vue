@@ -221,7 +221,7 @@ const emit = defineEmits(['update:visible', 'edge-updated', 'close']);
 
 // 响应式状态
 const selectedEdge = computed<Edge | null>(() => {
-  if (!props.selectedEdgeId) return null;
+  if (props.selectedEdgeId === null) return null;
   return edges.value.find(edge => edge.id.value === props.selectedEdgeId) || null;
 });
 

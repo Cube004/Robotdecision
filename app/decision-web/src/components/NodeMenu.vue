@@ -117,10 +117,15 @@
               <div class="setting-card radio-row" v-if="selectedNode">
                 <label>节点类型</label>
                 <div class="radio-buttons">
-                  <label v-if="selectedNode.taskConfig.nodeType == 'task'"
+                  <label v-if="selectedNode.taskConfig.nodeType !== 'root'"
                   class="radio-button" :class="{ active: selectedNode.taskConfig.nodeType === 'task' }">
                     <input type="radio" v-model="selectedNode.taskConfig.nodeType" value="task" @change="updateNodeType" />
                     <span>任务</span>
+                  </label>
+                  <label v-if="selectedNode.taskConfig.nodeType !== 'root'"
+                  class="radio-button" :class="{ active: selectedNode.taskConfig.nodeType === 'branch' }">
+                    <input type="radio" v-model="selectedNode.taskConfig.nodeType" value="branch" @change="updateNodeType" />
+                    <span>分支</span>
                   </label>
                   <label v-if="selectedNode.taskConfig.nodeType == 'root'"
                   class="radio-button" :class="{ active: selectedNode.taskConfig.nodeType === 'root' }
@@ -142,9 +147,9 @@
                     <input type="radio" v-model="selectedNode.taskConfig.mode" value='Stay' @change="updateNodeMode" />
                     <span>原地停留</span>
                   </label>
-                  <label class="radio-button" :class="{ active: selectedNode.taskConfig.mode === Mode.Spin }">
-                    <input type="radio" v-model="selectedNode.taskConfig.mode" value='Spin' @change="updateNodeMode" />
-                    <span>修改旋转速度</span>
+                  <label class="radio-button" :class="{ active: selectedNode.taskConfig.mode === Mode.Limit }">
+                    <input type="radio" v-model="selectedNode.taskConfig.mode" value='Limit' @change="updateNodeMode" />
+                    <span>限制速度</span>
                   </label>
                 </div>
               </div>
@@ -167,18 +172,25 @@
                 </select>
               </div>
 
-              <div class="setting-card" v-if="selectedNode.taskConfig.mode === Mode.Spin">
-                <label for="spin-speed">旋转速度</label>
+              <div class="setting-card" v-if="selectedNode.taskConfig.mode === Mode.Limit">
+                <label for="limit-spin-speed">最大旋转速度</label>
                 <div class="slider-control">
-                  <input type="range" id="spin-speed" v-model.number="spinSpeed" min="0" max="100" @input="updateSpinSpeed" />
+                  <input type="range" id="limit-spin-speed" v-model.number="selectedNode.taskConfig.spin" min="0" max="10" step="0.1"/>
                   <span class="slider-value">{{ (selectedNode.taskConfig.spin ? selectedNode.taskConfig.spin : 0).toFixed(1) }} 弧度/秒</span>
                 </div>
               </div>
 
+              <div class="setting-card" v-if="selectedNode.taskConfig.mode === Mode.Limit">
+                <label for="limit-linear-speed">最大线速度</label>
+                <div class="slider-control">
+                  <input type="range" id="limit-linear-speed" v-model.number="selectedNode.taskConfig.linear" min="0" max="10" step="0.1"/>
+                  <span class="slider-value">{{ (selectedNode.taskConfig.linear ? selectedNode.taskConfig.linear : 0).toFixed(1) }} 米/秒</span>
+                </div>
+              </div>
 
             </div>
 
-            <!-- 新增：优先级选项卡 -->
+            <!-- 优先级选项卡 -->
             <div v-if="activeTab === 3" class="tab-pane edges-tab">
               <div class="setting-card">
                 <div class="edges-header">
@@ -248,8 +260,8 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 import { Node } from '@/types/Node';
-import { nodes as nodeList, points as waypoints } from '@/types/Manger';
-import { Mode } from '@/types/NodeBase';
+import { nodes as nodeList, points as waypoints, showError } from '@/types/Manger';
+import { Mode, NodeType } from '@/types/NodeBase';
 import { Edge } from '@/types/EdgeBase';
 import draggable from 'vuedraggable';
 
@@ -278,11 +290,12 @@ const nodeEdges = ref<Edge[]>([]);
 // 相关表单数据
 const iconSvgPath = ref('');
 const iconColor = ref('#3B82F6');
-const spinSpeed = ref(0);
-
+// const spinSpeed = ref(0);
+// const linear = ref(0);
 // 选项卡控制
 const activeTab = ref(0);
-const tabs = [
+const tabs = ref<{ label: string }[]>([]);
+const AllTabs = [
   { label: '外观' },
   { label: '图标' },
   { label: '属性' },
@@ -294,6 +307,7 @@ const tabs = [
 watch(() => selectedNode.value, (newNode) => {
   if (newNode) {
     // 初始化表单数据
+    activeTab.value = 0;
     iconSvgPath.value = newNode.icon?.svgPath || '';
     iconColor.value = newNode.icon?.bgColor || '#3B82F6';
     // 初始化边缘数据
@@ -302,6 +316,11 @@ watch(() => selectedNode.value, (newNode) => {
       console.log(newNode.edges);
     } else {
       nodeEdges.value = [];
+    }
+    if (newNode.taskConfig.nodeType === NodeType.Task) {
+      tabs.value = AllTabs.slice(0, 3);
+    } else {
+      tabs.value = AllTabs;
     }
   }
 }, { immediate: true });
@@ -348,6 +367,13 @@ const updateIconColor = () => {
 
 const updateNodeType = () => {
   if (!selectedNode.value) return;
+  if (selectedNode.value.taskConfig.nodeType === 'task') {
+    if (selectedNode.value.edges.length > 0) {
+      selectedNode.value.taskConfig.nodeType = NodeType.Branch;
+      showError('任务节点不能有连接的边');
+    }
+  }
+
   if (selectedNode.value.taskConfig.nodeType === 'root') {
     selectedNode.value.taskConfig.mode = Mode.Stay;
     selectedNode.value.taskConfig.waypointId = null;
@@ -371,10 +397,10 @@ const updateWaypoint = () => {
   // selectedNode.value.taskConfig.waypointId = waypointId;
 };
 
-const updateSpinSpeed = () => {
-  if (!selectedNode.value) return;
-  selectedNode.value.taskConfig.spin = spinSpeed.value / 10;
-};
+// const updateSpinSpeed = () => {
+//   if (!selectedNode.value) return;
+//   selectedNode.value.taskConfig.spin = spinSpeed.value / 10;
+// };
 
 // 获取边的目标节点名称
 const getEdgeTargetName = (edge: Edge): string => {

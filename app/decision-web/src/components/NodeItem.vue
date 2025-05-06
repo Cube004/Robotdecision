@@ -53,7 +53,6 @@ import {
 } from '@/types/extensions/ToolMenu/AddEdge';
 import { nodes as nodeList } from '@/types/Manger';
 import { ref } from 'vue';
-
 // 获取NodeBase上的startDrag方法类型
 interface NodeBaseMethods {
   startDrag: (event: MouseEvent, node: Node, nodeList: Node[]) => void;

@@ -6,6 +6,7 @@
       :alignment-tolerance="15"
       @edge-click="handleEdgeClick"
     />
+    <NodeGroupItem />
     <NodeItem @open-edit-menu="handleNodeClick" />
 
     <!-- 工具菜单 -->
@@ -25,6 +26,21 @@
       @edge-updated="handleEdgeUpdated"
       @close="edgeMenuVisible = false"
     />
+
+    <!-- 错误弹窗 -->
+    <ErrorDialog
+      :visible="errorDialogVisible"
+      :message="errorMessage"
+      @update:visible="errorDialogVisible = $event"
+      @close="clearError"
+    />
+
+    <!-- 任务编组面板 -->
+    <NodeGroupPanel
+      :is-open="activeToolId === 'renderNodeGroup'"
+      @close="activeToolId = 'cursor'"
+      @node-group-click="handleNodeGroupClick"
+    />
   </div>
 </template>
 
@@ -33,10 +49,14 @@
   import EdgeComponent from '@/components/EdgeComponent.vue';
   import ToolMenu from '@/components/ToolMenu.vue';
   import EditMenu from '@/components/NodeMenu.vue';
+  import ErrorDialog from '@/components/ErrorWindow.vue';
   import { onMounted, ref } from 'vue';
   import { example } from '@/types/example';
   import EdgeMenu from '@/components/EdgeMenu.vue';
   import type { Edge } from '@/types/EdgeBase';
+  import NodeGroupItem from '@/components/NodeGroupItem.vue';
+  import { activeToolId } from './types/Manger';
+  import NodeGroupPanel from '@/components/NodeGroupPanel.vue';
 
   // 定义节点和边的响应式数据
   const backgroundLayer = ref<HTMLCanvasElement | null>(null);
@@ -47,11 +67,15 @@
   const edgeMenuVisible = ref(false);
   const selectedEdgeId = ref<number | null>(null);
 
+  // 错误弹窗相关状态
+  const errorDialogVisible = ref(false);
+  const errorMessage = ref('');
+
   // 处理节点点击事件
   const handleNodeClick = (nodeId: number) => {
     selectedNodeId.value = nodeId;
     editMenuVisible.value = true;
-
+    activeToolId.value = 'cursor';
     // 关闭边编辑菜单
     edgeMenuVisible.value = false;
   };
@@ -60,7 +84,15 @@
   const handleEdgeClick = (edgeId: number) => {
     selectedEdgeId.value = edgeId;
     edgeMenuVisible.value = true;
+    activeToolId.value = 'cursor';
+    // 关闭节点编辑菜单
+    editMenuVisible.value = false;
+  };
 
+  // 处理任务编组点击事件
+  const handleNodeGroupClick = () => {
+    // 关闭边编辑菜单
+    edgeMenuVisible.value = false;
     // 关闭节点编辑菜单
     editMenuVisible.value = false;
   };
@@ -75,6 +107,17 @@
   const handleEdgeUpdated = (edge: Edge) => {
     console.log('连线已更新', edge);
     // 这里可以添加其他逻辑，例如保存到服务器
+  };
+
+  // 显示错误信息
+  const showError = (message: string) => {
+    errorMessage.value = message;
+    errorDialogVisible.value = true;
+  };
+
+  // 清除错误信息
+  const clearError = () => {
+    errorMessage.value = '';
   };
 
   onMounted(() => {
@@ -104,7 +147,21 @@
       }
     }
     example();
-  })
+    // 示例：监听全局错误事件
+    window.addEventListener('error', (event) => {
+      showError(`发生错误: ${event.message}`);
+    });
+
+    // 示例：监听自定义错误事件
+    window.addEventListener('custom-error', ((event: CustomEvent) => {
+      showError(event.detail.message || '发生未知错误');
+    }) as EventListener);
+  });
+
+  // 导出错误处理方法，供其他组件使用
+  defineExpose({
+    showError
+  });
 </script>
 
 

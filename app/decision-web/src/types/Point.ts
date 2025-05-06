@@ -25,7 +25,7 @@ interface TextColor {
   value: string;
 }
 
-interface scale {
+export interface scale {
   x: number;
   y: number;
 }

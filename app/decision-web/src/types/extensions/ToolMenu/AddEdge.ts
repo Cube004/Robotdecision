@@ -1,9 +1,10 @@
 import { ref, watch } from 'vue';
-import { Node } from '@/types/Node';
+import { Node, NodeType } from '@/types/Node';
 import { Edge } from '@/types/Edge';
 import { activeToolId } from '@/types/ToolMenu';
 import { edges } from '@/types/Manger';
 import type { EdgeId } from '@/types/EdgeBase';
+import { showError } from '@/types/Manger';
 // 节点选择状态
 export const selectedStartNodeId = ref<number | null>(null);
 export const selectedEndNodeId = ref<number | null>(null);
@@ -84,7 +85,11 @@ export function handleNodeClick(nodeId: number, nodes: Node[]) {
 
   if (selectedStartNodeId.value === null) {
     // 选择起点
-    selectStartNode(nodeId);
+    if (clickedNode.taskConfig.nodeType === NodeType.Task) {
+      showError('任务节点不能作为起点');
+    }else{
+      selectStartNode(nodeId);
+    }
   } else if (selectedEndNodeId.value === null) {
     // 选择终点
     selectEndNode(nodeId);
@@ -213,16 +218,28 @@ export function handleConfirmAddEdge({ startNodeId, endNodeId }: { startNodeId: 
   // 创建新连接线
   const newEdge = createEdge(edgeId);
 
-  if (newEdge) {
-    edges.value.push(newEdge);
-  }
   console.log("使用工具栏添加的边:", newEdge?.id.value);
   console.log("当前所有边的id:", edges.value.map(edge => edge.id.value));
-
   // 重置状态
   resetAddEdgeState();
   // 切换回选择工具
   activeToolId.value = 'cursor';
+
+  // 添加边
+  if (newEdge) {
+    for (const edge of edges.value) {
+      if (edge.sourceId === startNodeId && edge.targetId === endNodeId) {
+        showError('不能添加重复的边');
+        return;
+      }
+      if (edge.sourceId === endNodeId && edge.targetId === startNodeId) {
+        showError('不能添加反向的边');
+        return;
+      }
+    }
+    console.log('可以添加边');
+    edges.value.push(newEdge);
+  }
 };
 
 /**

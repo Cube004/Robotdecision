@@ -1,12 +1,12 @@
 import { activeToolId } from '@/types/Manger';
 import { resetAddEdgeState, initAddEdgeState } from '@/types/extensions/ToolMenu/AddEdge';
 import { resetAddNodeState, initAddNodeState } from '@/types/extensions/ToolMenu/AddNode';
-import { handleMapTool } from '@/types/extensions/ToolMenu/MapPage';
 
 export { activeToolId };
 
 // 选择工具方法
 export const selectTool = (toolId: string) => {
+  console.log('选择工具', toolId);
   activeToolId.value = toolId;
   // emit('tool-selected', toolId);
 
@@ -28,11 +28,15 @@ export const selectTool = (toolId: string) => {
       resetAddNodeState();
       initAddEdgeState();
       break;
+    case 'renderNodeGroup':
+      console.log('打开任务编组');
+      resetAddEdgeState();
+      resetAddNodeState();
+      break;
     case 'map':
       console.log('打开航点地图');
       resetAddEdgeState();
       resetAddNodeState();
-      handleMapTool();
       break;
     case 'help':
       console.log('显示帮助信息');

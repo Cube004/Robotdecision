@@ -4,7 +4,7 @@ import { updatePointMenuPosition } from './MapPage';
 import { showPointMenu } from './MapPage';
 import { points } from '@/types/Manger';
 import { MapSettingsPoints, mapWidth, mapHeight } from '@/types/Manger';
-
+import { areas } from '@/types/Manger';
 // 菜单状态
 export const mapImage = ref<HTMLImageElement | null>(null);
 export const showColorPicker = ref(false);
@@ -50,6 +50,7 @@ export function createNewPoint(x: number, y: number) {
   points.value.push(newPoint);
   selectedPoint.value = newPoint;
   showPointMenu.value = true;
+  calculateWaypoint();
 };
 
 // 选择附近的点
@@ -100,7 +101,7 @@ export function selectPointById(id: number) {
   }
 };
 
-
+// -------------------------------------地图缩放管理-------------------------------------
 const resizeObserver = new ResizeObserver(entries => {
   for (const entry of entries) {
       const { width, height } = entry.contentRect;
@@ -117,6 +118,14 @@ const resizeObserver = new ResizeObserver(entries => {
           point.scale.x = scaleX;
           point.scale.y = scaleY;
         })
+      })
+      areas.value.forEach(area => {
+        area.leftTop.x = area.leftTop.x / scaleX * area.scale.x;
+        area.leftTop.y = area.leftTop.y / scaleY * area.scale.y;
+        area.rightBottom.x = area.rightBottom.x / scaleX * area.scale.x;
+        area.rightBottom.y = area.rightBottom.y / scaleY * area.scale.y;
+        area.scale.x = scaleX;
+        area.scale.y = scaleY;
       })
     }
   }
@@ -147,25 +156,31 @@ export function getScale() {
   return { scaleX: scaleX as number, scaleY: scaleY as number };
 }
 
+// -------------------------------------地图缩放管理-------------------------------------
+
+// 计算航点
 export function calculateWaypoint() {
   if (MapSettingsPoints.value.length === 3){
-    points.value.forEach(point => {
-      const width = MapSettingsPoints.value[2].position.x - MapSettingsPoints.value[1].position.x;
-      const height = MapSettingsPoints.value[2].position.y - MapSettingsPoints.value[1].position.y;
-      const x = point.position.x - MapSettingsPoints.value[0].position.x;
-      const y = point.position.y - MapSettingsPoints.value[0].position.y;
+    const CenterPoint = MapSettingsPoints.value.find(point => point.id.value === 0);
+    const LeftPoint = MapSettingsPoints.value.find(point => point.id.value === 1);
+    const RightPoint = MapSettingsPoints.value.find(point => point.id.value === 2);
+    if (LeftPoint && RightPoint && CenterPoint) {
+      points.value.forEach(point => {
+      const width = RightPoint.position.x - LeftPoint.position.x;
+      const height = RightPoint.position.y - LeftPoint.position.y;
+      const x = point.position.x - CenterPoint.position.x;
+      const y = point.position.y - CenterPoint.position.y;
       const waypoint = {
         x: x / width * mapWidth.value,
         y: y / height * mapHeight.value
       }
         point.waypoint = waypoint;
-    });
+      });
+    }
   }
 }
-// // // // // //
-// 航点编辑菜单 //
-// // // // // //
 
+// ----------------------------------------航点编辑菜单----------------------------------------
 
 // 切换颜色选择器显示状态
 export function toggleColorPicker() {
@@ -255,3 +270,5 @@ watch(fontSize, (newSize) => {
     }
   }
 });
+
+// ----------------------------------------航点编辑菜单----------------------------------------

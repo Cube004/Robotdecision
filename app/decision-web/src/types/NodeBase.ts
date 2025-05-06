@@ -1,15 +1,16 @@
 import { reactive } from 'vue';
 import { Edge } from '@/types/EdgeBase';
 
-export enum TaskType {
-  Task = "task",
-  Root = "root",
+export enum NodeType {
+  Task = "task", // 任务节点
+  Root = "root", // 根节点
+  Branch = "branch",// 分支节点
 }
 
 export enum Mode {
   Stay = "Stay",
   Move = "Move",
-  Spin = "Spin",
+  Limit = "Limit",
 }
 
 interface NodeId {
@@ -60,6 +61,7 @@ interface TaskConfig {
   waypointId: number | null;
   spin: number | null;
   resetTime: number | null;
+  linear: number | null;
 }
 
 // 响应式Node类
@@ -119,10 +121,11 @@ class Node {
       this.taskConfig = reactive(taskConfig);
     } else {
       this.taskConfig = reactive({
-        nodeType: TaskType.Task,
+        nodeType: NodeType.Task,
         mode: Mode.Stay,
         waypointId: null,
         spin: 0,
+        linear: 0,
         resetTime: 0,
       });
     }

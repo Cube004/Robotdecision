@@ -1,8 +1,8 @@
 <template>
   <div class="map-overlay" v-if="visible" :class="{ visible: showMap }">
     <div class="map-container">
-      <div class="map-image-div" ref="mapContainer">
-        <div class="map-content-wrapper">
+      <div class="map-image-div">
+        <div class="map-content-wrapper" ref="mapContainer">
           <img class="map-image" ref="mapImage" src="/map/RUMC.png" alt="航点地图" @click="handleMapClick">
           <!-- 渲染所有航点 -->
           <div
@@ -48,8 +48,8 @@
             :key="previewPoints.id.value"
             class="map-point"
             :style="{ // 使用鼠标位置
-              left: `${mousePosition.x}px`,
-              top: `${mousePosition.y}px`,
+              left: `${mousePosition.x + WindowWidth / 80}px`,
+              top: `${mousePosition.y + WindowHeight / 40}px`,
               backgroundColor: previewPoints.color.value,
               position: 'absolute'
             }"
@@ -58,6 +58,31 @@
           >
             <div class="point-text" v-if="previewPoints.text.value" :style="{ fontSize: previewPoints.fontSize.value + 'px', color: previewPoints.textColor.value }">
               {{ previewPoints.text.value }}
+            </div>
+          </div>
+          <!-- 渲染区域对象-->
+          <div
+            v-for="area in areas"
+            :key="area.id"
+            class="area"
+            :style="{
+              position: 'absolute',
+              left: `${area.leftTop.x}px`,
+              top: `${area.leftTop.y}px`,
+              width: `${area.rightBottom.x - area.leftTop.x}px`,
+              height: `${area.rightBottom.y - area.leftTop.y}px`,
+              backgroundColor: area.color,
+              borderRadius: '8px',
+              border: `2px solid ${area.color}`,
+              zIndex: 0,
+            }"
+            @mousedown="handleAreaMouseDown($event, area)"
+          >
+          <div
+            class="group-label"
+            :style="{ backgroundColor: area.color }"
+          >
+              {{ area.name }} (#{{ area.id }})
             </div>
           </div>
         </div>
@@ -187,6 +212,80 @@
           </div>
         </div>
 
+        <!-- 区域菜单 -->
+        <div class="menu area-menu" id="areaMenu" v-show="showAreaMenu" :style="areaMenuStyle">
+          <!-- 区域名称编辑 -->
+          <div class="menu-item">
+            <div class="menu-section">
+              <div class="section-title">区域名称</div>
+              <div class="input-row">
+                <input type="text" class="name-input" v-model="areaName" placeholder="输入区域名称" @change="updateAreaName">
+              </div>
+            </div>
+          </div>
+
+          <!-- 区域颜色选择 -->
+          <div class="menu-item" id="areaColor">
+            <button id="area-color-button" @click="toggleAreaColorPicker">
+              <div class="icon">
+                <div class="color-preview" :style="{ backgroundColor: areaColor }"></div>
+              </div>
+              <div class="menu-text">颜色与透明度</div>
+              <div class="arrow">
+                <svg width="8" height="8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="m3.414 7.086-.707.707a1 1 0 0 0 0 1.414l7.778 7.778a2 2 0 0 0 2.829 0l7.778-7.778a1 1 0 0 0 0-1.414l-.707-.707a1 1 0 0 0-1.415 0l-7.07 7.07-7.072-7.07a1 1 0 0 0-1.414 0Z" fill="currentColor"></path>
+                </svg>
+              </div>
+            </button>
+
+            <div class="color-picker-content" v-show="showAreaColorPicker">
+              <div class="color-grid">
+                <div
+                  v-for="color in areaColorOptions"
+                  :key="color"
+                  class="color-swatch"
+                  :class="{ selected: areaColor === color }"
+                  :style="{ backgroundColor: color }"
+                  @click="selectAreaColor(color)"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 区域删除 -->
+          <div class="menu-item" id="areaDelete">
+            <button id="area-delete-button" @click="toggleAreaDeleteConfirm">
+              <div class="icon">
+                <svg style="fill: #666" width="18" height="18" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M834.24768 256c-14.15168 0-25.6 11.08992-25.6 24.79616v668.80512c0 13.66016-11.47392 24.80128-25.6 24.80128H226.74944c-14.12608 0-25.6-11.14112-25.6-24.80128V280.79616c0-13.70624-11.44832-24.79616-25.6-24.79616s-25.6 11.08992-25.6 24.79616v668.80512c0 41.02656 34.45248 74.39872 76.8 74.39872h556.29824c42.34752 0 76.8-33.37216 76.8-74.39872V280.79616c0-13.70624-11.44832-24.79616-25.6-24.79616zM336.21504 51.2h353.28a25.6 25.6 0 0 0 0-51.2h-353.28a25.6 25.6 0 0 0 0 51.2z"></path>
+                  <path d="M433.06496 846.99136v-558.08a25.6 25.6 0 0 0-51.2 0v558.08a25.6 25.6 0 0 0 51.2 0zM636.3392 846.99136v-558.08a25.6 25.6 0 0 0-51.2 0v558.08a25.6 25.6 0 0 0 51.2 0zM970.24 124.58496h-916.48a25.6 25.6 0 0 0 0 51.2h916.48a25.6 25.6 0 0 0 0-51.2z"></path>
+                </svg>
+              </div>
+              <div class="menu-text">删除区域</div>
+              <div class="arrow">
+                <svg width="8" height="8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="m3.414 7.086-.707.707a1 1 0 0 0 0 1.414l7.778 7.778a2 2 0 0 0 2.829 0l7.778-7.778a1 1 0 0 0 0-1.414l-.707-.707a1 1 0 0 0-1.415 0l-7.07 7.07-7.072-7.07a1 1 0 0 0-1.414 0Z" fill="currentColor"></path>
+                </svg>
+              </div>
+            </button>
+
+            <div class="delete-confirm-content" v-show="showAreaDeleteConfirm">
+              <div class="delete-message">
+                <div class="warning-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm0-7a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm0-8a1 1 0 0 0-1 1v5a1 1 0 1 0 2 0V8a1 1 0 0 0-1-1z" fill="#f44336"></path>
+                  </svg>
+                </div>
+                <div class="message-text">
+                  <div class="message-title">删除区域</div>
+                  <div class="message-desc">此操作无法撤销</div>
+                </div>
+              </div>
+              <button class="confirm-button" id="deleteAreaButton" @click="deleteArea">删除</button>
+            </div>
+          </div>
+        </div>
+
         <!-- 悬浮功能菜单 -->
         <div
           class="floating-menu"
@@ -198,9 +297,9 @@
             class="floating-menu-header"
           >
             <div class="header-title">
-              <!-- <svg viewBox="0 0 24 24" width="16" height="16" class="header-icon">
-                <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3M5 14.99v-2.23l6 3.24 6-3.24V15l-6 3.24-6-3.24z" fill="currentColor"/>
-              </svg> -->
+              <svg viewBox="0 0 24 24" width="16" height="16" class="header-icon">
+                <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z" fill="currentColor"/>
+              </svg>
               <span>地图工具</span>
             </div>
             <button class="floating-menu-toggle" :class="{ collapsed: !showFloatingMenu }" @click="()=>{showFloatingMenu = !showFloatingMenu}" title="折叠/展开菜单">
@@ -211,60 +310,115 @@
           </div>
 
           <div class="floating-menu-content" v-show="showFloatingMenu">
-            <div class="menu-section">
-              <div class="section-title">初始化启动区</div>
-              <button class="tool-button" @click="setStartingArea" data-tooltip="设置机器人启动区域">
-                <div class="button-icon">
-                  <svg viewBox="0 0 24 24" width="16" height="16">
-                    <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z" fill="currentColor"></path>
-                  </svg>
-                </div>
-                <span>放置启动区</span>
+            <!-- 标签页按钮 -->
+            <div class="tab-headers">
+              <button
+                class="tab-button"
+                :class="{ active: activeTab === 0 }"
+                @click="activeTab = 0"
+              >
+                初始化地图
+              </button>
+              <button
+                class="tab-button"
+                :class="{ active: activeTab === 1 }"
+                @click="activeTab = 1"
+              >
+                创建对象
               </button>
             </div>
 
-            <div class="menu-section">
-              <div class="section-title">边界点</div>
-              <div class="buttons-row">
-                <button class="tool-button boundary-button" @click="setTopLeftCorner" data-tooltip="放置地图左上角边界点">
+            <!-- 第一个标签页：初始化地图 -->
+            <div class="tab-content" v-show="activeTab === 0">
+              <!-- 原有的初始化启动区 -->
+              <div class="menu-section">
+                <div class="section-title">初始化启动区</div>
+                <button class="tool-button" @click="setStartingArea" data-tooltip="设置机器人启动区域">
                   <div class="button-icon">
                     <svg viewBox="0 0 24 24" width="16" height="16">
-                      <path d="M4 4h6v6H4V4z M4 4L10 4 10 10 4 10z" fill="currentColor"></path>
+                      <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z" fill="currentColor"></path>
                     </svg>
                   </div>
-                  <span>左上角</span>
+                  <span>放置启动区</span>
                 </button>
-                <button class="tool-button boundary-button" @click="setBottomRightCorner" data-tooltip="放置地图右下角边界点">
+              </div>
+
+              <!-- 原有的边界点 -->
+              <div class="menu-section">
+                <div class="section-title">边界点</div>
+                <div class="buttons-row">
+                  <button class="tool-button boundary-button" @click="setTopLeftCorner" data-tooltip="放置地图左上角边界点">
+                    <div class="button-icon">
+                      <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path d="M4 4h6v6H4V4z M4 4L10 4 10 10 4 10z" fill="currentColor"></path>
+                      </svg>
+                    </div>
+                    <span>左上角</span>
+                  </button>
+                  <button class="tool-button boundary-button" @click="setBottomRightCorner" data-tooltip="放置地图右下角边界点">
+                    <div class="button-icon">
+                      <svg viewBox="0 0 24 24" width="16" height="16">
+                        <path d="M14 14h6v6h-6v-6z M14 14L20 14 20 20 14 20z" fill="currentColor"></path>
+                      </svg>
+                    </div>
+                    <span>右下角</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- 原有的地图尺寸 -->
+              <div class="menu-section">
+                <div class="section-title">地图尺寸</div>
+                <div class="input-row">
+                  <div class="input-group">
+                    <label for="map-width">长度 (m)</label>
+                    <input type="number" id="map-width" class="size-input" v-model="mapWidth" min="1" step="1">
+                  </div>
+                  <div class="input-group">
+                    <label for="map-height">宽度 (m)</label>
+                    <input type="number" id="map-height" class="size-input" v-model="mapHeight" min="1" step="1">
+                  </div>
+                </div>
+                <button class="tool-button apply-button" @click="applyMapSize" data-tooltip="应用尺寸设置到地图">
                   <div class="button-icon">
                     <svg viewBox="0 0 24 24" width="16" height="16">
-                      <path d="M14 14h6v6h-6v-6z M14 14L20 14 20 20 14 20z" fill="currentColor"></path>
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"></path>
                     </svg>
                   </div>
-                  <span>右下角</span>
+                  <span>重新计算航点</span>
                 </button>
               </div>
             </div>
 
-            <div class="menu-section">
-              <div class="section-title">地图尺寸</div>
-              <div class="input-row">
-                <div class="input-group">
-                  <label for="map-width">长度 (m)</label>
-                  <input type="number" id="map-width" class="size-input" v-model="mapWidth" min="1" step="1">
-                </div>
-                <div class="input-group">
-                  <label for="map-height">宽度 (m)</label>
-                  <input type="number" id="map-height" class="size-input" v-model="mapHeight" min="1" step="1">
-                </div>
+            <!-- 第二个标签页：创建对象 -->
+            <div class="tab-content" v-show="activeTab === 1">
+              <!-- 创建航点对象 -->
+              <div class="menu-section">
+                <div class="section-title">创建航点</div>
+                <button class="tool-button" @click="createWaypoint" data-tooltip="在地图上创建新航点">
+                  <div class="button-icon">
+                    <svg viewBox="0 0 24 24" width="16" height="16">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="currentColor"></path>
+                    </svg>
+                  </div>
+                  <span>添加航点</span>
+                </button>
               </div>
-              <button class="tool-button apply-button" @click="applyMapSize" data-tooltip="应用尺寸设置到地图">
-                <div class="button-icon">
-                  <svg viewBox="0 0 24 24" width="16" height="16">
-                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"></path>
-                  </svg>
-                </div>
-                <span>应用设置</span>
-              </button>
+
+              <!-- 创建区域 -->
+              <div class="menu-section">
+                <div class="section-title">创建区域</div>
+                <div class="description-text">点击按钮后，在地图上依次选择左上角和右下角顶点来创建区域</div>
+                <button class="tool-button" @click="createArea" data-tooltip="创建一个矩形区域">
+                  <div class="button-icon">
+                    <svg t="1746547363258" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="18517" width="24" height="24">
+                      <path fill="currentColor" d="M333.226667 197.290667l16.725333-83.669334 376.533333 75.178667-16.682666 83.669333zM790.698667 351.872l84.736-10.154667 40.533333 338.901334-84.736 10.154666zM227.285333 831.530667l559.189334-66.816 10.154666 84.736-559.232 66.816zM111.530667 782.08L196.224 225.365333l84.352 12.8-84.693333 556.8z" p-id="18518"></path>
+                      <path fill="currentColor" d="M247.466667 277.333333C170.666667 277.333333 106.666667 213.333333 106.666667 136.533333S170.666667 0 247.466667 0 384 64 384 136.533333 324.266667 277.333333 247.466667 277.333333z m0-192c-29.866667 0-55.466667 25.6-55.466667 51.2s25.6 51.2 51.2 51.2S298.666667 166.4 298.666667 136.533333 277.333333 85.333333 247.466667 85.333333zM136.533333 1024C64 1024 0 960 0 887.466667s64-136.533333 136.533333-136.533334c76.8 0 136.533333 64 136.533334 136.533334S213.333333 1024 136.533333 1024z m0-192c-29.866667 0-51.2 25.6-51.2 51.2S110.933333 938.666667 136.533333 938.666667s51.2-25.6 51.2-51.2-21.333333-55.466667-51.2-55.466667zM810.666667 392.533333c-76.8 0-136.533333-64-136.533334-136.533333s64-136.533333 136.533334-136.533333 136.533333 64 136.533333 136.533333-59.733333 136.533333-136.533333 136.533333z m0-192c-29.866667 0-51.2 25.6-51.2 51.2s25.6 51.2 51.2 51.2 51.2-25.6 51.2-51.2-21.333333-51.2-51.2-51.2zM887.466667 917.333333c-76.8 0-136.533333-64-136.533334-136.533333S810.666667 640 887.466667 640s136.533333 64 136.533333 136.533333-64 140.8-136.533333 140.8z m0-192c-29.866667 0-51.2 25.6-51.2 51.2s25.6 51.2 51.2 51.2S938.666667 810.666667 938.666667 780.8s-25.6-55.466667-51.2-55.466667z" p-id="18519"></path>
+                    </svg>
+                  </div>
+                  <span>创建区域</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -297,6 +451,17 @@
         <div class="status-section map-coordinates" v-if="mousePosition.x && mousePosition.y">
           <div class="status-text">坐标: {{ mousePosition.x }}, {{ mousePosition.y }}</div>
         </div>
+      </div>
+
+      <!-- 区域创建提示 -->
+      <div class="area-creation-hint" v-if="isCreatingArea">
+        <div class="hint-icon">
+          <svg viewBox="0 0 24 24" width="20" height="20">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="currentColor"></path>
+          </svg>
+        </div>
+        <div v-if="!areaFirstPoint">请点击选择区域的左上角点</div>
+        <div v-else>请点击选择区域的右下角点</div>
       </div>
     </div>
   </div>
@@ -343,14 +508,40 @@ import {
   setBottomRightCorner,
   applyMapSize,
   previewPoints,
-  mousePosition
+  mousePosition,
+  createArea,
+  isCreatingArea,
+  areaFirstPoint,
+  activeTab,
+  showAreaMenu,
+  areaMenuStyle,
+  selectedArea,
+  areaName,
+  areaColor,
 } from '@/types/extensions/ToolMenu/MapPage';
+import {
+  showAreaColorPicker,
+  showAreaDeleteConfirm,
+  updateAreaMenuPosition,
+  handleOutsideClick,
+  toggleAreaColorPicker,
+  toggleAreaDeleteConfirm,
+  selectAreaColor,
+  updateAreaName,
+  deleteArea,
+  areaColorOptions,
+  createWaypoint
+} from '@/types/extensions/ToolMenu/AreaMenu';
 import { points } from '@/types/Manger';
-import { mapWidth, mapHeight, MapSettingsPoints } from '@/types/Manger';
+import { mapWidth, mapHeight, MapSettingsPoints, areas } from '@/types/Manger';
+import { type Area } from '@/types/Area';
 // 定义 props
 const props = defineProps<{
   visible: boolean;
 }>();
+
+const WindowWidth = window.innerWidth;
+const WindowHeight = window.innerHeight;
 
 
 // 监听 visible 属性变化
@@ -363,6 +554,45 @@ watch(() => props.visible, (newVal) => {
     showMap.value = false;
   }
 });
+
+const handleAreaMouseDown = (event: MouseEvent, area: Area) => {
+  // 防止冒泡到地图
+  event.stopPropagation();
+
+  // 设置选中区域
+  selectedArea.value = area;
+
+  // 初始化表单值
+  areaName.value = area.name;
+  areaColor.value = area.color;
+
+  // 重置菜单状态
+  showAreaColorPicker.value = false;
+  showAreaDeleteConfirm.value = false;
+
+  // 计算区域的中心点坐标，而不是使用鼠标点击位置
+  // 这样可以确保菜单出现在区域附近的一致位置
+  const areaWidth = area.rightBottom.x - area.leftTop.x;
+
+  // 获取点击点相对于容器的绝对坐标
+  const containerRect = mapContainer.value?.getBoundingClientRect();
+  if (!containerRect) return;
+
+  // 优先放置在区域右侧，如果空间不足则放在左侧
+  const areaCenterX = area.leftTop.x + areaWidth / 2 + containerRect.left;
+  const areaCenterY = area.leftTop.y + containerRect.top;
+
+  // 显示区域菜单
+  setTimeout(() => {
+    showAreaMenu.value = true;
+  }, 200);
+
+  // 更新菜单位置，使用经过计算的位置，而不是鼠标点击位置
+  updateAreaMenuPosition(areaCenterX, areaCenterY);
+
+  // 关闭其他菜单
+  showPointMenu.value = false;
+};
 
 // 跟踪鼠标位置
 const trackMousePosition = (event: MouseEvent) => {
@@ -384,6 +614,10 @@ onMounted(() => {
         e.preventDefault();
       });
       container.addEventListener('mousemove', trackMousePosition);
+
+      // 添加全局点击事件监听
+      document.addEventListener('click', handleOutsideClick);
+
       stop();
     }
   });
@@ -394,6 +628,9 @@ onUnmounted(() => {
   if (mapContainer.value) {
     mapContainer.value.removeEventListener('mousemove', trackMousePosition);
   }
+
+  // 移除全局点击事件监听
+  document.removeEventListener('click', handleOutsideClick);
 });
 </script>
 
@@ -1253,5 +1490,171 @@ onUnmounted(() => {
 
 .apply-button .button-icon {
   color: white;
+}
+
+/* 标签页样式 */
+.tab-headers {
+  display: flex;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.tab-button {
+  padding: 10px 15px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+  flex: 1;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.tab-button:hover {
+  color: #3b82f6;
+}
+
+.tab-button.active {
+  color: #3b82f6;
+  font-weight: 600;
+}
+
+.tab-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #3b82f6;
+  border-radius: 2px 2px 0 0;
+}
+
+.tab-icon {
+  fill: currentColor;
+  transition: transform 0.2s ease;
+}
+
+.tab-button:hover .tab-icon {
+  transform: scale(1.1);
+}
+
+.tab-button.active .tab-icon {
+  fill: #3b82f6;
+  transform: scale(1.2);
+}
+
+.tab-content {
+  padding: 10px 0;
+  animation: fadeIn 0.3s ease;
+}
+
+/* 描述文本样式 */
+.description-text {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 10px;
+  line-height: 1.4;
+  background-color: #f1f5f9;
+  padding: 8px 10px;
+  border-radius: 4px;
+  border-left: 3px solid #cbd5e1;
+}
+
+/* 区域创建状态提示 */
+.area-creation-hint {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(51, 65, 85, 0.9);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  z-index: 2000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hint-icon {
+  color: #60a5fa;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.group-label {
+  position: absolute;
+  top: -30px;
+  right: 10px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+/* 区域样式 */
+.area {
+  position: absolute;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 5;
+}
+
+.area:hover {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(59, 130, 246, 0.5);
+}
+
+/* 区域菜单样式 */
+.area-menu {
+  width: 280px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  max-height: 80vh; /* 限制最大高度 */
+  overflow-y: auto; /* 内容过多时允许滚动 */
+}
+
+/* 颜色选择器和删除确认内容样式 */
+.area-menu .color-picker-content,
+.area-menu .delete-confirm-content {
+  position: relative; /* 确保内容不会溢出菜单 */
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.name-input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.name-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  outline: none;
+}
+
+.color-preview {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 </style>

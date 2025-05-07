@@ -224,7 +224,7 @@
                       <div class="edge-info">
                         <div class="edge-primary">
                           <span class="edge-name">{{ getEdgeTargetName(element) }}</span>
-                          <span class="edge-id">连接线 ID:  #{{ element.id.value }} {{ element.config.label ? `| 说明:${element.config.label}` : '' }}</span>
+                          <span class="edge-id">连接线 ID:  #{{ element.value }} {{ getEdgeLabel(element) }}</span>
                         </div>
                         <div class="edge-priority">
                           <span class="priority-label">优先级</span>
@@ -253,6 +253,19 @@
         </div>
       </div>
 
+      <!-- 删除按钮区域 -->
+      <div class="delete-button-container">
+        <button class="delete-button" @click="confirmDelete">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 6h18"></path>
+            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+            <line x1="10" y1="11" x2="10" y2="17"></line>
+            <line x1="14" y1="11" x2="14" y2="17"></line>
+          </svg>
+          <span>删除节点</span>
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -262,9 +275,10 @@ import { ref, computed, watch } from 'vue';
 import { Node } from '@/types/Node';
 import { nodes as nodeList, points as waypoints, showError } from '@/types/Manger';
 import { Mode, NodeType } from '@/types/NodeBase';
-import { Edge } from '@/types/EdgeBase';
+import { type EdgeId } from '@/types/EdgeBase';
+import { edges as edgesList } from '@/types/Manger';
 import draggable from 'vuedraggable';
-
+import { showConfirmPromise } from '@/types/ConfirmDialog';
 // 属性定义
 interface Props {
   visible: boolean;
@@ -285,7 +299,7 @@ const selectedNode = computed<Node | null>(() => {
 });
 
 // 节点的边列表
-const nodeEdges = ref<Edge[]>([]);
+const nodeEdges = ref<EdgeId[]>([]);
 
 // 相关表单数据
 const iconSvgPath = ref('');
@@ -314,6 +328,8 @@ watch(() => selectedNode.value, (newNode) => {
     if (newNode.edges && newNode.edges.length > 0) {
       nodeEdges.value = newNode.edges;
       console.log(newNode.edges);
+      console.log(nodeEdges.value,nodeEdges.value.length);
+
     } else {
       nodeEdges.value = [];
     }
@@ -403,9 +419,15 @@ const updateWaypoint = () => {
 // };
 
 // 获取边的目标节点名称
-const getEdgeTargetName = (edge: Edge): string => {
-  const targetNode = nodeList.value.find(node => node.id.value === edge.targetId);
-  return targetNode ? targetNode.text.content : `未知节点 #${edge.targetId}`;
+const getEdgeTargetName = (edgeId: EdgeId): string => {
+  const edge = edgesList.value.find(edge => edge.id.value === edgeId.value);
+  const targetNode = nodeList.value.find(node => node.id.value === edge?.targetId);
+  return targetNode ? targetNode.text.content : `未知节点 #${edge?.targetId}`;
+};
+
+const getEdgeLabel = (edgeId: EdgeId): string => {
+  const edge = edgesList.value.find(edge => edge.id.value === edgeId.value);
+  return edge?.config?.label ? `| 说明:${edge.config.label}` : '';
 };
 
 // 处理边顺序变化
@@ -416,6 +438,24 @@ const handleEdgeOrderChanged = () => {
   if (nodeEdges.value.length > 0) {
     selectedNode.value.edges = [...nodeEdges.value];
     emit('node-updated', selectedNode.value);
+  }
+};
+
+// 删除节点方法
+const confirmDelete = async () => {
+  if (!selectedNode.value) return;
+  const result = await showConfirmPromise(`确定要删除节点 "${selectedNode.value.text.content}" 吗？此操作无法撤销。`, '删除确认');
+  if (result) {
+    // 找出节点在数组中的索引
+    const nodeIndex = nodeList.value.findIndex(node => node.id.value === selectedNode.value?.id.value);
+
+    if (nodeIndex !== -1) {
+      // 删除节点
+      nodeList.value.splice(nodeIndex, 1);
+
+      // 关闭编辑菜单
+      close();
+    }
   }
 };
 
@@ -1072,6 +1112,68 @@ input[type="range"]:active::-webkit-slider-thumb {
   .edge-priority-info {
     padding: 12px;
     font-size: 13px;
+  }
+}
+
+/* 删除按钮区域 */
+.delete-button-container {
+  position: sticky;
+  bottom: 0;
+  width: 90%;
+  padding: 20px 28px;
+  background-color: transparent;
+  z-index: 1001;
+  display: flex;
+  justify-content: center;
+}
+
+.edit-menu:not(.open) .delete-button-container {
+  display: none;
+}
+
+.delete-button {
+  width: 100%;
+  background-color: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  padding: 14px 28px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.delete-button:hover {
+  background-color: #fecaca;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
+}
+
+.delete-button:active {
+  transform: translateY(0);
+  background-color: #fca5a5;
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.1);
+}
+
+.delete-button svg {
+  flex-shrink: 0;
+}
+
+/* 支持移动设备 */
+@media (max-width: 640px) {
+  .delete-button-container {
+    width: 100%;
+    padding: 15px 20px;
+  }
+
+  .delete-button {
+    padding: 12px 20px;
+    font-size: 14px;
   }
 }
 </style>

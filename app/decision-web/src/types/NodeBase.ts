@@ -1,5 +1,5 @@
 import { reactive } from 'vue';
-import { Edge } from '@/types/EdgeBase';
+import { type EdgeId } from '@/types/EdgeBase';
 
 export enum NodeType {
   Task = "task", // 任务节点
@@ -73,7 +73,7 @@ class Node {
   text: Text;
   taskConfig: TaskConfig;
   icon?: Icon;
-  edges: Edge[];
+  edges: EdgeId[];
   constructor(
     id: NodeId,
     position: Position,
@@ -136,11 +136,6 @@ class Node {
 
     this.edges = reactive([]);
   }
-
-  // 更新ID的方法
-  // updateId(newId: number): void {
-  //   this.id.value = newId;
-  // }
 
   // 更新位置的方法
   updatePosition(x: number, y: number): void {

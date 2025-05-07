@@ -419,6 +419,8 @@ const calculateControlPoint = (point: {x: number, y: number}, direction: string,
   top: 0;
   left: 0;
   z-index: 0;
+  width: 300%;
+  height: 300%;
 }
 
 .edge-path {

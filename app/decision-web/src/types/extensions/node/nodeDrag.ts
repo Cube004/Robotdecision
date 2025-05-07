@@ -1,7 +1,7 @@
 import { ref } from 'vue';
 import type { Ref } from 'vue';
 import Node from '@/types/NodeBase';
-
+import { mousePositionCanvas } from '@/types/Manger';
 // 为静态方法定义类型接口
 interface NodeConstructor {
   new (
@@ -17,9 +17,6 @@ interface NodeConstructor {
   draggingNodeId: Ref<number | null>;
 }
 
-// 创建响应式状态
-const dragOffset = ref({ x: 0, y: 0 });
-
 // 扩展 Node 类添加静态属性和方法
 export function extendNodeWithDrag() {
   // 添加静态属性
@@ -31,12 +28,6 @@ export function extendNodeWithDrag() {
 
     // 记录当前拖拽的节点ID
     (Node as unknown as NodeConstructor).draggingNodeId.value = node.id.value;
-
-    // 计算鼠标点击位置与节点左上角的偏移量
-    dragOffset.value = {
-      x: event.clientX - node.position.x,
-      y: event.clientY - node.position.y
-    };
 
     // 添加全局事件监听
     const handleDragBound = (e: MouseEvent) => handleDrag(e, nodeList);
@@ -51,12 +42,10 @@ export function extendNodeWithDrag() {
     if ((Node as unknown as NodeConstructor).draggingNodeId.value !== null) {
       const node = nodeList.find(node => node.id.value === (Node as unknown as NodeConstructor).draggingNodeId.value);
       if (node) {
-        // 更新节点位置，考虑初始偏移量
-        const newX = event.clientX - dragOffset.value.x;
-        const newY = event.clientY - dragOffset.value.y;
-
-        // 应用新位置
-        node.updatePosition(newX, newY);
+        node.updatePosition(
+          mousePositionCanvas.value.x - node.shape.width / 2,
+          mousePositionCanvas.value.y - node.shape.height / 2
+        )
       }
     }
   }

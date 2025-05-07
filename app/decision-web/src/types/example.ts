@@ -3,12 +3,14 @@ import type { NodeGroup } from '@/types/Node';
 import { Edge } from '@/types/Edge';
 import { nodes, edges, NodeGroups } from '@/types/Manger';
 import { reactive } from 'vue';
-export function example() {
+export function example(init_position: { x: number, y: number }) {
+  console.log(init_position);
+
   // 创建示例节点
   // 创建示例节点1 - 根节点（带SVG图标 - 任务图标）
   const node1 = new Node(
     { value: 0 }, // id
-    { x: 300, y: 200 }, // position
+    { x: init_position.x + 300, y: init_position.y + 200 }, // position
     { width: 200, height: 60, borderWidth: 1, borderRadius: 8 }, // shape
     { borderColor: '#E2E8F0', fillColor: '#FFFFFF', fillOpacity: 1 }, // color
     { size: 14, color: '#334155', content: '开始节点', fontFamily: 'Inter, system-ui, sans-serif' }, // text
@@ -23,7 +25,7 @@ export function example() {
   // 创建示例节点2 - 分支节点（带SVG图标 - 任务图标）
   const node2 = new Node(
     { value: 1 }, // id
-    { x: 300, y: 350 }, // position
+    { x: init_position.x + 300, y: init_position.y + 350 }, // position
     { width: 200, height: 60, borderWidth: 1, borderRadius: 8 }, // shape
     { borderColor: '#E2E8F0', fillColor: '#FFFFFF', fillOpacity: 1 }, // color
     { size: 14, color: '#334155', content: '分支节点', fontFamily: 'Inter, system-ui, sans-serif' }, // text
@@ -38,7 +40,7 @@ export function example() {
   // 创建示例节点3 - 任务节点（带SVG图标 - 菱形图标）
   const node3 = new Node(
     { value: 2 }, // id
-    { x: 600, y: 350 }, // position
+    { x: init_position.x + 600, y: init_position.y + 350 }, // position
     { width: 200, height: 60, borderWidth: 1, borderRadius: 8 }, // shape
     { borderColor: '#FEE2E2', fillColor: '#FFFFFF', fillOpacity: 1 }, // color
     { size: 14, color: '#334155', content: '任务节点', fontFamily: 'Inter, system-ui, sans-serif' }, // text
@@ -53,7 +55,7 @@ export function example() {
   // 创建示例节点4 - 任务节点（SVG圆圈图标）
   const node4 = new Node(
     { value: 3 }, // id
-    { x: 600, y: 500 }, // position
+    { x: init_position.x + 600, y: init_position.y + 500 }, // position
     { width: 200, height: 60, borderWidth: 1, borderRadius: 8 }, // shape
     { borderColor: '#DCF5E8', fillColor: '#FFFFFF', fillOpacity: 1 }, // color
     { size: 14, color: '#334155', content: '任务节点', fontFamily: 'Inter, system-ui, sans-serif' }, // text
@@ -69,6 +71,7 @@ export function example() {
   nodes.value = [node1, node2, node3, node4];
 
   // 创建示例边
+
   // 开始节点 -> 任务节点
   const edge1 = new Edge(
     { value: 0 },

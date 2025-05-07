@@ -4,7 +4,7 @@ import { Edge } from '@/types/Edge';
 import { activeToolId } from '@/types/ToolMenu';
 import { edges } from '@/types/Manger';
 import type { EdgeId } from '@/types/EdgeBase';
-import { showError } from '@/types/Manger';
+import { showError, GetNewId } from '@/types/Manger';
 // 节点选择状态
 export const selectedStartNodeId = ref<number | null>(null);
 export const selectedEndNodeId = ref<number | null>(null);
@@ -211,10 +211,7 @@ export function handleConfirmAddEdge({ startNodeId, endNodeId }: { startNodeId: 
   console.log('确认添加连接线', startNodeId, endNodeId);
 
   // 生成唯一ID
-  const nextEdgeId = edges.value.length > 0
-  ? Math.max(...edges.value.map(edge => edge.id.value)) + 1
-  : 0;
-  const edgeId = { value: nextEdgeId };
+  const edgeId = { value: GetNewId(edges.value.map(edge => edge.id.value)) };
   // 创建新连接线
   const newEdge = createEdge(edgeId);
 

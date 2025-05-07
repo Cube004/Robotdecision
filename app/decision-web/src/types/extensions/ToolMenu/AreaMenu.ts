@@ -1,24 +1,11 @@
 import { ref } from 'vue';
-import { Point } from '@/types/Point';
-import { showFloatingMenu, isPlacingSettingsPoint, previewPoints, mapContainer } from './MapPage';
+import { mapContainer } from './MapPage';
 import { areas } from '@/types/Manger';
 import { showAreaMenu, areaMenuStyle, selectedArea, areaName, areaColor } from './MapPage';
-// ----------------------------创建对象函数----------------------------
-// 创建航点对象
-export const createWaypoint = () => {
-  isPlacingSettingsPoint.value = true;
-  showFloatingMenu.value = false;
-  previewPoints.value = new Point(
-    Date.now(), // 使用时间戳作为唯一ID
-    { x: 0, y: 0 },
-    { x: -1, y: -1 },
-    '#3b82f6', // 默认蓝色
-    '新航点',
-    14,
-    '#000000',
-    { x: 1, y: 1 }
-  );
-};
+
+// ----------------------------区域菜单配置----------------------------
+export const showAreaColorPicker = ref(false);
+export const showAreaDeleteConfirm = ref(false);
 
 // 全局点击事件处理，关闭区域菜单
 export const handleOutsideClick = (event: MouseEvent) => {
@@ -50,9 +37,6 @@ export const areaColorOptions = ref([
   'rgba(107, 114, 128, 0.2)' // 灰色
 ]);
 
-// 控制区域菜单显示
-export const showAreaColorPicker = ref(false);
-export const showAreaDeleteConfirm = ref(false);
 
 // 更新区域菜单位置
 export function updateAreaMenuPosition(x: number, y: number) {

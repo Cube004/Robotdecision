@@ -9,6 +9,8 @@ export class Area {
   rightBottom: Position;
   color: string;
   scale: scale;
+  leftTopWaypoint: Position;
+  rightBottomWaypoint: Position;
   constructor(id: number, name: string, leftTop: Position, rightBottom: Position, color: string, scale: scale) {
     this.id = id;
     this.name = name;
@@ -18,6 +20,14 @@ export class Area {
     this.scale = reactive({
       x: scale.x,
       y: scale.y
+    });
+    this.leftTopWaypoint = reactive({
+      x: -1,
+      y: -1
+    });
+    this.rightBottomWaypoint = reactive({
+      x: -1,
+      y: -1
     });
   }
 }

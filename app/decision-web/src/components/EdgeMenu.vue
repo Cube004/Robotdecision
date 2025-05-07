@@ -113,16 +113,26 @@
 
                 <div class="condition-body">
                   <div class="condition-setting">
-                    <label for="datetype">数据类型</label>
-                    <select id="datetype" v-model="condition.datetype">
+                    <label for="datetype">数据</label>
+                    <select id="datetype-normal" v-model="condition.datetype" v-if="condition.metricType < 5">
                       <option v-for="(option, idx) in dataTypeOptions" :key="idx" :value="option.value">
                         {{ option.label }}
+                      </option>
+                    </select>
+                    <select id="datetype-area" v-model="condition.datetype" v-if="condition.metricType === 5">
+                      <option v-for="(option, idx) in areas" :key="idx" :value="option.id">
+                        {{ option.name }}
+                      </option>
+                    </select>
+                    <select id="datetype-waypoint" v-model="condition.datetype" v-if="condition.metricType === 6">
+                      <option v-for="(option, idx) in points" :key="idx" :value="option.id">
+                        {{ option.text.value }}
                       </option>
                     </select>
                   </div>
 
                   <div class="condition-setting">
-                    <label for="metricType">度量类型</label>
+                    <label for="metricType">判断依据</label>
                     <select id="metricType" v-model="condition.metricType">
                       <option v-for="(option, idx) in metricTypeOptions" :key="idx" :value="option.value">
                         {{ option.label }}
@@ -130,7 +140,7 @@
                     </select>
                   </div>
 
-                  <div class="condition-setting">
+                  <div class="condition-setting" v-if="condition.metricType < 5">
                     <label>时间范围类型</label>
                     <div class="radio-buttons">
                       <label
@@ -150,22 +160,22 @@
                     </div>
                   </div>
 
-                  <div class="condition-setting" v-if="condition.temporalScope.type === 3">
+                  <div class="condition-setting" v-if="condition.temporalScope.type === 3 && condition.metricType < 5">
                     <label for="rollingWindow">滚动窗口</label>
                     <div class="slider-control">
                       <input
                         type="range"
                         :id="`rollingWindow-${index}`"
                         v-model.number="condition.temporalScope.rollingWindow"
-                        min="1"
+                        min="0"
                         max="60"
                         step="1"
                       />
-                      <span class="slider-value">{{ condition.temporalScope.rollingWindow || 1 }}分钟</span>
+                      <span class="slider-value">{{ condition.temporalScope.rollingWindow || 0 }}秒</span>
                     </div>
                   </div>
 
-                  <div class="condition-setting minmax-row">
+                  <div class="condition-setting minmax-row" v-if="condition.metricType < 5">
                     <div class="input-group">
                       <label for="min">最小值</label>
                       <input type="number" :id="`min-${index}`" v-model.number="condition.min" placeholder="最小值" />
@@ -189,10 +199,19 @@
         </div>
       </div>
 
-      <!-- 底部操作区域 -->
-      <!-- <div class="menu-footer">
-        <button class="save-button" @click="saveChanges">保存更改</button>
-      </div> -->
+      <!-- 删除按钮区域 -->
+      <div class="delete-button-container">
+        <button class="delete-button" @click="confirmDelete">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 6h18"></path>
+            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+            <line x1="10" y1="11" x2="10" y2="17"></line>
+            <line x1="14" y1="11" x2="14" y2="17"></line>
+          </svg>
+          <span>删除连线</span>
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -201,8 +220,9 @@
 import { ref, computed } from 'vue';
 import type { Edge } from '@/types/EdgeBase';
 import type { Condition } from '@/types/Condition';
-import { edges } from '@/types/Manger';
-
+import { areas, edges, points } from '@/types/Manger';
+import { showConfirmPromise } from '@/types/ConfirmDialog';
+import { dataTypeOptions, metricTypeOptions, temporalScopeOptions } from '@/types/Condition';
 // 属性定义
 interface Props {
   visible: boolean;
@@ -232,29 +252,7 @@ const tabs = [
   { label: '条件编辑' }
 ];
 
-// 数据类型选项
-const dataTypeOptions = [
-  { value: 'temperature', label: '温度' },
-  { value: 'humidity', label: '湿度' },
-  { value: 'pressure', label: '气压' },
-  { value: 'speed', label: '速度' },
-  { value: 'battery', label: '电量' }
-];
 
-// 度量类型选项
-const metricTypeOptions = [
-  { value: 1, label: '瞬时值' },
-  { value: 2, label: '平均值' },
-  { value: 3, label: '最大值' },
-  { value: 4, label: '最小值' }
-];
-
-// 时间范围类型选项
-const temporalScopeOptions = [
-  { value: 1, label: '实时' },
-  { value: 2, label: '累计' },
-  { value: 3, label: '滚动窗口' }
-];
 
 // 方法
 const close = () => {
@@ -267,11 +265,11 @@ const addCondition = () => {
 
   // 创建新的空白条件
   const newCondition: Condition = {
-    datetype: 'temperature',
-    metricType: 1,
+    datetype: dataTypeOptions[0].value,
+    metricType: metricTypeOptions[0].value,
     temporalScope: {
-      type: 1,
-      rollingWindow: null
+      type: temporalScopeOptions[0].value,
+      rollingWindow: 0
     },
     min: 0,
     max: 100
@@ -283,6 +281,24 @@ const addCondition = () => {
 const removeCondition = (index: number) => {
   if (!selectedEdge.value) return;
   selectedEdge.value.conditions.splice(index, 1);
+};
+
+// 删除连线方法
+const confirmDelete = async () => {
+  if (!selectedEdge.value) return;
+  const result = await showConfirmPromise(`确定要删除连线 "ID:${selectedEdge.value.id.value}" 吗？此操作无法撤销。`, '删除确认');
+  if (result) {
+    // 找出连线在数组中的索引
+    const edgeIndex = edges.value.findIndex(edge => edge.id.value === selectedEdge.value?.id.value);
+
+    if (edgeIndex !== -1) {
+      // 删除连线
+      edges.value.splice(edgeIndex, 1);
+
+      // 关闭编辑菜单
+      close();
+    }
+  }
 };
 
 </script>
@@ -798,40 +814,56 @@ input:checked + .toggle-label .toggle-inner:before {
   font-weight: 500;
 }
 
-/* 底部操作区域 */
-.menu-footer {
+/* 删除按钮区域 */
+.delete-button-container {
+  position: sticky;
+  bottom: 0;
+  width: 90%;
+  padding: 20px 28px;
+  background-color: transparent;
+  z-index: 1001;
   display: flex;
-  justify-content: flex-end;
-  padding: 22px 28px;
-  border-top: 1px solid #e9ecef;
-  background-color: #fff;
+  justify-content: center;
 }
 
-.save-button {
-  background-color: #3B82F6;
-  color: white;
-  border: none;
+.edit-menu:not(.open) .delete-button-container {
+  display: none;
+}
+
+.delete-button {
+  width: 100%;
+  background-color: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
   padding: 14px 28px;
   border-radius: 10px;
   font-size: 15px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.25s ease;
-  box-shadow: 0 3px 8px rgba(59, 130, 246, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
-.save-button:hover {
-  background-color: #2563EB;
+.delete-button:hover {
+  background-color: #fecaca;
   transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
 }
 
-.save-button:active {
+.delete-button:active {
   transform: translateY(0);
-  background-color: #1d4ed8;
-  box-shadow: 0 2px 5px rgba(59, 130, 246, 0.2);
+  background-color: #fca5a5;
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.1);
 }
 
+.delete-button svg {
+  flex-shrink: 0;
+}
+
+/* 支持移动设备 */
 @media (max-width: 640px) {
   .edit-menu {
     width: 100%;
@@ -862,6 +894,16 @@ input:checked + .toggle-label .toggle-inner:before {
   .minmax-row {
     flex-direction: column;
     gap: 10px;
+  }
+
+  .delete-button-container {
+    width: 100%;
+    padding: 15px 20px;
+  }
+
+  .delete-button {
+    padding: 12px 20px;
+    font-size: 14px;
   }
 }
 </style>

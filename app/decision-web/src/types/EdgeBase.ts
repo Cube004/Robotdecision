@@ -41,6 +41,7 @@ export class Edge {
         color: '#94A3B8',
         width: 2,
         dashed: false,
+        label: '',
         type: 'curve',
         curvature: 0.5
       });

@@ -1,9 +1,8 @@
 import { activeToolId } from '@/types/Manger';
 import { resetAddEdgeState, initAddEdgeState } from '@/types/extensions/ToolMenu/AddEdge';
 import { resetAddNodeState, initAddNodeState } from '@/types/extensions/ToolMenu/AddNode';
-
 export { activeToolId };
-
+import { exportRule, uploadRuleFile } from '@/types/extensions/MangerTool/Export';
 // 选择工具方法
 export const selectTool = (toolId: string) => {
   console.log('选择工具', toolId);
@@ -52,11 +51,13 @@ export const selectTool = (toolId: string) => {
       console.log('保存数据');
       resetAddEdgeState();
       resetAddNodeState();
+      exportRule();
       break;
     case 'sync':
       console.log('导入数据');
       resetAddEdgeState();
       resetAddNodeState();
+      uploadRuleFile();
       break;
   }
 };

@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import { computed, ref, onMounted, watch } from 'vue';
-import { nodes, NodeGroups } from '@/types/Manger';
+import { nodes, NodeGroups, mousePositionCanvas } from '@/types/Manger';
 
 // 节点组的位置和大小
 interface GroupPosition {
@@ -142,7 +142,7 @@ const handleGroupMouseDown = (event: MouseEvent, group: typeof nodeGroups.value[
   event.preventDefault();
 
   // 记录拖拽起始点
-  dragStartPos.value = { x: event.clientX, y: event.clientY };
+  dragStartPos.value = { x: mousePositionCanvas.value.x, y: mousePositionCanvas.value.y };
   isDragging.value = group.id;
   dragStartGroupPos.value = { ...groupPositions.value[group.id] };
 
@@ -164,33 +164,30 @@ const handleGroupMouseDown = (event: MouseEvent, group: typeof nodeGroups.value[
 };
 
 // 处理鼠标移动事件（拖拽中）
-const handleMouseMove = (event: MouseEvent) => {
+const handleMouseMove = () => {
   if (isDragging.value !== null && dragStartGroupPos.value) {
     // 计算移动距离
-    const deltaX = event.clientX - dragStartPos.value.x;
-    const deltaY = event.clientY - dragStartPos.value.y;
-
+    const deltaX = mousePositionCanvas.value.x - dragStartPos.value.x;
+    const deltaY = mousePositionCanvas.value.y - dragStartPos.value.y;
     // 同步更新组位置和节点位置
     const group = nodeGroups.value.find(g => g.id === isDragging.value);
     if (group) {
-      // 先更新节点位置，避免视觉延迟
+
       const nodesToUpdate = nodes.value.filter(n => group.nodesId.includes(n.id.value));
       nodesToUpdate.forEach(node => {
         const startPos = dragNodesStartPos.value[node.id.value];
         if (startPos) {
-          // 使用直接赋值而不是修改属性
           node.position = {
             x: startPos.x + deltaX,
             y: startPos.y + deltaY
           };
         }
       });
-
       // 然后更新组位置
       groupPositions.value[isDragging.value] = {
         ...dragStartGroupPos.value,
-        x: dragStartGroupPos.value.x + deltaX,
-        y: dragStartGroupPos.value.y + deltaY
+        x: mousePositionCanvas.value.x - groupPositions.value[isDragging.value].width / 2,
+        y: mousePositionCanvas.value.y - groupPositions.value[isDragging.value].height / 2
       };
     }
   }

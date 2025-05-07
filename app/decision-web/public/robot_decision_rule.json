@@ -1,0 +1,241 @@
+{
+  "version": "1.0",
+  "createdAt": "2025-05-07T13:48:49.975Z",
+  "mapSettings": {
+    "points": []
+  },
+  "nodes": [
+    {
+      "id": 0,
+      "position": {
+        "x": 2860,
+        "y": 1471
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "开始节点",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "root",
+        "mode": "Stay",
+        "waypointId": null,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#10B981",
+        "svgPath": "M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+      },
+      "edges": [
+        {
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "position": {
+        "x": 2860,
+        "y": 1621
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "分支节点",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "branch",
+        "mode": "Stay",
+        "waypointId": null,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": [
+        {
+          "value": 1
+        },
+        {
+          "value": 2
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "position": {
+        "x": 3160,
+        "y": 1621
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#FEE2E2",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "任务节点",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Stay",
+        "waypointId": null,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#EF4444",
+        "svgPath": "M4.5 15.75l7.5-7.5 7.5 7.5"
+      },
+      "edges": []
+    },
+    {
+      "id": 3,
+      "position": {
+        "x": 3160,
+        "y": 1771
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#DCF5E8",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "任务节点",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Stay",
+        "waypointId": null,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#F97316",
+        "svgPath": "M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+      },
+      "edges": []
+    }
+  ],
+  "edges": [
+    {
+      "id": 0,
+      "sourceId": 0,
+      "targetId": 1,
+      "config": {
+        "color": "#10B981",
+        "width": 2,
+        "label": "开始流程",
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": []
+    },
+    {
+      "id": 1,
+      "sourceId": 1,
+      "targetId": 2,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "label": "分支一流程",
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": []
+    },
+    {
+      "id": 2,
+      "sourceId": 1,
+      "targetId": 3,
+      "config": {
+        "color": "#EF4444",
+        "width": 2,
+        "label": "分支二流程",
+        "type": "curve",
+        "curvature": 0.4
+      },
+      "conditions": []
+    }
+  ],
+  "points": [],
+  "areas": [],
+  "nodeGroups": [
+    {
+      "id": 0,
+      "name": "主流程组",
+      "color": "rgba(59, 130, 246, 0.4)",
+      "nodesId": [
+        0,
+        1
+      ],
+      "config": {
+        "Loop": false,
+        "ResetTime": 0,
+        "Reverse": false
+      }
+    },
+    {
+      "id": 1,
+      "name": "任务组",
+      "color": "rgba(249, 115, 22, 0.4)",
+      "nodesId": [
+        2,
+        3
+      ],
+      "config": {
+        "Loop": true,
+        "ResetTime": 5,
+        "Reverse": false
+      }
+    }
+  ]
+}

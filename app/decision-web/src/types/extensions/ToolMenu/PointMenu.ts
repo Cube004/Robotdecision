@@ -1,12 +1,10 @@
-import { ref, watch, watchEffect } from 'vue';
+import { ref, watch } from 'vue';
 import { Point } from '@/types/Point';
-import { updatePointMenuPosition } from './MapPage';
+import { updatePointMenuPosition, getScale } from './MapPage';
 import { showPointMenu } from './MapPage';
-import { points } from '@/types/Manger';
+import { points, GetNewId, areas } from '@/types/Manger';
 import { MapSettingsPoints, mapWidth, mapHeight } from '@/types/Manger';
-import { areas } from '@/types/Manger';
 // 菜单状态
-export const mapImage = ref<HTMLImageElement | null>(null);
 export const showColorPicker = ref(false);
 export const showCustomColor = ref(false);
 export const showTextProperties = ref(false);
@@ -19,7 +17,7 @@ export const selectedColor = ref('#4285f4');
 export const customColor = ref('#4285f4');
 export const colorOptions = ref(['#000000', '#5f6368', '#bdc1c6', '#4285f4', '#8e24aa', '#4052b5', '#137333', '#b06000', '#ea4335']);
 export const textColorOptions = ref(['#000000', '#5f6368', '#4285f4', '#137333', '#ea4335']);
-export const pointText = ref('');
+export const pointText = ref('新航点');
 export const fontSize = ref(14);
 export const selectedTextColor = ref('#000000');
 
@@ -38,7 +36,7 @@ export function createNewPoint(x: number, y: number) {
   if (!scale) return;
   const { scaleX, scaleY } = scale;
   const newPoint = new Point(
-    points.value.length,
+    GetNewId(points.value.map(point => point.id.value)),
     { x, y },
     { x, y },
     selectedColor.value,
@@ -47,10 +45,7 @@ export function createNewPoint(x: number, y: number) {
     selectedTextColor.value,
     { x: scaleX, y: scaleY }
   );
-  points.value.push(newPoint);
-  selectedPoint.value = newPoint;
-  showPointMenu.value = true;
-  calculateWaypoint();
+  return newPoint;
 };
 
 // 选择附近的点
@@ -101,62 +96,7 @@ export function selectPointById(id: number) {
   }
 };
 
-// -------------------------------------地图缩放管理-------------------------------------
-const resizeObserver = new ResizeObserver(entries => {
-  for (const entry of entries) {
-      const { width, height } = entry.contentRect;
-      if (width && height) {
-        const scale = getScale();
-        if (!scale) return;
-        const { scaleX, scaleY } = scale;
-      [points, MapSettingsPoints].forEach(points => {
-        points.value.forEach(point => {
-          const x = point.position.x / scaleX * point.scale.x;
-          const y = point.position.y / scaleY * point.scale.y;
-          point.position.x = x;
-          point.position.y = y;
-          point.scale.x = scaleX;
-          point.scale.y = scaleY;
-        })
-      })
-      areas.value.forEach(area => {
-        area.leftTop.x = area.leftTop.x / scaleX * area.scale.x;
-        area.leftTop.y = area.leftTop.y / scaleY * area.scale.y;
-        area.rightBottom.x = area.rightBottom.x / scaleX * area.scale.x;
-        area.rightBottom.y = area.rightBottom.y / scaleY * area.scale.y;
-        area.scale.x = scaleX;
-        area.scale.y = scaleY;
-      })
-    }
-  }
-  calculateWaypoint();
-});
 
-const stop = watchEffect(() => {
-  if (mapImage.value) {
-    resizeObserver.observe(mapImage.value);
-    stop();
-  }
-})
-
-export function getScale() {
-  const displayWidth = mapImage.value?.width;
-  const displayHeight = mapImage.value?.height;
-
-  const naturalWidth = mapImage.value?.naturalWidth;
-  const naturalHeight = mapImage.value?.naturalHeight;
-
-  if (naturalWidth === undefined || naturalHeight === undefined || displayWidth === undefined || displayHeight === undefined) {
-    console.log("getScale error");
-    return;
-  }
-  const scaleX = naturalWidth / displayWidth;
-  const scaleY = naturalHeight / displayHeight;
-
-  return { scaleX: scaleX as number, scaleY: scaleY as number };
-}
-
-// -------------------------------------地图缩放管理-------------------------------------
 
 // 计算航点
 export function calculateWaypoint() {
@@ -165,9 +105,9 @@ export function calculateWaypoint() {
     const LeftPoint = MapSettingsPoints.value.find(point => point.id.value === 1);
     const RightPoint = MapSettingsPoints.value.find(point => point.id.value === 2);
     if (LeftPoint && RightPoint && CenterPoint) {
-      points.value.forEach(point => {
       const width = RightPoint.position.x - LeftPoint.position.x;
       const height = RightPoint.position.y - LeftPoint.position.y;
+      points.value.forEach(point => {
       const x = point.position.x - CenterPoint.position.x;
       const y = point.position.y - CenterPoint.position.y;
       const waypoint = {
@@ -175,6 +115,16 @@ export function calculateWaypoint() {
         y: y / height * mapHeight.value
       }
         point.waypoint = waypoint;
+      });
+      areas.value.forEach(area => {
+        area.leftTopWaypoint = {
+          x: (area.leftTop.x - CenterPoint.position.x) / width * mapWidth.value,
+          y: (area.leftTop.y - CenterPoint.position.y) / height * mapHeight.value
+        }
+        area.rightBottomWaypoint = {
+          x: (area.rightBottom.x - CenterPoint.position.x) / width * mapWidth.value,
+          y: (area.rightBottom.y - CenterPoint.position.y) / height * mapHeight.value
+        }
       });
     }
   }

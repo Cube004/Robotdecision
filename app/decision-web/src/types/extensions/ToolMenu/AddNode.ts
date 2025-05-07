@@ -2,6 +2,8 @@ import { ref } from 'vue';
 import { Node } from '@/types/Node';
 import { nodes } from '@/types/Manger';
 import { activeToolId } from '@/types/ToolMenu';
+import { mousePositionCanvas } from '@/types/Manger';
+import { GetNewId } from '@/types/Manger';
 // 用于存储当前操作模式状态
 export const isAddingNode = ref<boolean>(false);
 
@@ -50,9 +52,7 @@ export function handleCancelAddNode() {
 export function handlePlaceNode(position: { x: number, y: number }) {
   console.log('添加新节点位置:', position);
   // 获取下一个节点ID
-  const nextNodeId = nodes.value.length > 0
-    ? Math.max(...nodes.value.map(node => node.id.value)) + 1
-    : 0;
+  const nextNodeId = GetNewId(nodes.value.map(node => node.id.value));
   // 创建新节点
   const newNode = createNode(position, nextNodeId);
   // 添加到节点列表
@@ -79,7 +79,7 @@ export function createNode(position: { x: number, y: number }, nextNodeId: numbe
   // 创建新节点
   const newNode = new Node(
     { value: nextNodeId }, // id
-    { x: position.x - 100, y: position.y - 30 }, // 居中位置
+    { x: mousePositionCanvas.value.x - 100, y: mousePositionCanvas.value.y - 30 }, // 居中位置
     { width: 200, height: 60, borderWidth: 1, borderRadius: 8 }, // shape
     { borderColor: '#E2E8F0', fillColor: '#FFFFFF', fillOpacity: 1 }, // color
     { size: 14, color: '#334155', content: '任务节点', fontFamily: 'Inter, system-ui, sans-serif' }, // text

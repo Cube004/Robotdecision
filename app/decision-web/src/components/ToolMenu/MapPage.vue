@@ -5,41 +5,45 @@
         <div class="map-content-wrapper" ref="mapContainer">
           <img class="map-image" ref="mapImage" src="/map/RUMC.png" alt="航点地图" @click="handleMapClick">
           <!-- 渲染所有航点 -->
-          <div
-            v-for="point in points"
-            :key="point.id.value"
-            class="map-point"
-            :style="{
-              left: `${point.position.x}px`,
-              top: `${point.position.y}px`,
-              backgroundColor: point.color.value,
-              position: 'absolute'
-            }"
-            :class="{ active: selectedPoint && selectedPoint.id.value === point.id.value }"
-            @click.stop="selectPointById(point.id.value)"
-          >
-            <div class="point-text" v-if="point.text.value" :style="{ fontSize: point.fontSize.value + 'px', color: point.textColor.value }">
-              {{ point.text.value }}
-            </div>
+          <div v-if="layers.find(layer => layer.name === '航点图层')?.visible">
+            <div
+              v-for="point in points"
+              :key="point.id.value"
+              class="map-point"
+              :style="{
+                left: `${point.position.x}px`,
+                top: `${point.position.y}px`,
+                backgroundColor: point.color.value,
+                position: 'absolute'
+              }"
+              :class="{ active: selectedPoint && selectedPoint.id.value === point.id.value }"
+              @click.stop="selectPointById(point.id.value)"
+            >
+              <div class="point-text" v-if="point.text.value" :style="{ fontSize: point.fontSize.value + 'px', color: point.textColor.value }">
+                {{ point.text.value }}
+              </div>
 
-            <div class="point-waypoint-text" v-if="point.waypoint" :style="{ fontSize: point.fontSize.value + 'px', color: point.textColor.value }">
-              {{ point.waypoint.x.toFixed(1) }}, {{ point.waypoint.y.toFixed(1) }}
+              <div class="point-waypoint-text" v-if="point.waypoint" :style="{ fontSize: point.fontSize.value + 'px', color: point.textColor.value }">
+                {{ point.waypoint.x.toFixed(1) }}, {{ point.waypoint.y.toFixed(1) }}
+              </div>
             </div>
           </div>
           <!-- 渲染地图设置点 -->
-          <div
-            v-for="point in MapSettingsPoints"
-            :key="point.id.value"
-            class="map-point"
-            :style="{
-              left: `${point.position.x}px`,
-              top: `${point.position.y}px`,
-              backgroundColor: point.color.value,
-              position: 'absolute'
-            }"
-          >
-            <div class="point-text" v-if="point.text.value" :style="{ fontSize: point.fontSize.value + 'px', color: point.textColor.value }">
-              {{ point.text.value }}
+          <div v-if="layers.find(layer => layer.name === '地图设置图层')?.visible">
+            <div
+              v-for="point in MapSettingsPoints"
+              :key="point.id.value"
+              class="map-point"
+              :style="{
+                left: `${point.position.x}px`,
+                top: `${point.position.y}px`,
+                backgroundColor: point.color.value,
+                position: 'absolute'
+              }"
+            >
+              <div class="point-text" v-if="point.text.value" :style="{ fontSize: point.fontSize.value + 'px', color: point.textColor.value }">
+                {{ point.text.value }}
+              </div>
             </div>
           </div>
           <!-- 渲染预览点 -->
@@ -61,32 +65,33 @@
             </div>
           </div>
           <!-- 渲染区域对象-->
-          <div
-            v-for="area in areas"
-            :key="area.id"
-            class="area"
-            :style="{
-              position: 'absolute',
-              left: `${area.leftTop.x}px`,
-              top: `${area.leftTop.y}px`,
-              width: `${area.rightBottom.x - area.leftTop.x}px`,
-              height: `${area.rightBottom.y - area.leftTop.y}px`,
-              backgroundColor: area.color,
-              borderRadius: '8px',
-              border: `2px solid ${area.color}`,
-              zIndex: 0,
-            }"
-            @mousedown="handleAreaMouseDown($event, area)"
-          >
-          <div
-            class="group-label"
-            :style="{ backgroundColor: area.color }"
-          >
-              {{ area.name }} (#{{ area.id }})
+          <div v-if="layers.find(layer => layer.name === '区域图层')?.visible">
+            <div
+              v-for="area in areas"
+              :key="area.id"
+              class="area"
+              :style="{
+                position: 'absolute',
+                left: `${area.leftTop.x}px`,
+                top: `${area.leftTop.y}px`,
+                width: `${area.rightBottom.x - area.leftTop.x}px`,
+                height: `${area.rightBottom.y - area.leftTop.y}px`,
+                backgroundColor: area.color,
+                borderRadius: '8px',
+                border: `2px solid ${area.color}`,
+                zIndex: 0,
+              }"
+              @mousedown="handleAreaMouseDown($event, area)"
+            >
+            <div
+              class="group-label"
+              :style="{ backgroundColor: area.color }"
+            >
+                {{ area.name }} (#{{ area.id }})
+              </div>
             </div>
           </div>
         </div>
-
         <!-- 航点菜单 -->
         <div class="menu point-menu" id="pointMenu" v-show="showPointMenu" :style="pointMenuStyle">
           <div class="menu-item" id="pointColor">
@@ -289,7 +294,6 @@
         <!-- 悬浮功能菜单 -->
         <div
           class="floating-menu"
-          :class="{ dragging: isDragging }"
           :style="{ top: menuPosition.top + 'px', left: menuPosition.left + 'px' }"
           v-show="showMapTools"
         >
@@ -495,13 +499,11 @@ import {
   showDeleteConfirm,
   textColorOptions,
   selectedColor,
-  customColor,
-  mapImage
+  customColor
 } from '@/types/extensions/ToolMenu/PointMenu';
 import {
   showFloatingMenu,
   showMapTools,
-  isDragging,
   menuPosition,
   setStartingArea,
   setTopLeftCorner,
@@ -518,6 +520,8 @@ import {
   selectedArea,
   areaName,
   areaColor,
+  createWaypoint,
+  mapImage
 } from '@/types/extensions/ToolMenu/MapPage';
 import {
   showAreaColorPicker,
@@ -529,12 +533,12 @@ import {
   selectAreaColor,
   updateAreaName,
   deleteArea,
-  areaColorOptions,
-  createWaypoint
+  areaColorOptions
 } from '@/types/extensions/ToolMenu/AreaMenu';
 import { points } from '@/types/Manger';
 import { mapWidth, mapHeight, MapSettingsPoints, areas } from '@/types/Manger';
 import { type Area } from '@/types/Area';
+import { layers } from '@/types/Layers';
 // 定义 props
 const props = defineProps<{
   visible: boolean;

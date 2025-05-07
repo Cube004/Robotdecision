@@ -1,9 +1,9 @@
-import { ref } from 'vue';
+import { ref, watchEffect, watch } from 'vue';
 import { activeToolId } from '@/types/ToolMenu';
 import { createNewPoint, selectPointNearby, resetMenuState } from './PointMenu';
 import { Point } from '@/types/Point';
-import { getScale, calculateWaypoint } from './PointMenu';
-import { MapSettingsPoints, showError, areas } from '@/types/Manger';
+import { calculateWaypoint } from './PointMenu';
+import { MapSettingsPoints, showError, areas, GetNewId, points } from '@/types/Manger';
 import { Area } from '@/types/Area';
 
 export const mapContainer = ref<HTMLElement | null>(null);
@@ -16,41 +16,52 @@ export const pointMenuStyle = ref({
 });
 export const mousePosition = ref({ x: 0, y: 0 });
 
-// ----------------------------地图初始化设置----------------------------
+// ----------------------------放置状态管理----------------------------
+export const isPlacingSettingsPoint = ref(false); // 是否正在放置地图初始化点
+export const isPlacingPoint = ref(false); // 是否正在放置航点
+export const isCreatingArea = ref(false);
+export function resetPlaceState(){
+  isPlacingSettingsPoint.value = false;
+  isCreatingArea.value = false;
+  isPlacingPoint.value = false;
+  previewPoints.value = null;
+  showFloatingMenu.value = false;
+}
 
-// 为悬浮菜单添加响应式变量
-export const showFloatingMenu = ref(false); // 默认显示悬浮菜单内容
+export function createWaypoint(){
+  resetPlaceState();
+  if (MapSettingsPoints.value.length !== 3) {
+    showError('请先使用航点计算工具初始化地图参数');
+    return;
+  }
+  isPlacingPoint.value = true;
+  previewPoints.value = createNewPoint(0, 0) as Point;
+}
+
+export function createArea(){
+  resetPlaceState();
+  isCreatingArea.value = true;
+  const firstPoint = createNewPoint(0, 0) as Point;
+  firstPoint.text.value = '左上角';
+  previewPoints.value = firstPoint;
+}
+
+export function createArea2(){
+  const secondPoint = createNewPoint(0, 0) as Point;
+  secondPoint.text.value = '右下角';
+  previewPoints.value = secondPoint;
+}
+
+// ----------------------------地图初始化相关----------------------------
+
 export const showMapTools = ref(true); // 显示地图工具菜单
-export const isDragging = ref(false); // 是否正在拖动
+export const showFloatingMenu = ref(false); // 默认显示悬浮菜单内容
 export const menuPosition = ref({ top: 20, left: 20 }); // 菜单位置
 export const activeTab = ref(0); // 当前激活的标签页，默认显示第一个标签页
-
 export const previewPoints = ref<Point | null>(null);
-export const isPlacingSettingsPoint = ref(false);
-
-
-
-// 区域菜单相关变量
-export const isCreatingArea = ref(false);
-export const areaFirstPoint = ref<{x: number, y: number} | null>(null);
-export const showAreaMenu = ref(false);
-export const areaMenuStyle = ref({
-  top: '0px',
-  left: '0px',
-  display: 'none'
-});
-export const selectedArea = ref<Area | null>(null);
-export const areaName = ref('');
-export const areaColor = ref('rgba(59, 130, 246, 0.2)');
-// 创建区域对象
-export const createArea = () => {
-  isCreatingArea.value = true;
-  areaFirstPoint.value = null;
-  showFloatingMenu.value = false;
-};
-
 
 export const setStartingArea = () => {
+  resetPlaceState();
   isPlacingSettingsPoint.value = true;
   showFloatingMenu.value = false;
   previewPoints.value = new Point(
@@ -65,6 +76,7 @@ export const setStartingArea = () => {
   );
 };
 export const setTopLeftCorner = () => {
+  resetPlaceState();
   isPlacingSettingsPoint.value = true;
   showFloatingMenu.value = false;
   previewPoints.value = new Point(
@@ -79,6 +91,7 @@ export const setTopLeftCorner = () => {
   );
 };
 export const setBottomRightCorner = () => {
+  resetPlaceState();
   isPlacingSettingsPoint.value = true;
   showFloatingMenu.value = false;
   previewPoints.value = new Point(
@@ -92,14 +105,20 @@ export const setBottomRightCorner = () => {
     { x: 1, y: 1 }
   );
 };
+// ----------------------------地图区域相关----------------------------
 
-export const applyMapSize = () => {
-  calculateWaypoint();
-};
+export const areaFirstPoint = ref<{x: number, y: number} | null>(null);
+export const showAreaMenu = ref(false);
+export const areaMenuStyle = ref({
+  top: '0px',
+  left: '0px',
+  display: 'none'
+});
+export const selectedArea = ref<Area | null>(null);
+export const areaName = ref('');
+export const areaColor = ref('rgba(59, 130, 246, 0.2)');
 
 // ----------------------------地图点击事件----------------------------
-
-// 地图点击事件
 export function handleMapClick(event: MouseEvent) {
   if (!(event.target instanceof HTMLImageElement)) return;
 
@@ -115,6 +134,7 @@ export function handleMapClick(event: MouseEvent) {
     if (!areaFirstPoint.value) {
       // 第一次点击，记录左上角点
       areaFirstPoint.value = { x, y };
+      createArea2(); // 创建右下角预览点
       return;
     } else {
       // 第二次点击，创建区域
@@ -130,7 +150,7 @@ export function handleMapClick(event: MouseEvent) {
       if (!scale) return;
       const { scaleX, scaleY } = scale;
       const newArea = new Area(
-        areas.value.length,
+        GetNewId(areas.value.map(area => area.id)),
         '新区域',
         { x: leftTopX, y: leftTopY },
         { x: rightBottomX, y: rightBottomY },
@@ -140,13 +160,13 @@ export function handleMapClick(event: MouseEvent) {
       areas.value.push(newArea);
 
       // 重置创建状态
-      isCreatingArea.value = false;
       areaFirstPoint.value = null;
+      resetPlaceState();
       return;
     }
   }
 
-  // 放置预览点
+  // 处理地图初始化点
   if (isPlacingSettingsPoint.value && previewPoints.value) {
     isPlacingSettingsPoint.value = false;
     previewPoints.value.position = { x, y };
@@ -159,15 +179,25 @@ export function handleMapClick(event: MouseEvent) {
     const { scaleX, scaleY } = scale;
     previewPoints.value.scale = { x: scaleX, y: scaleY };
     MapSettingsPoints.value.push(previewPoints.value);
-
-    previewPoints.value = null;
+    resetPlaceState();
     return;
   }
 
-  if (event.button === 2 || event.ctrlKey) { // 右键点击或Ctrl+点击
+  // 处理航点创建
+  if (isPlacingPoint.value) {
+    isPlacingPoint.value = false;
+    points.value.push(createNewPoint(x, y) as Point);
+    calculateWaypoint();
+    resetPlaceState();
+    return;
+  }
+
+  // 处理右键点击或Ctrl+点击
+  if (event.button === 2 || event.ctrlKey) {
     // 创建新航点
     if (MapSettingsPoints.value.length === 3) {
-      createNewPoint(x, y);
+      points.value.push(createNewPoint(x, y) as Point);
+      calculateWaypoint();
     }else{
       showError('请先使用航点计算工具初始化地图参数');
     }
@@ -231,3 +261,77 @@ export function updatePointMenuPosition(x: number, y: number) {
   };
 };
 
+// 计算航点
+export const applyMapSize = () => {
+  calculateWaypoint();
+};
+
+
+// -------------------------------------地图缩放管理-------------------------------------
+export const mapImage = ref<HTMLImageElement | null>(null);
+const resizeObserver = new ResizeObserver(entries => {
+  for (const entry of entries) {
+      const { width, height } = entry.contentRect;
+      if (width && height) {
+        updateObjectPosition();
+    }
+  }
+  calculateWaypoint();
+});
+
+const stop = watchEffect(() => {
+  if (mapImage.value) {
+    resizeObserver.observe(mapImage.value);
+    stop();
+  }
+})
+
+export function getScale() {
+  const displayWidth = mapImage.value?.width;
+  const displayHeight = mapImage.value?.height;
+
+  const naturalWidth = mapImage.value?.naturalWidth;
+  const naturalHeight = mapImage.value?.naturalHeight;
+
+  if (naturalWidth === undefined || naturalHeight === undefined || displayWidth === undefined || displayHeight === undefined) {
+    console.log("getScale error");
+    return;
+  }
+  const scaleX = naturalWidth / displayWidth;
+  const scaleY = naturalHeight / displayHeight;
+
+  return { scaleX: scaleX as number, scaleY: scaleY as number };
+}
+
+// 更新对象位置
+export function updateObjectPosition() {
+  const scale = getScale();
+  if (!scale) return;
+  const { scaleX, scaleY } = scale;
+  [points, MapSettingsPoints].forEach(points => {
+    points.value.forEach(point => {
+      const x = point.position.x / scaleX * point.scale.x;
+      const y = point.position.y / scaleY * point.scale.y;
+      point.position.x = x;
+      point.position.y = y;
+      point.scale.x = scaleX;
+      point.scale.y = scaleY;
+      })
+  })
+  areas.value.forEach(area => {
+    area.leftTop.x = area.leftTop.x / scaleX * area.scale.x;
+    area.leftTop.y = area.leftTop.y / scaleY * area.scale.y;
+    area.rightBottom.x = area.rightBottom.x / scaleX * area.scale.x;
+    area.rightBottom.y = area.rightBottom.y / scaleY * area.scale.y;
+    area.scale.x = scaleX;
+    area.scale.y = scaleY;
+  })
+}
+// -------------------------------------地图缩放管理-------------------------------------
+
+watch(showMap, (newVal) => {
+  if (newVal) {
+    updateObjectPosition();
+    calculateWaypoint();
+  }
+})

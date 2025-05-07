@@ -22,33 +22,32 @@ export const mapHeight = ref(15);
 export const MapSettingsPoints = ref<Point[]>([]);
 // ----------------------------地图设置----------------------------
 
-
+export const mousePositionCanvas = ref<{ x: number, y: number }>({ x: 0, y: 0 });
+export const currentScale = ref(1.0);
 // 工具选择处理函数
 export function handleToolSelected(toolId: string) {
     console.log('当前选中工具:', toolId);
 };
 
+let oldNodes: Node[] = [];
 watch(nodes, (newVal) => {
-  if (newVal.length > 0 && newVal.length !== (nodes.value[nodes.value.length - 1].id.value + 1)) {
-    nodes.value.forEach((node, index) => {
-      if (node.id.value !== index) {
-        const oldId = node.id.value;
-        edges.value.filter(edge => edge.sourceId === oldId || edge.targetId === oldId).forEach(edge => {
-          if (edge.sourceId === oldId) {
-            edge.sourceId = index;
-          } else if (edge.targetId === oldId) {
-            edge.targetId = index;
-          }
-        });
-        node.id.value = index;
-      }
+  if (oldNodes.length > newVal.length) {
+    const removedNodes = oldNodes.filter(oldNode => !newVal.some(newNode => newNode.id.value === oldNode.id.value));
+    removedNodes.forEach(node => {
+      // 移除节点后，移除与该节点相连的边
+      edges.value = [...edges.value.filter(edge => edge.sourceId !== node.id.value && edge.targetId !== node.id.value)];
+      // 移除节点后，移除节点组中节点ID
+      NodeGroups.value.forEach(group => {
+        group.nodesId = group.nodesId.filter(id => id !== node.id.value);
+      });
     });
   }
-});
+  oldNodes = [...newVal];
+}, { deep: true });
 
 let oldVal: Edge[] = [];
 watch(edges, (newVal) => {
-  console.log("发生了变化",newVal.length, oldVal.length);
+  console.log("edges发生了变化",newVal.length, oldVal.length);
 
   // 找出哪些边被移除了
   const removedEdges = oldVal.filter(oldEdge =>
@@ -64,8 +63,8 @@ watch(edges, (newVal) => {
   if (removedEdges.length > 0) {
     // 避免直接修改节点的边
     nodes.value.forEach(node => {
-      const filteredEdges = node.edges.filter(edge =>
-        !removedEdges.some(e => e.id.value === edge.id.value)
+      const filteredEdges = node.edges.filter(edgeId =>
+        !removedEdges.some(e => e.id.value === edgeId.value)
       );
       if (filteredEdges.length !== node.edges.length) {
         node.edges = filteredEdges;
@@ -77,26 +76,12 @@ watch(edges, (newVal) => {
   if (addedEdges.length > 0) {
     addedEdges.forEach(edge => {
       const sourceNode = nodes.value.find(node => node.id.value === edge.sourceId);
-      if (sourceNode && !sourceNode.edges.some(e => e.id.value === edge.id.value)) {
+      if (sourceNode && !sourceNode.edges.some(edgeId => edgeId.value === edge.id.value)) {
         // 创建一个新数组而不是直接修改
-        sourceNode.edges = [...sourceNode.edges, edge];
+        sourceNode.edges = [...sourceNode.edges, edge.id];
       }
     });
     console.log("新增的边", addedEdges);
-  }
-
-  // * 边的ID与索引不一致，使用延时更新，避免在当前监听循环中修改
-  if (newVal.length > 0 && newVal.length !== (edges.value[edges.value.length - 1].id.value + 1)) {
-    setTimeout(() => {
-      const edgesToUpdate = [...edges.value];
-      edgesToUpdate.forEach((edge, index) => {
-        if (edge.id.value !== index) {
-          edge.id.value = index;
-        }
-      });
-      // 使用全新的数组引用触发响应式更新
-      edges.value = edgesToUpdate;
-    }, 0);
   }
   oldVal = [...newVal];
 }, { deep: true }); // 添加深度监听选项
@@ -119,4 +104,19 @@ export function showError(message: string) {
   window.dispatchEvent(new CustomEvent('custom-error', {
     detail: { message: message }
   }));
+}
+
+
+export function GetNewId(ids: number[]): number {
+  if (ids.length === 0) return 0;
+  ids.sort((a, b) => a - b);
+
+  let expected = 0;
+  for (const id of ids) {
+      if (id > expected) {
+          return expected;
+      }
+      expected = id + 1;
+  }
+  return expected;
 }

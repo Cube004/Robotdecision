@@ -123,7 +123,7 @@ class Node {
       this.taskConfig = reactive({
         nodeType: NodeType.Task,
         mode: Mode.Stay,
-        waypointId: null,
+        waypointId: -1,
         spin: 0,
         linear: 0,
         resetTime: 0,

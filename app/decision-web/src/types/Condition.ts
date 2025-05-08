@@ -1,8 +1,8 @@
 import { reactive } from "vue";
 
 export interface Condition {
-  datetype: string;
   metricType: number;
+  datetype: string;
   temporalScope: {
     type: number;
     rollingWindow: number | null;

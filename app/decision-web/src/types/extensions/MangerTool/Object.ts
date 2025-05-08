@@ -95,7 +95,7 @@ export function LoadMapSettingsPoints() {
       console.error('加载文件时出错:', error);
     });
 }
-
+LoadMapSettingsPoints();
 export function outNodes() {
   const nodeList = [...nodes.value];
   const json = nodeList.map(item => {

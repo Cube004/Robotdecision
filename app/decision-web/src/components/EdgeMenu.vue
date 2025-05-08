@@ -112,6 +112,16 @@
                 </div>
 
                 <div class="condition-body">
+
+                  <div class="condition-setting">
+                    <label for="metricType">判断依据</label>
+                    <select id="metricType" v-model="condition.metricType">
+                      <option v-for="(option, idx) in metricTypeOptions" :key="idx" :value="option.value">
+                        {{ option.label }}
+                      </option>
+                    </select>
+                  </div>
+
                   <div class="condition-setting">
                     <label for="datetype">数据</label>
                     <select id="datetype-normal" v-model="condition.datetype" v-if="condition.metricType < 5">
@@ -120,22 +130,13 @@
                       </option>
                     </select>
                     <select id="datetype-area" v-model="condition.datetype" v-if="condition.metricType === 5">
-                      <option v-for="(option, idx) in areas" :key="idx" :value="option.id">
+                      <option v-for="(option, idx) in areas" :key="idx" :value="option.id.toString()">
                         {{ option.name }}
                       </option>
                     </select>
                     <select id="datetype-waypoint" v-model="condition.datetype" v-if="condition.metricType === 6">
-                      <option v-for="(option, idx) in points" :key="idx" :value="option.id">
+                      <option v-for="(option, idx) in points" :key="idx" :value="option.id.value.toString()">
                         {{ option.text.value }}
-                      </option>
-                    </select>
-                  </div>
-
-                  <div class="condition-setting">
-                    <label for="metricType">判断依据</label>
-                    <select id="metricType" v-model="condition.metricType">
-                      <option v-for="(option, idx) in metricTypeOptions" :key="idx" :value="option.value">
-                        {{ option.label }}
                       </option>
                     </select>
                   </div>

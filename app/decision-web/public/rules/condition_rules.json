@@ -8,17 +8,17 @@
     {
         "type": "stage_remain_time",
         "description": "剩余时间",
-        "data": 300
+        "data": 420
     },
     {
         "type": "own_base_HP",
         "description": "己方基地血量",
-        "data": 1000
+        "data": 5000
     },
     {
         "type": "enemy_base_HP",
         "description": "敌方基地血量",
-        "data": 1000
+        "data": 5000
     },
     {
         "type": "event_data",
@@ -28,7 +28,7 @@
     {
         "type": "current_HP",
         "description": "哨兵血量",
-        "data": 1000
+        "data": 400
     },
     {
         "type": "vision_status",
@@ -48,7 +48,7 @@
     {
         "type": "shoot_num",
         "description": "剩余发弹量",
-        "data": 600
+        "data": 300
     },
     {
         "type": "rfid_status",
@@ -61,23 +61,23 @@
     },{
         "type": "remaining_energy",
         "description": "剩余能量",
-        "data": 1000
+        "data": 5
     },{
         "type": "enemy_outpost_HP",
         "description": "敌人前哨站血量",
-        "data": 1000
+        "data": 1500
     },{
         "type": "own_outpost_HP",
         "description": "己方前哨站血量",
-        "data": 1000
+        "data": 1500
     },{
         "type": "enemy_robot_HP",
         "description": "敌人机器人血量",
-        "data": 1000
+        "data": 300
     },{
         "type": "maximum_HP",
         "description": "最大血量",
-        "data": 1000
+        "data": 300
     },{
         "type": "defence_buff",
         "description": "防御buff",
@@ -89,6 +89,10 @@
     },{
         "type": "attack_buff",
         "description": "攻击buff",
+        "data": 0
+    },{
+        "type": "obtain_shoot_num",
+        "description": "可获取发弹量",
         "data": 0
     }
     ]

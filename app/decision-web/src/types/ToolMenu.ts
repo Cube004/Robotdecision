@@ -52,12 +52,14 @@ export const selectTool = (toolId: string) => {
       resetAddEdgeState();
       resetAddNodeState();
       exportRule();
+      activeToolId.value = 'cursor';
       break;
     case 'sync':
       console.log('导入数据');
       resetAddEdgeState();
       resetAddNodeState();
       uploadRuleFile();
+      activeToolId.value = 'cursor';
       break;
   }
 };

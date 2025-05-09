@@ -14,7 +14,7 @@ export function init_push_data() {
   .then(data => {
     if (Array.isArray(data.rules)) {
       data.rules.forEach((item: { type: string; description: string; data: number }) => {
-        push_data.value.push({ label: item.type, data: item.data });
+        push_data.value.push({ label: item.type, data: item.data as number });
       });
     }
     console.log('成功加载数据类型:', push_data.value.length);

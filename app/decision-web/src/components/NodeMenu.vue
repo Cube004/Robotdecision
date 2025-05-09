@@ -195,15 +195,15 @@
               <div class="setting-card">
                 <div class="edges-header">
                   <label>优先级列表</label>
-                  <span class="edges-count" v-if="nodeEdges.length">共 {{ nodeEdges.length }} 个连接</span>
+                  <span class="edges-count" v-if="selectedNode.edges.length">共 {{ selectedNode.edges.length }} 个连接</span>
                 </div>
 
-                <div class="edges-empty" v-if="!nodeEdges.length">
+                <div class="edges-empty" v-if="!selectedNode.edges.length">
                   <span>当前节点没有连接的边</span>
                 </div>
 
                 <draggable
-                  v-model="nodeEdges"
+                  v-model="selectedNode.edges"
                   item-key="id"
                   class="edges-list"
                   handle=".edge-drag-handle"
@@ -236,7 +236,7 @@
                 </draggable>
               </div>
 
-              <div class="setting-card" v-if="nodeEdges.length">
+              <div class="setting-card" v-if="selectedNode.edges.length">
                 <div class="edge-priority-info">
                   <div class="info-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -299,7 +299,6 @@ const selectedNode = computed<Node | null>(() => {
 });
 
 // 节点的边列表
-const nodeEdges = ref<EdgeId[]>([]);
 
 // 相关表单数据
 const iconSvgPath = ref('');
@@ -324,15 +323,6 @@ watch(() => selectedNode.value, (newNode) => {
     activeTab.value = 0;
     iconSvgPath.value = newNode.icon?.svgPath || '';
     iconColor.value = newNode.icon?.bgColor || '#3B82F6';
-    // 初始化边缘数据
-    if (newNode.edges && newNode.edges.length > 0) {
-      nodeEdges.value = newNode.edges;
-      console.log(newNode.edges);
-      console.log(nodeEdges.value,nodeEdges.value.length);
-
-    } else {
-      nodeEdges.value = [];
-    }
     if (newNode.taskConfig.nodeType === NodeType.Task) {
       tabs.value = AllTabs.slice(0, 3);
     } else {
@@ -449,12 +439,6 @@ const getEdgeLabel = (edgeId: EdgeId): string => {
 // 处理边顺序变化
 const handleEdgeOrderChanged = () => {
   if (!selectedNode.value) return;
-
-  // 更新节点的边顺序
-  if (nodeEdges.value.length > 0) {
-    selectedNode.value.edges = [...nodeEdges.value];
-    emit('node-updated', selectedNode.value);
-  }
 };
 
 // 删除节点方法

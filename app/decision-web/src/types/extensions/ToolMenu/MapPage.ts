@@ -313,6 +313,7 @@ export function updateObjectPosition() {
     points.value.forEach(point => {
       const x = point.position.x / scaleX * point.scale.x;
       const y = point.position.y / scaleY * point.scale.y;
+      if (x === null || y === null) return;
       point.position.x = x;
       point.position.y = y;
       point.scale.x = scaleX;
@@ -320,10 +321,15 @@ export function updateObjectPosition() {
       })
   })
   areas.value.forEach(area => {
-    area.leftTop.x = area.leftTop.x / scaleX * area.scale.x;
-    area.leftTop.y = area.leftTop.y / scaleY * area.scale.y;
-    area.rightBottom.x = area.rightBottom.x / scaleX * area.scale.x;
-    area.rightBottom.y = area.rightBottom.y / scaleY * area.scale.y;
+    const lfx = area.leftTop.x / scaleX * area.scale.x;
+    const lfy = area.leftTop.y / scaleY * area.scale.y;
+    const rbx = area.rightBottom.x / scaleX * area.scale.x;
+    const rby = area.rightBottom.y / scaleY * area.scale.y;
+    if (lfx === null || lfy === null || rbx === null || rby === null) return;
+    area.leftTop.x = lfx;
+    area.leftTop.y = lfy;
+    area.rightBottom.x = rbx;
+    area.rightBottom.y = rby;
     area.scale.x = scaleX;
     area.scale.y = scaleY;
   })
@@ -331,7 +337,7 @@ export function updateObjectPosition() {
 // -------------------------------------地图缩放管理-------------------------------------
 
 watch(showMap, (newVal) => {
-  if (newVal) {
+  if (newVal && activeToolId.value === 'map') {
     updateObjectPosition();
     calculateWaypoint();
     if (pose.value) {
@@ -341,8 +347,7 @@ watch(showMap, (newVal) => {
 })
 
 watch(pose, (newVal) => {
-  console.log("pose", newVal);
-  if (newVal) {
+  if (newVal && activeToolId.value === 'map') {
     updateRobotPose({x: newVal.x, y: newVal.y});
   }
 })

@@ -254,7 +254,7 @@
       </div>
 
       <!-- 删除按钮区域 -->
-      <div class="delete-button-container">
+      <div class="delete-button-container" v-if="selectedNode.taskConfig.nodeType !== 'root'">
         <button class="delete-button" @click="confirmDelete">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M3 6h18"></path>
@@ -388,6 +388,12 @@ const updateNodeType = () => {
       selectedNode.value.taskConfig.nodeType = NodeType.Branch;
       showError('任务节点不能有连接的边');
     }
+    selectedNode.value.color = { borderColor: '#E2E8F0', fillColor: '#FFFFFF', fillOpacity: 1 };
+    selectedNode.value.text = { size: 14, color: '#334155', content: '任务节点', fontFamily: 'Inter, system-ui, sans-serif' };
+    selectedNode.value.icon =     {
+      svgPath: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4',
+      bgColor: '#3B82F6'
+    }
   }
 
   if (selectedNode.value.taskConfig.nodeType === 'root') {
@@ -395,6 +401,16 @@ const updateNodeType = () => {
     selectedNode.value.taskConfig.waypointId = null;
     selectedNode.value.taskConfig.spin = 0;
     selectedNode.value.taskConfig.resetTime = 0;
+  }
+
+
+  if (selectedNode.value.taskConfig.nodeType === 'branch') {
+    selectedNode.value.color = { borderColor: '#E2E8F0', fillColor: '#FFFFFF', fillOpacity: 1 };
+    selectedNode.value.text = { size: 14, color: '#334155', content: '分支节点', fontFamily: 'Inter, system-ui, sans-serif' };
+    selectedNode.value.icon =  {
+      svgPath: 'M4.5 15.75l7.5-7.5 7.5 7.5',
+      bgColor: '#EF4444'
+    }
   }
 };
 

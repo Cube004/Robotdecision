@@ -31,9 +31,9 @@ export function example(init_position: { x: number, y: number }) {
     { size: 14, color: '#334155', content: '分支节点', fontFamily: 'Inter, system-ui, sans-serif' }, // text
     null, // taskConfig
     {
-      svgPath: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4',
-      bgColor: '#3B82F6'
-    } // icon - 任务清单图标
+      svgPath: 'M4.5 15.75l7.5-7.5 7.5 7.5',
+      bgColor: '#EF4444'
+    }
   );
   node2.taskConfig.nodeType = NodeType.Branch;
 
@@ -42,13 +42,13 @@ export function example(init_position: { x: number, y: number }) {
     { value: 2 }, // id
     { x: init_position.x + 600, y: init_position.y + 350 }, // position
     { width: 200, height: 60, borderWidth: 1, borderRadius: 8 }, // shape
-    { borderColor: '#FEE2E2', fillColor: '#FFFFFF', fillOpacity: 1 }, // color
+    { borderColor: '#E2E8F0', fillColor: '#FFFFFF', fillOpacity: 1 }, // color
     { size: 14, color: '#334155', content: '任务节点', fontFamily: 'Inter, system-ui, sans-serif' }, // text
     null, // taskConfig
     {
-      svgPath: 'M4.5 15.75l7.5-7.5 7.5 7.5',
-      bgColor: '#EF4444'
-    } // icon - 菱形/箭头图标
+      svgPath: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4',
+      bgColor: '#3B82F6'
+    }
   );
   node3.taskConfig.nodeType = NodeType.Task;
 
@@ -57,13 +57,13 @@ export function example(init_position: { x: number, y: number }) {
     { value: 3 }, // id
     { x: init_position.x + 600, y: init_position.y + 500 }, // position
     { width: 200, height: 60, borderWidth: 1, borderRadius: 8 }, // shape
-    { borderColor: '#DCF5E8', fillColor: '#FFFFFF', fillOpacity: 1 }, // color
+    { borderColor: '#E2E8F0', fillColor: '#FFFFFF', fillOpacity: 1 }, // color
     { size: 14, color: '#334155', content: '任务节点', fontFamily: 'Inter, system-ui, sans-serif' }, // text
     null, // taskConfig
     {
-      svgPath: 'M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z',
-      bgColor: '#F97316'
-    } // icon - 圆圈图标
+      svgPath: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4',
+      bgColor: '#3B82F6'
+    }  // icon - 圆圈图标
   );
   node4.taskConfig.nodeType = NodeType.Task;
 

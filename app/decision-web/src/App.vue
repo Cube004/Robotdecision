@@ -124,7 +124,7 @@
   import EditMenu from '@/components/NodeMenu.vue';
   import ErrorDialog from '@/components/ErrorWindow.vue';
   import { onMounted, ref, onUnmounted, computed } from 'vue';
-  // import { example } from '@/types/example';
+  import { example } from '@/types/example';
   import EdgeMenu from '@/components/EdgeMenu.vue';
   import type { Edge } from '@/types/EdgeBase';
   import NodeGroupItem from '@/components/NodeGroupItem.vue';
@@ -480,11 +480,11 @@
         x: (viewportWidth - canvasWidth) / 2,
         y: (viewportHeight - canvasHeight) / 2
       };
-      // const init_position = {
-      //   x: Math.abs((viewportWidth - canvasWidth) / 2),
-      //   y: Math.abs((viewportHeight - canvasHeight) / 2)
-      // }
-      // example(init_position);
+      const init_position = {
+        x: Math.abs((viewportWidth - canvasWidth) / 2),
+        y: Math.abs((viewportHeight - canvasHeight) / 2)
+      }
+      example(init_position);
     }
     // 示例：监听全局错误事件
     window.addEventListener('error', (event) => {

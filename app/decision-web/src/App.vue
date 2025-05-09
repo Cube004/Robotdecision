@@ -114,6 +114,18 @@
       @close="activeToolId = 'cursor'"
       @node-group-click="handleNodeGroupClick"
     />
+
+    <!-- 悬浮WebSocket调试按钮 -->
+    <div class="ws-debug-button" @click="toggleWebSocketDebug">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 4L12 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <path d="M4 12L20 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span>WebSocket调试</span>
+    </div>
+
+    <!-- WebSocket调试面板 -->
+    <WebSocketDemo v-if="showWebSocketDebug" />
   </div>
 </template>
 
@@ -133,6 +145,7 @@
   import { confirmVisible, confirmMessage, confirmTitle, handleConfirmResult ,confirmWindowRef} from '@/types/ConfirmDialog';
   import ConfirmWindow from '@/components/ConfirmWindow.vue';
   import { layers } from '@/types/Layers';
+  import WebSocketDemo from './components/WebSocketDemo.vue';
   // 是否显示坐标信息
   const showCoordinates = ref(true);
 
@@ -423,6 +436,14 @@
   // 清除错误信息
   const clearError = () => {
     errorMessage.value = '';
+  };
+
+  // WebSocket调试面板显示状态
+  const showWebSocketDebug = ref(false);
+
+  // 切换WebSocket调试面板的显示状态
+  const toggleWebSocketDebug = () => {
+    showWebSocketDebug.value = !showWebSocketDebug.value;
   };
 
   onMounted(() => {
@@ -721,5 +742,40 @@
     color: #64748B;
     min-width: 40px;
     text-align: right;
+  }
+
+  /* WebSocket调试按钮样式 */
+  .ws-debug-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background-color: #1e40af;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    z-index: 999;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .ws-debug-button:hover {
+    background-color: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  .ws-debug-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .ws-debug-button svg {
+    flex-shrink: 0;
   }
 </style>

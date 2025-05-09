@@ -7,7 +7,8 @@
     :class="{
       'dragging': (Node as any).draggingNodeId.value === node.id.value,
       'start-node': selectedStartNodeId === node.id.value,
-      'end-node': selectedEndNodeId === node.id.value
+      'end-node': selectedEndNodeId === node.id.value,
+      'path-node': path_node.includes(node.id.value),
     }"
     :style="{
       width: `${node.shape.width}px`,
@@ -38,6 +39,9 @@
     <div class="node-marker" v-if="getNodeMarker(node)" :style="{ backgroundColor: getNodeMarker(node)?.color }">
       {{ getNodeMarker(node)?.label }}
     </div>
+
+    <!-- 添加决策路径节点标记 -->
+    <div class="path-node-marker" v-if="path_node.includes(node.id.value)">决策路径节点</div>
   </button>
 </template>
 
@@ -53,6 +57,7 @@ import {
 } from '@/types/extensions/ToolMenu/AddEdge';
 import { nodes as nodeList } from '@/types/Manger';
 import { ref } from 'vue';
+import { path_node } from '@/types/extensions/Debug/debug';
 // 获取NodeBase上的startDrag方法类型
 interface NodeBaseMethods {
   startDrag: (event: MouseEvent, node: Node, nodeList: Node[]) => void;
@@ -175,6 +180,10 @@ const emit = defineEmits(['open-edit-menu']);
   box-shadow: 0 0 0 2px #EF4444; /* 红色边框 */
 }
 
+.node.path-node {
+  box-shadow: 0 0 0 2px #10B981; /* 绿色边框 */
+}
+
 .node-icon {
   height: 100%;
   width: 40px;
@@ -227,5 +236,17 @@ const emit = defineEmits(['open-edit-menu']);
   padding: 2px 6px;
   border-radius: 4px;
   font-weight: bold;
+}
+
+.path-node-marker {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  font-size: 12px;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: bold;
+  background-color: #10B981; /* 绿色背景与边框匹配 */
 }
 </style>

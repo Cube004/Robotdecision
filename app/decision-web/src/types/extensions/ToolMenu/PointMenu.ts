@@ -3,7 +3,7 @@ import { Point } from '@/types/Point';
 import { updatePointMenuPosition, getScale } from './MapPage';
 import { showPointMenu } from './MapPage';
 import { points, GetNewId, areas } from '@/types/Manger';
-import { MapSettingsPoints, mapWidth, mapHeight } from '@/types/Manger';
+import { MapSettingsPoints, mapWidth, mapHeight, RobotPose } from '@/types/Manger';
 // 菜单状态
 export const showColorPicker = ref(false);
 export const showCustomColor = ref(false);
@@ -112,24 +112,64 @@ export function calculateWaypoint() {
       const y = point.position.y - CenterPoint.position.y;
       const waypoint = {
         x: x / width * mapWidth.value,
-        y: y / height * mapHeight.value
+        y: y / height * mapHeight.value * -1
       }
         point.waypoint = waypoint;
       });
       areas.value.forEach(area => {
         area.leftTopWaypoint = {
           x: (area.leftTop.x - CenterPoint.position.x) / width * mapWidth.value,
-          y: (area.leftTop.y - CenterPoint.position.y) / height * mapHeight.value
+          y: (area.leftTop.y - CenterPoint.position.y) / height * mapHeight.value * -1
         }
         area.rightBottomWaypoint = {
           x: (area.rightBottom.x - CenterPoint.position.x) / width * mapWidth.value,
-          y: (area.rightBottom.y - CenterPoint.position.y) / height * mapHeight.value
+          y: (area.rightBottom.y - CenterPoint.position.y) / height * mapHeight.value * -1
         }
       });
     }
   }
 }
 
+
+export function updateRobotPose({x,y}:{x:number,y:number}){
+  const scale = getScale();
+  if (!scale) return;
+  const { scaleX, scaleY } = scale;
+  {
+    const CenterPoint = MapSettingsPoints.value.find(point => point.id.value === 0);
+    const LeftPoint = MapSettingsPoints.value.find(point => point.id.value === 1);
+    const RightPoint = MapSettingsPoints.value.find(point => point.id.value === 2);
+    if (LeftPoint && RightPoint && CenterPoint) {
+    const width = RightPoint.position.x - LeftPoint.position.x; // 像素宽度
+    const height = RightPoint.position.y - LeftPoint.position.y; // 像素高度
+
+    // 每米的像素
+    const ratioX =  width / mapWidth.value;
+    const ratioY =  height / mapHeight.value;
+    console.log("ratioX", ratioX);
+    console.log("ratioY", ratioY);
+
+    if (RobotPose.value) {
+      RobotPose.value.position.x = CenterPoint.position.x + x * ratioX;
+      RobotPose.value.position.y = CenterPoint.position.y - y * ratioY;
+      RobotPose.value.scale = {x: scaleX, y: scaleY};
+    } else {
+      RobotPose.value = new Point(
+        0,
+        { x: CenterPoint.position.x + x / ratioX,
+          y: CenterPoint.position.y - y / ratioY
+        },
+        { x, y },
+        '#EF4444',
+        '哨兵位置',
+        fontSize.value + 2,
+        selectedTextColor.value,
+        { x: scaleX, y: scaleY }
+      )
+    }
+  }
+}
+}
 // ----------------------------------------航点编辑菜单----------------------------------------
 
 // 切换颜色选择器显示状态

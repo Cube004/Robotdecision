@@ -22,6 +22,10 @@ export const mapHeight = ref(15);
 export const MapSettingsPoints = ref<Point[]>([]);
 // ----------------------------地图设置----------------------------
 
+// ----------------------------机器人位置----------------------------
+export const RobotPose = ref<Point>();
+// ----------------------------机器人位置----------------------------
+
 export const mousePositionCanvas = ref<{ x: number, y: number }>({ x: 0, y: 0 });
 export const currentScale = ref(1.0);
 // 工具选择处理函数

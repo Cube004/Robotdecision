@@ -2,74 +2,94 @@
     "rules": [
     {
         "type": "game_progress",
-        "description": "比赛状态"
+        "description": "比赛状态",
+        "data": 3
     },
     {
         "type": "stage_remain_time",
-        "description": "剩余时间"
+        "description": "剩余时间",
+        "data": 300
     },
     {
         "type": "own_base_HP",
-        "description": "己方基地血量"
+        "description": "己方基地血量",
+        "data": 1000
     },
     {
         "type": "enemy_base_HP",
-        "description": "敌方基地血量"
+        "description": "敌方基地血量",
+        "data": 1000
     },
     {
         "type": "event_data",
-        "description": "事件数据"
+        "description": "事件数据",
+        "data": 1
     },
     {
         "type": "current_HP",
-        "description": "哨兵血量"
+        "description": "哨兵血量",
+        "data": 1000
     },
     {
         "type": "vision_status",
-        "description": "检测到敌方"
+        "description": "检测到敌方",
+        "data": 0
     },
     {
         "type": "armor_id",
-        "description": "受损装甲ID"
+        "description": "受损装甲ID",
+        "data": 0
     },
     {
         "type": "HP_deduction_reason",
-        "description": "血量减少原因"
+        "description": "血量减少原因",
+        "data": 0
     },
     {
         "type": "shoot_num",
-        "description": "剩余发弹量"
+        "description": "剩余发弹量",
+        "data": 600
     },
     {
         "type": "rfid_status",
-        "description": "RFID状态"
+        "description": "RFID状态",
+        "data": 0
     },{
         "type": "last_task_id",
-        "description": "上一次任务ID"
+        "description": "上一次任务ID",
+        "data": 0
     },{
         "type": "remaining_energy",
-        "description": "剩余能量"
+        "description": "剩余能量",
+        "data": 1000
     },{
         "type": "enemy_outpost_HP",
-        "description": "敌人前哨站血量"
+        "description": "敌人前哨站血量",
+        "data": 1000
     },{
         "type": "own_outpost_HP",
-        "description": "己方前哨站血量"
+        "description": "己方前哨站血量",
+        "data": 1000
     },{
         "type": "enemy_robot_HP",
-        "description": "敌人机器人血量"
+        "description": "敌人机器人血量",
+        "data": 1000
     },{
         "type": "maximum_HP",
-        "description": "最大血量"
+        "description": "最大血量",
+        "data": 1000
     },{
         "type": "defence_buff",
-        "description": "防御buff"
+        "description": "防御buff",
+        "data": 0
     },{
         "type": "vulnerability_buff",
-        "description": "脆弱buff"
+        "description": "脆弱buff",
+        "data": 0
     },{
         "type": "attack_buff",
-        "description": "攻击buff"
+        "description": "攻击buff",
+        "data": 0
     }
     ]
 }

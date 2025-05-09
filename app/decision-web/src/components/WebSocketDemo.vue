@@ -2,7 +2,7 @@
   <div class="websocket-demo" :class="{ 'websocket-demo-collapsed': !isExpanded }">
     <div class="demo-header" @click="toggleExpand">
       <h2>WebSocket调试工具</h2>
-      <button class="toggle-btn">
+      <button class="toggle-btn" v-if="false">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
           :style="{ transform: isExpanded ? 'rotate(0deg)' : 'rotate(180deg)' }">
           <path d="M19 15L12 9L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -10,7 +10,7 @@
       </button>
     </div>
 
-    <div v-if="isExpanded" class="demo-content">
+    <div v-if="isExpanded || true" class="demo-content">
       <div class="connection-form">
         <div class="form-row">
           <div class="form-group">
@@ -88,7 +88,7 @@
 
             <!-- 机器人姿态数据 -->
             <div v-if="activeTab === 1">
-              <div v-if="poseData.length > 0" class="data-card">
+              <div v-if="poseData" class="data-card">
                 <h4>机器人姿态:</h4>
                 <div class="table-container">
                   <table class="data-table">
@@ -100,10 +100,10 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(item, index) in poseData" :key="index">
-                        <td>{{ item.x.toFixed(2) }}</td>
-                        <td>{{ item.y.toFixed(2) }}</td>
-                        <td>{{ item.z.toFixed(2) }}</td>
+                      <tr>
+                        <td>{{ poseData.x.toFixed(2) }}</td>
+                        <td>{{ poseData.y.toFixed(2) }}</td>
+                        <td>{{ poseData.z.toFixed(2) }}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -155,6 +155,110 @@
                 <p>暂无原始数据</p>
               </div>
             </div>
+
+            <!-- 推送数据 -->
+            <div v-if="activeTab === 4">
+              <div class="data-card push-data-card">
+                <h4>推送数据设置</h4>
+
+                <div class="send-control-panel">
+                  <div class="form-row frequency-row">
+                    <div class="form-group">
+                      <label for="send-frequency">发送频率 (毫秒):</label>
+                      <input
+                        id="send-frequency"
+                        v-model.number="sendFrequency"
+                        type="number"
+                        min="100"
+                        step="100"
+                        :disabled="isAutoSending"
+                        placeholder="例如: 1000"
+                      />
+                    </div>
+
+                    <div class="auto-send-controls">
+                      <button
+                        v-if="!isAutoSending"
+                        @click="startAutoSend"
+                        :disabled="!wsConnected || !sendFrequency"
+                        class="start-btn"
+                      >
+                        开始发送
+                      </button>
+                      <button
+                        v-else
+                        @click="stopAutoSend"
+                        class="stop-btn"
+                      >
+                        停止发送
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="send-status" v-if="isAutoSending">
+                    <div class="status-indicator"></div>
+                    <span>每 {{ sendFrequency }}ms 自动发送中 (已发送 {{ sendCount }} 次)</span>
+                  </div>
+                </div>
+
+                <div class="data-preview">
+                  <h5>发送数据预览:</h5>
+                  <div class="json-preview">
+                    <pre>{{ JSON.stringify(pushDataItems, null, 2) }}</pre>
+                  </div>
+                </div>
+
+                <div class="edit-push-data">
+                  <h5>编辑推送数据:</h5>
+                  <div class="search-box">
+                    <input v-model="pushSearchQuery" type="text" placeholder="搜索数据项..." />
+                  </div>
+
+                  <div class="table-container">
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th>名称</th>
+                          <th>值</th>
+                          <th>操作</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for="(item, index) in filteredPushDataItems" :key="index" class="data-row">
+                          <td class="data-label">{{ item.label }}</td>
+                          <td class="data-value-edit">
+                            <input
+                              v-model.number="filteredPushDataItems[index].data"
+                              type="number"
+                              class="value-input"
+                            />
+                          </td>
+                          <td class="data-actions">
+                            <button @click="resetPushDataItem(item)" class="reset-btn">重置</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="button-row push-data-actions">
+                    <button
+                      @click="sendPushDataOnce"
+                      :disabled="!wsConnected"
+                      class="send-once-btn"
+                    >
+                      立即发送一次
+                    </button>
+                    <button
+                      @click="resetAllPushData"
+                      class="reset-all-btn"
+                    >
+                      重置所有数据
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -163,18 +267,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onBeforeUnmount } from 'vue';
+import { ref, computed, onBeforeUnmount, onMounted } from 'vue';
 import { WebSocketClient, createWebSocketClient, wsConnected, wsError, rawData } from '../services';
-import { path_node, current_data, pose } from '../types/extensions/Debug/debug';
+import { path_node, current_data, pose, push_data } from '../types/extensions/Debug/debug';
 
 // 组件展开/折叠状态
-const isExpanded = ref(false);
+const isExpanded = ref(true);
 const toggleExpand = () => {
   isExpanded.value = !isExpanded.value;
 };
 
 // WebSocket连接参数
-const ip = ref('127.0.0.1');
+const ip = ref('172.20.0.203');
 const port = ref(9000);
 let wsClient: WebSocketClient | null = null;
 
@@ -187,16 +291,18 @@ const dataTabs = [
   { name: '路径节点' },
   { name: '机器人姿态' },
   { name: '数据项' },
-  { name: '原始数据' }
+  { name: '原始数据' },
+  { name: '推送数据' }
 ];
 
 // 获取各标签页的项目数量
 const getTabItemCount = (tabIndex: number) => {
   switch (tabIndex) {
     case 0: return pathNodeData.value.length;
-    case 1: return poseData.value.length;
+    case 1: return poseData.value ? 1 : 0;
     case 2: return currentDataItems.value.length;
     case 3: return rawReceivedData.value ? 1 : 0;
+    case 4: return pushDataItems.value.length;
     default: return 0;
   }
 };
@@ -236,12 +342,106 @@ const disconnectWebSocket = () => {
     wsClient.disconnect();
     wsClient = null;
   }
+
+  // 确保停止自动发送
+  stopAutoSend();
 };
 
 // 组件销毁前断开连接
 onBeforeUnmount(() => {
   disconnectWebSocket();
 });
+
+// 推送数据
+interface PushDataItem {
+  label: string;
+  data: number;
+}
+
+const pushDataItems = ref<PushDataItem[]>([]);
+const pushSearchQuery = ref('');
+const sendTimer = ref<number | null>(null);
+
+// 初始化推送数据
+onMounted(() => {
+  // 复制push_data的初始值
+  pushDataItems.value = push_data.value.map(item => ({...item}));
+});
+
+const filteredPushDataItems = computed(() => {
+  if (!pushSearchQuery.value.trim()) {
+    return pushDataItems.value;
+  }
+  const query = pushSearchQuery.value.toLowerCase();
+  return pushDataItems.value.filter(item =>
+    item.label.toLowerCase().includes(query) ||
+    String(item.data).toLowerCase().includes(query)
+  );
+});
+
+// 立即发送一次数据
+const sendPushDataOnce = () => {
+  if (wsClient && pushDataItems.value.length > 0) {
+    const jsonData = JSON.stringify(pushDataItems.value);
+    wsClient.send(jsonData);
+    console.log('发送数据:', jsonData);
+  }
+};
+
+// 重置单个数据项
+const resetPushDataItem = (item: PushDataItem) => {
+  const originalItem = push_data.value.find(i => i.label === item.label);
+  if (originalItem) {
+    const index = pushDataItems.value.findIndex(i => i.label === item.label);
+    if (index !== -1) {
+      pushDataItems.value[index].data = originalItem.data;
+    }
+  }
+};
+
+// 重置所有数据
+const resetAllPushData = () => {
+  pushDataItems.value = push_data.value.map(item => ({...item}));
+};
+
+// 自动发送控制
+const sendFrequency = ref(1000);
+const isAutoSending = ref(false);
+const sendCount = ref(0);
+
+// 开始自动发送
+const startAutoSend = () => {
+  if (!wsClient || pushDataItems.value.length === 0) return;
+
+  isAutoSending.value = true;
+  sendCount.value = 0;
+  autoSend();
+};
+
+// 停止自动发送
+const stopAutoSend = () => {
+  isAutoSending.value = false;
+  if (sendTimer.value !== null) {
+    window.clearTimeout(sendTimer.value);
+    sendTimer.value = null;
+  }
+};
+
+// 自动发送函数
+const autoSend = () => {
+  if (isAutoSending.value && wsClient && pushDataItems.value.length > 0) {
+    const jsonData = JSON.stringify(pushDataItems.value);
+    wsClient.send(jsonData);
+    sendCount.value++;
+
+    // 如果还在自动发送状态，设置下一次发送
+    if (isAutoSending.value) {
+      sendTimer.value = window.setTimeout(autoSend, sendFrequency.value) as unknown as number;
+    }
+  } else {
+    isAutoSending.value = false;
+  }
+};
 </script>
 
 <style scoped>
@@ -672,5 +872,170 @@ pre {
 
 .json-container {
   scrollbar-color: rgba(226, 232, 240, 0.3) transparent;
+}
+
+/* 推送数据样式 */
+.push-data-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.send-control-panel {
+  background-color: #f1f5f9;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.frequency-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.auto-send-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.start-btn {
+  background-color: #10b981;
+  color: white;
+}
+
+.start-btn:hover:not(:disabled) {
+  background-color: #059669;
+}
+
+.stop-btn {
+  background-color: #f97316;
+  color: white;
+}
+
+.stop-btn:hover {
+  background-color: #ea580c;
+}
+
+.send-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: #334155;
+}
+
+.status-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #10b981;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.data-preview {
+  background-color: #f8fafc;
+  padding: 12px;
+  border-radius: 6px;
+}
+
+.data-preview h5 {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.json-preview {
+  background-color: #f1f5f9;
+  border-radius: 4px;
+  padding: 8px;
+  max-height: 120px;
+  overflow: auto;
+}
+
+.json-preview pre {
+  margin: 0;
+  font-size: 12px;
+  white-space: pre-wrap;
+  color: #334155;
+}
+
+.edit-push-data h5 {
+  margin: 0 0 12px 0;
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.data-value-edit {
+  padding: 4px 0;
+}
+
+.value-input {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-size: 13px;
+  background-color: #f8fafc;
+}
+
+.data-actions {
+  text-align: center;
+  width: 80px;
+}
+
+.reset-btn {
+  padding: 4px 8px;
+  font-size: 12px;
+  color: #64748b;
+  background-color: #f1f5f9;
+  border-radius: 4px;
+}
+
+.reset-btn:hover {
+  background-color: #e2e8f0;
+  color: #334155;
+}
+
+.push-data-actions {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.send-once-btn {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.send-once-btn:hover:not(:disabled) {
+  background-color: #2563eb;
+}
+
+.reset-all-btn {
+  background-color: #94a3b8;
+  color: white;
+}
+
+.reset-all-btn:hover {
+  background-color: #64748b;
 }
 </style>

@@ -5,7 +5,8 @@ import { Point } from '@/types/Point';
 import { calculateWaypoint } from './PointMenu';
 import { MapSettingsPoints, showError, areas, GetNewId, points } from '@/types/Manger';
 import { Area } from '@/types/Area';
-
+import { updateRobotPose } from './PointMenu';
+import { pose } from '@/types/extensions/Debug/debug'
 export const mapContainer = ref<HTMLElement | null>(null);
 export const showMap = ref(false);
 export const showPointMenu = ref(false);
@@ -333,5 +334,15 @@ watch(showMap, (newVal) => {
   if (newVal) {
     updateObjectPosition();
     calculateWaypoint();
+    if (pose.value) {
+      updateRobotPose({x: pose.value.x, y: pose.value.y});
+    }
+  }
+})
+
+watch(pose, (newVal) => {
+  console.log("pose", newVal);
+  if (newVal) {
+    updateRobotPose({x: newVal.x, y: newVal.y});
   }
 })

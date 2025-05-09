@@ -163,11 +163,11 @@ class WebSocketClient {
       // 处理机器人姿态数据
       if (data.data_tabs && data.data_tabs.robot_pose) {
         const robotPose = data.data_tabs.robot_pose;
-        pose.value = [{
+        pose.value = {
           x: robotPose.x || 0,
           y: robotPose.y || 0,
           z: robotPose.z || 0
-        }];
+        };
       }
 
       // 处理其他数据

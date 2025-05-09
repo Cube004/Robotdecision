@@ -91,6 +91,22 @@
               </div>
             </div>
           </div>
+          <!-- 渲染机器人 -->
+          <div
+            v-if="RobotPose !== undefined"
+            :key="RobotPose.id.value"
+            class="map-point"
+            :style="{ // 使用鼠标位置
+              left: `${RobotPose.position.x}px`,
+              top: `${RobotPose.position.y}px`,
+              backgroundColor: RobotPose.color.value,
+              position: 'absolute'
+            }"
+          >
+            <div class="point-text" v-if="RobotPose.text.value" :style="{ fontSize: RobotPose.fontSize.value + 'px', color: RobotPose.textColor.value }">
+              {{ RobotPose.text.value }}
+            </div>
+          </div>
         </div>
         <!-- 航点菜单 -->
         <div class="menu point-menu" id="pointMenu" v-show="showPointMenu" :style="pointMenuStyle">
@@ -539,6 +555,7 @@ import { points } from '@/types/Manger';
 import { mapWidth, mapHeight, MapSettingsPoints, areas } from '@/types/Manger';
 import { type Area } from '@/types/Area';
 import { layers } from '@/types/Layers';
+import { RobotPose } from '@/types/Manger';
 // 定义 props
 const props = defineProps<{
   visible: boolean;

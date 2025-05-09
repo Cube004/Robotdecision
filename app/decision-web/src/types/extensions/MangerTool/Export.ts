@@ -331,3 +331,28 @@ export function uploadRuleFile() {
   // 触发文件选择对话框
   fileInput.click();
 }
+
+export function GetRule(){
+    // 获取各个部分的JSON数据（这里将字符串解析回对象）
+    const mapSettingsPointsData = JSON.parse(outMapSettingsPoints());
+    const nodesData = JSON.parse(outNodes());
+    const edgesData = JSON.parse(outEdges());
+    const pointsData = JSON.parse(outPoints());
+    const areasData = JSON.parse(outAreas());
+    const nodeGroupsData = JSON.parse(outNodeGroups());
+
+    // 合并成一个完整的数据对象
+    const completeData = {
+      version: '1.0',
+      createdAt: new Date().toISOString(),
+      mapSettings: {
+        points: mapSettingsPointsData
+      },
+      nodes: nodesData,
+      edges: edgesData,
+      points: pointsData,
+      areas: areasData,
+      nodeGroups: nodeGroupsData
+    };
+    return completeData;
+}

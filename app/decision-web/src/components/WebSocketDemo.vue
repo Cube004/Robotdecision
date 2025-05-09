@@ -259,6 +259,51 @@
                 </div>
               </div>
             </div>
+
+            <!-- 规则上传 -->
+            <div v-if="activeTab === 5">
+              <div class="data-card rules-card">
+                <h4>规则上传</h4>
+
+                <div class="rules-info">
+                  <p>点击下方按钮将当前规则转换为字符串并发送至服务器。</p>
+                  <p class="rules-note">注意：此操作将获取当前编辑器中的所有规则数据，包括节点、边缘、区域等配置。</p>
+                </div>
+
+                <div class="rule-preview" v-if="rulePreview">
+                  <h5>规则预览:</h5>
+                  <div class="json-preview rules-json-preview">
+                    <pre>{{ rulePreviewFormatted }}</pre>
+                  </div>
+                  <div class="rules-file-info">
+                    <span>规则大小: {{ ruleSizeFormatted }}</span>
+                  </div>
+                </div>
+
+                <div class="rules-actions">
+                  <button
+                    @click="previewRule"
+                    class="preview-btn"
+                  >
+                    生成规则
+                  </button>
+                  <button
+                    @click="sendRule"
+                    :disabled="!wsConnected || !rulePreview"
+                    class="send-rules-btn"
+                  >
+                    发送规则
+                  </button>
+                </div>
+
+                <div v-if="rulesSent" class="rules-sent-info">
+                  <div class="success-icon">✓</div>
+                  <span>规则已成功发送！</span>
+                  <span class="timestamp">{{ ruleSentTimestamp }}</span>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -270,6 +315,7 @@
 import { ref, computed, onBeforeUnmount, onMounted } from 'vue';
 import { WebSocketClient, createWebSocketClient, wsConnected, wsError, rawData } from '../services';
 import { path_node, current_data, pose, push_data } from '../types/extensions/Debug/debug';
+import { GetRule } from '../types/extensions/MangerTool/Export';
 
 // 组件展开/折叠状态
 const isExpanded = ref(true);
@@ -292,7 +338,8 @@ const dataTabs = [
   { name: '机器人姿态' },
   { name: '数据项' },
   { name: '原始数据' },
-  { name: '推送数据' }
+  { name: '推送数据' },
+  { name: '规则上传' }
 ];
 
 // 获取各标签页的项目数量
@@ -303,6 +350,7 @@ const getTabItemCount = (tabIndex: number) => {
     case 2: return currentDataItems.value.length;
     case 3: return rawReceivedData.value ? 1 : 0;
     case 4: return pushDataItems.value.length;
+    case 5: return rulePreview.value ? 1 : 0;
     default: return 0;
   }
 };
@@ -440,6 +488,66 @@ const autoSend = () => {
     }
   } else {
     isAutoSending.value = false;
+  }
+};
+
+// 规则上传功能
+const rulePreview = ref<object | null>(null);
+const rulesSent = ref(false);
+const ruleSentTimestamp = ref('');
+
+// 规则预览
+const previewRule = () => {
+  try {
+    const rule = GetRule();
+    rulePreview.value = rule;
+    rulesSent.value = false;
+  } catch (error) {
+    console.error('获取规则时出错:', error);
+  }
+};
+
+// 获取格式化的JSON字符串
+const rulePreviewFormatted = computed(() => {
+  if (!rulePreview.value) return '';
+  // 格式化但限制显示长度，避免界面过大
+  const jsonStr = JSON.stringify(rulePreview.value, null, 2);
+  if (jsonStr.length > 1000) {
+    return jsonStr.substring(0, 1000) + '...\n[内容过长，仅显示部分]';
+  }
+  return jsonStr;
+});
+
+// 获取规则大小
+const ruleSizeFormatted = computed(() => {
+  if (!rulePreview.value) return '0 KB';
+  const jsonStr = JSON.stringify(rulePreview.value);
+  const bytes = new TextEncoder().encode(jsonStr).length;
+  if (bytes < 1024) {
+    return `${bytes} B`;
+  } else if (bytes < 1024 * 1024) {
+    return `${(bytes / 1024).toFixed(2)} KB`;
+  } else {
+    return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+  }
+});
+
+// 发送规则
+const sendRule = () => {
+  if (wsClient && rulePreview.value) {
+    try {
+      const ruleString = JSON.stringify(rulePreview.value);
+      wsClient.send(ruleString);
+
+      // 更新发送状态
+      rulesSent.value = true;
+      const now = new Date();
+      ruleSentTimestamp.value = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
+
+      console.log('规则已发送:', rulePreview.value);
+    } catch (error) {
+      console.error('发送规则时出错:', error);
+    }
   }
 };
 </script>
@@ -1037,5 +1145,98 @@ pre {
 
 .reset-all-btn:hover {
   background-color: #64748b;
+}
+
+/* 规则上传样式 */
+.rules-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.rules-info {
+  background-color: #f8fafc;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.rules-note {
+  color: #64748b;
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+.rule-preview {
+  background-color: #f1f5f9;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.rule-preview h5 {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.rules-json-preview {
+  max-height: 300px;
+}
+
+.rules-file-info {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #64748b;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.rules-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.preview-btn {
+  background-color: #94a3b8;
+  color: white;
+  flex: 1;
+}
+
+.preview-btn:hover {
+  background-color: #64748b;
+}
+
+.send-rules-btn {
+  background-color: #10b981;
+  color: white;
+  flex: 1;
+}
+
+.send-rules-btn:hover:not(:disabled) {
+  background-color: #059669;
+}
+
+.rules-sent-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #d1fae5;
+  padding: 12px;
+  border-radius: 6px;
+  margin-top: 16px;
+}
+
+.success-icon {
+  color: #059669;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.timestamp {
+  margin-left: auto;
+  font-size: 13px;
+  color: #64748b;
 }
 </style>

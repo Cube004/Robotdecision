@@ -2,7 +2,7 @@
   <div class="websocket-demo" :class="{ 'websocket-demo-collapsed': !isExpanded }">
     <div class="demo-header" @click="toggleExpand">
       <h2>WebSocket调试工具</h2>
-      <button class="toggle-btn" v-if="false">
+      <button class="toggle-btn">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
           :style="{ transform: isExpanded ? 'rotate(0deg)' : 'rotate(180deg)' }">
           <path d="M19 15L12 9L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -318,7 +318,7 @@ import { path_node, current_data, pose, push_data } from '../types/extensions/De
 import { GetRule } from '../types/extensions/MangerTool/Export';
 
 // 组件展开/折叠状态
-const isExpanded = ref(true);
+const isExpanded = ref(false);
 const toggleExpand = () => {
   isExpanded.value = !isExpanded.value;
 };

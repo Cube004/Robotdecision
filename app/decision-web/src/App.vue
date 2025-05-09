@@ -116,7 +116,7 @@
     />
 
     <!-- 悬浮WebSocket调试按钮 -->
-    <div class="ws-debug-button" @click="toggleWebSocketDebug">
+    <div class="ws-debug-button" @click="toggleWebSocketDebug" v-if="!showWebSocketDebug">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M12 4L12 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
         <path d="M4 12L20 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>

@@ -55,6 +55,21 @@
     },{
         "type": "own_outpost_HP",
         "description": "己方前哨站血量"
+    },{
+        "type": "enemy_robot_HP",
+        "description": "敌人机器人血量"
+    },{
+        "type": "maximum_HP",
+        "description": "最大血量"
+    },{
+        "type": "defence_buff",
+        "description": "防御buff"
+    },{
+        "type": "vulnerability_buff",
+        "description": "脆弱buff"
+    },{
+        "type": "attack_buff",
+        "description": "攻击buff"
     }
     ]
 }

@@ -132,7 +132,7 @@
                     <tbody>
                       <tr v-for="(item, index) in filteredDataItems" :key="index" class="data-row">
                         <td class="data-label">{{ item.label }}</td>
-                        <td class="data-value">{{ item.data }}</td>
+                        <td class="data-value">{{ item.data as number}}</td>
                       </tr>
                     </tbody>
                   </table>

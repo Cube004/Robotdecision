@@ -161,6 +161,19 @@ class Node {
   updateIcon(icon: Icon): void {
     this.icon = reactive(icon);
   }
+
+  updataEdges(id: number){
+    let same = false;
+    for(let i = 0; i < this.edges.length; i++) {
+      if (this.edges[i].value === id) {
+        same = true;
+        break;
+      }
+    }
+    if (!same) {
+      this.edges.push({value: id});
+    }
+  }
 }
 
 export default Node;

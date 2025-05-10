@@ -7,13 +7,13 @@ import {
   outNodeGroups,
   LoadMapSettingsPoints
 } from './Object';
-import { nodes, edges, points, areas, NodeGroups } from '@/types/Manger';
+import { nodes, edges, points, areas, NodeGroups, clearAll } from '@/types/Manger';
 import { Node } from '@/types/Node';
 import { Edge } from '@/types/Edge';
 import { Point } from '@/types/Point';
 import { Area } from '@/types/Area';
 import type { Condition } from '@/types/Condition';
-
+import type { EdgeId } from '@/types/EdgeBase';
 // 定义导入数据的类型接口
 interface NodeData {
   id: number;
@@ -49,7 +49,7 @@ interface NodeData {
     src?: string;
     svgPath?: string;
   };
-  edges: number[];
+  edges: EdgeId[];
 }
 
 interface EdgeData {
@@ -168,6 +168,7 @@ export function exportRule() {
  * 导入完整的规则文件
  */
 export function importRule(fileData: string) {
+  clearAll();
   try {
     const data: RuleData = JSON.parse(fileData);
 
@@ -176,27 +177,7 @@ export function importRule(fileData: string) {
       // 这里假设已经有处理地图设置点的相关函数
       LoadMapSettingsPoints();
     }
-
-    // 导入节点
-    if (data.nodes && Array.isArray(data.nodes)) {
-      // 清空现有节点
-      nodes.value = [];
-
-      // 添加导入的节点
-      data.nodes.forEach((nodeData: NodeData) => {
-        const node = new Node(
-          { value: nodeData.id }, // 使用对象形式包装ID以匹配NodeId类型
-          nodeData.position,
-          nodeData.shape,
-          nodeData.color,
-          nodeData.text,
-          nodeData.taskConfig,
-          nodeData.icon
-        );
-        nodes.value.push(node);
-      });
-    }
-
+    const tempEdges: Edge[] = [];
     // 导入边
     if (data.edges && Array.isArray(data.edges)) {
       // 清空现有边
@@ -214,9 +195,38 @@ export function importRule(fileData: string) {
         if (edgeData.conditions) {
           edge.conditions = edgeData.conditions;
         }
-        edges.value.push(edge);
+        tempEdges.push(edge);
       });
     }
+    // 导入节点
+    if (data.nodes && Array.isArray(data.nodes)) {
+      // 清空现有节点
+      nodes.value = [];
+
+      // 添加导入的节点
+      data.nodes.forEach((nodeData: NodeData) => {
+        const node = new Node(
+          { value: nodeData.id }, // 使用对象形式包装ID以匹配NodeId类型
+          nodeData.position,
+          nodeData.shape,
+          nodeData.color,
+          nodeData.text,
+          nodeData.taskConfig,
+          nodeData.icon
+        );
+        if (nodeData.edges) {
+          nodeData.edges.forEach((edgeId: EdgeId) => {
+            if(tempEdges.find(edge => edge.id.value === edgeId.value)?.sourceId === node.id.value) {
+              node.edges.push(edgeId);
+            }
+          });
+        }
+        nodes.value.push(node);
+      });
+    }
+
+    // 导入边
+    edges.value = tempEdges;
 
     // 导入点
     if (data.points && Array.isArray(data.points)) {

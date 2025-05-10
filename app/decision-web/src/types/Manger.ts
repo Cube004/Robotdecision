@@ -33,6 +33,16 @@ export function handleToolSelected(toolId: string) {
     console.log('当前选中工具:', toolId);
 };
 
+export function clearAll() {
+  nodes.value.splice(0, nodes.value.length);
+  edges.value.splice(0, edges.value.length);
+  points.value.splice(0, points.value.length);
+  areas.value.splice(0, areas.value.length);
+  NodeGroups.value.splice(0, NodeGroups.value.length);
+  oldNodes = [];
+  oldVal = [];
+}
+
 let oldNodes: Node[] = [];
 watch(nodes, (newVal) => {
   if (oldNodes.length > newVal.length) {
@@ -80,13 +90,22 @@ watch(edges, (newVal) => {
   if (addedEdges.length > 0) {
     addedEdges.forEach(edge => {
       const sourceNode = nodes.value.find(node => node.id.value === edge.sourceId);
-      if (sourceNode && !sourceNode.edges.some(edgeId => edgeId.value === edge.id.value)) {
-        // 创建一个新数组而不是直接修改
-        sourceNode.edges = [...sourceNode.edges, edge.id];
+      if (sourceNode && sourceNode.id.value === edge.sourceId) {
+        sourceNode.updataEdges(edge.id.value);
       }
     });
     console.log("新增的边", addedEdges);
   }
+
+
+  edges.value.forEach(edge => {
+    if (!nodes.value[edge.sourceId].edges.includes(edge.id)) {
+      const sourceNode = nodes.value.find(node => node.id.value === edge.sourceId);
+      if (sourceNode) {
+        sourceNode.updataEdges(edge.id.value);
+      }
+    }
+  });
   oldVal = [...newVal];
 }, { deep: true }); // 添加深度监听选项
 

@@ -16,10 +16,16 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   tf2_ros
   tf2_geometry_msgs
+  message_generation
 )
 find_package(Qt5Widgets REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(JSONCPP REQUIRED jsoncpp)
+
+# 添加 libwebsockets 库依赖
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(LIBWEBSOCKETS REQUIRED libwebsockets)
+
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -54,11 +60,10 @@ pkg_check_modules(JSONCPP REQUIRED jsoncpp)
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+add_message_files(
+  FILES
+  DecisionStatus.msg
+)
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -75,10 +80,10 @@ pkg_check_modules(JSONCPP REQUIRED jsoncpp)
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs  # Or other packages containing msgs
-# )
+generate_messages(
+  DEPENDENCIES
+  std_msgs  # Or other packages containing msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -151,6 +156,9 @@ add_library(rules_lib
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(${PROJECT_NAME}_node src/main.cpp)
 
+# 添加 Websocket 服务可执行文件
+add_executable(${PROJECT_NAME}_websocket_service src/WebsocketService.cpp)
+
 add_compile_options(-fPIC)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 add_executable(${PROJECT_NAME}_gui src/gui.cpp)
@@ -171,6 +179,12 @@ target_link_libraries(${PROJECT_NAME}_node
   ${JSONCPP_LIBRARIES}
   jsoncpp
   rules_lib
+)
+
+# 添加 Websocket 服务的链接库
+target_link_libraries(${PROJECT_NAME}_websocket_service
+  ${catkin_LIBRARIES}
+  ${LIBWEBSOCKETS_LIBRARIES}
 )
 
 target_link_libraries(${PROJECT_NAME}_gui

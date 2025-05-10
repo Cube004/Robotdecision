@@ -12,7 +12,7 @@
 #include <std_msgs/Empty.h>
 #include <actionlib/client/simple_action_client.h>
 #include "move_base_msgs/MoveBaseAction.h"
-
+#include "decision/core/robot_pose.h"
 
 struct WaypointTask 
 {
@@ -20,6 +20,11 @@ struct WaypointTask
     ros::Time task_start_time;
     ros::Time task_completed_time;
     geometry_msgs::PoseStamped waypoint_pose;
+    geometry_msgs::PoseStamped LastRobot_pose;
+    geometry_msgs::PoseStamped LastGoal;
+    double LastPose_time_tolerance = 5; // 5 秒内没有更新机器人位置, 则认为加大目标点误差
+    double LastPose_time_cancel = 10; // 10 秒内没有更新机器人位置, 则认为机器人已经到达目标点
+    float tolerance_plus = 0.3;
     float tolerance = 0.3;
     bool completed = false;
 };
@@ -67,6 +72,28 @@ public:
     }
 
 
+    void updateRobotPose(){
+        // 如果机器人位置发生变化, 则更新机器人位置
+        if (abs(waypoint_task_.LastRobot_pose.pose.position.x - robot_pose_x) > 0.01 || 
+            abs(waypoint_task_.LastRobot_pose.pose.position.y - robot_pose_y) > 0.01)
+        {
+            waypoint_task_.LastRobot_pose.pose.position.x = robot_pose_x;
+            waypoint_task_.LastRobot_pose.pose.position.y = robot_pose_y;
+            waypoint_task_.LastRobot_pose.header.stamp = ros::Time::now();
+            waypoint_task_.LastRobot_pose.header.frame_id = frame_id_;
+        }
+    }
+
+    void updateLastGoal(float x, float y){
+        if (abs(waypoint_task_.LastGoal.pose.position.x - x) > 0.01 || 
+            abs(waypoint_task_.LastGoal.pose.position.y - y) > 0.01)
+        {
+            waypoint_task_.LastGoal.pose.position.x = x;
+            waypoint_task_.LastGoal.pose.position.y = y;
+            waypoint_task_.LastGoal.header.stamp = ros::Time::now();
+        }
+    }
+
     WaypointTask createWaypointTask(int id, geometry_msgs::PoseStamped goal){
         if (this->waypoint_task_.task_id != id){ // 新任务
             this->waypoint_task_.task_id = id;
@@ -76,11 +103,29 @@ public:
             this->waypoint_task_.completed = false;
         }
         {
+            this->updateRobotPose();
             std::lock_guard<std::mutex> lock(mutex_);
-            if (abs(transform.transform.translation.x - goal.pose.position.x) > this->waypoint_task_.tolerance || 
-                abs(transform.transform.translation.y - goal.pose.position.y) > this->waypoint_task_.tolerance)
+            double plus_tolerance = 0;
+            
+            
+            // if (ros::Time::now() - waypoint_task_.LastRobot_pose.header.stamp > ros::Duration(waypoint_task_.LastPose_time_tolerance)
+            //     && ros::Time::now() - waypoint_task_.LastGoal.header.stamp > ros::Duration(waypoint_task_.LastPose_time_tolerance)
+            // ){
+            //     plus_tolerance = waypoint_task_.tolerance_plus;
+            //     ROS_WARN("机器人太久没动，加大目标点误差");
+            // }else if (ros::Time::now() - waypoint_task_.LastGoal.header.stamp > ros::Duration(waypoint_task_.LastPose_time_cancel)){
+            //     ROS_ERROR("目标点太久没动，取消目标点");
+            //     this->waypoint_task_.task_id = -1;
+            //     this->waypoint_task_.task_completed_time = ros::Time::now();
+            //     this->waypoint_task_.completed = true;
+            //     return this->waypoint_task_;
+            // }
+
+            if (abs(transform.transform.translation.x - goal.pose.position.x) > this->waypoint_task_.tolerance + plus_tolerance|| 
+                abs(transform.transform.translation.y - goal.pose.position.y) > this->waypoint_task_.tolerance + plus_tolerance)
             {   // 如果当前位置与目标位置的距离大于阈值, 且当前目标点与目标点不一致, 则发送目标点
                 this->sendGoal(goal.pose.position.x, goal.pose.position.y);
+                this->updateLastGoal(goal.pose.position.x, goal.pose.position.y);
                 #ifdef DEBUG
                 std::cout << "send goal" << "id: " << id << "  x: " << goal.pose.position.x << "y: " << goal.pose.position.y << std::endl;
                 #endif
@@ -94,11 +139,6 @@ public:
             }
         }
         return this->waypoint_task_;
-    }
-
-    std::pair<float, float> getRobotPosition(){
-        std::lock_guard<std::mutex> lock(mutex_);
-        return std::make_pair(transform.transform.translation.x, transform.transform.translation.y);
     }
 
 private:
@@ -117,6 +157,9 @@ private:
                 std::lock_guard<std::mutex> lock(mutex_);
                 try{
                     transform = tf_buffer->lookupTransform(frame_id_, child_frame_id_, ros::Time(0));
+                    robot_pose_x = transform.transform.translation.x;
+                    robot_pose_y = transform.transform.translation.y;
+                    robot_pose_z = transform.transform.translation.z;
                     ros::spinOnce();    
                 }catch(tf2::TransformException &ex){
                     ROS_WARN("%s", ex.what());

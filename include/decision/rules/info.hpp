@@ -95,7 +95,11 @@ namespace rules {
         
         // 打印边的数量
         std::cout << "    边数量: " << node.edges.size() << std::endl;
-        
+        std::cout << "    边ID列表: ";
+        for (const auto& edge : node.edges) {
+            std::cout << edge.edge_id << " ";
+        }
+        std::cout << std::endl;
         // 打印节点组ID
         std::cout << "    所属节点组ID: ";
         for (const auto& groupId : node.group_id) {

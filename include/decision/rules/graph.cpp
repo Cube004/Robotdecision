@@ -16,15 +16,16 @@ namespace rules {
         return rules::NodeMode::NAVIGATION;
     }
 
-    bool Graph::CheckFinish(int id){
+    bool Graph::CheckFinish(int id, ros::NodeHandle *nh){
         // 检查节点组是否完成, 如果完成则重置节点组
-        bool ALLfinish = true;
         for (auto& groupIndex : this->nodeList[id].group_id) {
+            bool ALLfinish = true;
             std::cout << "group_id: " << groupIndex << " ";
             std::cout << "nodes: ";
+            if(this->nodeGroupList[groupIndex].Loop == false) continue;
             for (auto& node_id : this->nodeGroupList[groupIndex].nodes) {
                 std::cout << node_id << " ";
-                ALLfinish = this->nodeList[node_id].get_finish() && ALLfinish;
+                ALLfinish = this->nodeList[node_id].get_finish(nh) && ALLfinish;
             }
             if (ALLfinish) {
                 std::cout << "group_id: " << groupIndex << " finish" << "|   now reset" << std::endl;
@@ -33,7 +34,7 @@ namespace rules {
                 }
             }
         }
-        return this->nodeList[id].get_finish();
+        return this->nodeList[id].get_finish(nh);
     }
 
     // 初始化图
@@ -97,7 +98,10 @@ namespace rules {
         std::cout << "区域读取完成" << std::endl;
 
         // 初始化边
+        std::cout << "edgeJson: ";
         for (const auto& edgeJson : jsonData["edges"]) {
+            this->edgeList[edgeJson["id"]].edge_id = edgeJson["id"];
+            std::cout << edgeJson;
             this->edgeList[edgeJson["id"]].nodeIn_id = edgeJson["sourceId"];
             this->edgeList[edgeJson["id"]].nodeOut_id = edgeJson["targetId"];
             for (const auto& conditionJson : edgeJson["conditions"]) {

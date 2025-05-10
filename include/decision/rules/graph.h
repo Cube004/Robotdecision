@@ -66,10 +66,22 @@ namespace rules {
         ros::Time last_check_time;// 上一次检查该节点的时间
         ros::Time start_time;
         ros::Time end_time;
-        bool get_finish(){
+        bool get_finish(ros::NodeHandle *nh){
             if (this->type == NodeType::ROOT || this->type == NodeType::BRANCH){
                 this->finish = true;
                 return this->finish;
+            }
+            if (this->type == NodeType::TASK && this->mode == NodeMode::LIMIT){
+                double limit_linear;
+                double limit_angular;
+                nh->getParam("/decision/limit_linear", limit_linear);
+                nh->getParam("/decision/limit_angular", limit_angular);
+                if (limit_linear == this->limit_linear && limit_angular == this->limit_angular){
+                    this->finish = true;
+                    return this->finish;
+                }else{
+                    ROS_ERROR("limit_linear or limit_angular not match %f %f %f %f", limit_linear, this->limit_linear, limit_angular, this->limit_angular);
+                }
             }
             
             if (resetTime == -1) return finish;
@@ -98,7 +110,7 @@ class Graph {
         std::string decisionJsonStr;
         int rootNode_id = -1;
         bool init(const std::string& decisionJsonStr);
-        bool CheckFinish(int node_id);
+        bool CheckFinish(int node_id, ros::NodeHandle *nh);
         void transformDecisionRule(std::string filePath);
     };
 }

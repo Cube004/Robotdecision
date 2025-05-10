@@ -57,7 +57,9 @@
   <build_export_depend>roscpp</build_export_depend>
   <exec_depend>roscpp</exec_depend>
   
-  
+  <!-- 添加 libwebsockets 依赖 -->
+  <build_depend>libwebsockets-dev</build_depend>
+  <exec_depend>libwebsockets-dev</exec_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

@@ -8,9 +8,11 @@
 
 #include <ros/ros.h>
 #include <roborts_msgs/driver.h>
+
 #include <geometry_msgs/PoseStamped.h>
 #include "decision/rules/graph.h"
-
+#include "nlohmann/json.hpp"
+#include "decision/core/robot_pose.h"
 // 前向声明
 namespace rules {
     class Graph;
@@ -47,7 +49,7 @@ namespace database
     class Database{
         private:
             std::unordered_map<std::string, data> dataContainer_;
-            geometry_msgs::PoseStamped robot_pose_;
+            std::set<std::string> data_type_tabs;
             // 自旋锁 (使用std::atomic_flag实现)
             std::atomic_flag spinlock = ATOMIC_FLAG_INIT;
             std::shared_ptr<::rules::Graph> graph_;
@@ -56,6 +58,7 @@ namespace database
             bool check_data(std::string datatype, ros::Time end, ros::Duration duration, int type, int min_value = 0, int max_value = 0);
             void update_task_id(int task_id);
             void bind_graph(std::shared_ptr<::rules::Graph> graph);
+            std::string get_data_tabs();
         private:
             bool check_in_area(std::string datatype);
             bool check_near_waypoint(std::string datatype);
@@ -64,14 +67,9 @@ namespace database
             int get_current_data(data &data);
             bool hasValueDuring(data &data, ros::Time end, ros::Duration duration, int min_value = 0, int max_value = 0);
             std::pair<int, int> Time_get_index(data &data, ros::Time end, ros::Duration duration);
-            data &get_data_base(std::string datatype);
             void preprocess_data(std::string datatype, ros::Time stamp, int value);
     };
 
-    data &Database::get_data_base(std::string datatype){
-        // 获取数据
-        return dataContainer_[datatype];
-    }
 
     void Database::bind_graph(std::shared_ptr<::rules::Graph> graph){
         this->graph_ = graph;
@@ -79,7 +77,8 @@ namespace database
 
     void Database::preprocess_data(std::string datatype, ros::Time stamp, int value){
         // 预处理数据
-        auto data = get_data_base(datatype);
+        auto& data = dataContainer_[datatype];
+        data_type_tabs.insert(datatype);
         if (!data.raw_data.empty()){
             if (stamp <= data.timestamp.back()){
                 std::cout << "stamp <= data.timestamp.back()" << std::endl;
@@ -134,7 +133,15 @@ namespace database
         preprocess_data("HP_deduction_reason", msg.header.stamp, msg.HP_deduction_reason);
         preprocess_data("armor_id", msg.header.stamp, msg.armor_id);
         preprocess_data("rfid_status", msg.header.stamp, msg.rfid_status);
-        
+        preprocess_data("remaining_energy", msg.header.stamp, msg.remaining_energy);
+        preprocess_data("enemy_outpost_HP", msg.header.stamp, msg.enemy_outpost_HP);
+        preprocess_data("own_outpost_HP", msg.header.stamp, msg.own_outpost_HP);
+        preprocess_data("enemy_robot_HP", msg.header.stamp, msg.enemy_robot_HP);
+        preprocess_data("maximum_HP", msg.header.stamp, msg.maximum_HP);
+        preprocess_data("defence_buff", msg.header.stamp, msg.defence_buff);
+        preprocess_data("vulnerability_buff", msg.header.stamp, msg.vulnerability_buff);
+        preprocess_data("attack_buff", msg.header.stamp, msg.attack_buff);
+        preprocess_data("obtain_shoot_num", msg.header.stamp, msg.obtain_shoot_num);
         // 释放自旋锁
         spinlock.clear(std::memory_order_release);
     }
@@ -147,11 +154,31 @@ namespace database
         // 释放自旋锁
         spinlock.clear(std::memory_order_release);
     }
-
+    void debug_info(std::string datatype, ros::Time end, ros::Duration duration, int type, int min_value, int max_value, std::shared_ptr<rules::Graph> graph,bool result){
+        try{
+            if (type == CURRENT_VALUE){
+                ROS_INFO("current_value %s :%d", datatype.c_str(), result);
+            }else if (type == TOTAL_INCREMENT){
+                ROS_INFO("total_increment %s :%d", datatype.c_str(), result);
+            }else if (type == TOTAL_DECREMENT){
+                ROS_INFO("total_decrement %s :%d", datatype.c_str(), result);
+            }else if (type == HISTORICAL_PRESENCE){
+                ROS_INFO("historical_presence %s :%d", datatype.c_str(), result);
+            }else if (type == IN_REGION){
+                ROS_INFO("in_region %s :%d", graph->areaList[std::stoi(datatype)].name.c_str(), result);
+            }else if (type == NEAR_WAYPOINT){
+                ROS_INFO("near_waypoint %s :%d", graph->waypointList[std::stoi(datatype)].name.c_str(), result);
+            }
+        }catch(const std::runtime_error& e){
+            ROS_ERROR("error: %s", e.what());
+        }
+    }
     bool Database::check_data(std::string datatype, ros::Time end, ros::Duration duration, int type, int min_value, int max_value){
         // 使用自旋锁
         while (spinlock.test_and_set(std::memory_order_acquire));
         bool result = confirm_metric_compliance(datatype, end, duration, type, min_value, max_value);
+
+        debug_info(datatype, end, duration, type, min_value, max_value, this->graph_, result);
         // 释放自旋锁
         spinlock.clear(std::memory_order_release);
         return result;
@@ -159,8 +186,17 @@ namespace database
     
     bool Database::confirm_metric_compliance(std::string datatype, ros::Time end, ros::Duration duration, int type, int min_value, int max_value){
         try {
-            data &data = get_data_base(datatype);
+            if (type == IN_REGION)
+            {
+                return check_in_area(datatype);
+            }else if (type == NEAR_WAYPOINT)
+            {
+                return check_near_waypoint(datatype);
+            }
+
+            auto& data = dataContainer_[datatype];
             if (data.raw_data.empty()) return false;
+
             if (type == CURRENT_VALUE)
             {
                 int result = get_current_data(data);
@@ -182,12 +218,9 @@ namespace database
             else if (type == HISTORICAL_PRESENCE)
             {
                 return hasValueDuring(data, end, duration, min_value, max_value);
-            }else if (type == IN_REGION)
-            {
-                return check_in_area(datatype);
-            }else if (type == NEAR_WAYPOINT)
-            {
-                return check_near_waypoint(datatype);
+            }else{
+                ROS_ERROR("invalid type");
+                return false;
             }
         } catch (const std::runtime_error& e) {
             std::cout << e.what() << std::endl;
@@ -198,10 +231,10 @@ namespace database
 
     bool Database::check_in_area(std::string datatype){
         int area_id = std::stoi(datatype);
-        if (this->robot_pose_.pose.position.x > this->graph_->areaList[area_id].leftTop.pose.position.x && 
-            this->robot_pose_.pose.position.y > this->graph_->areaList[area_id].leftTop.pose.position.y && 
-            this->robot_pose_.pose.position.x < this->graph_->areaList[area_id].rightBottom.pose.position.x && 
-            this->robot_pose_.pose.position.y < this->graph_->areaList[area_id].rightBottom.pose.position.y)
+        if (robot_pose_x > this->graph_->areaList[area_id].leftTop.pose.position.x && 
+            robot_pose_y < this->graph_->areaList[area_id].leftTop.pose.position.y && 
+            robot_pose_x < this->graph_->areaList[area_id].rightBottom.pose.position.x && 
+            robot_pose_y > this->graph_->areaList[area_id].rightBottom.pose.position.y)
         {
             return true;
         }
@@ -210,10 +243,10 @@ namespace database
 
     bool Database::check_near_waypoint(std::string datatype){
         int waypoint_id = std::stoi(datatype);
-        if (this->robot_pose_.pose.position.x > this->graph_->waypointList[waypoint_id].pose.pose.position.x - 0.5 && 
-            this->robot_pose_.pose.position.x < this->graph_->waypointList[waypoint_id].pose.pose.position.x + 0.5 && 
-            this->robot_pose_.pose.position.y > this->graph_->waypointList[waypoint_id].pose.pose.position.y - 0.5 && 
-            this->robot_pose_.pose.position.y < this->graph_->waypointList[waypoint_id].pose.pose.position.y + 0.5)
+        if (robot_pose_x > this->graph_->waypointList[waypoint_id].pose.pose.position.x - 0.5 && 
+            robot_pose_x < this->graph_->waypointList[waypoint_id].pose.pose.position.x + 0.5 && 
+            robot_pose_y > this->graph_->waypointList[waypoint_id].pose.pose.position.y - 0.5 && 
+            robot_pose_y < this->graph_->waypointList[waypoint_id].pose.pose.position.y + 0.5)
         {
             return true;
         }
@@ -289,6 +322,27 @@ namespace database
         if (end_index >= data.timestamp.size()) throw std::runtime_error("error: end_index is out of range");
         
         return std::make_pair(start_index, end_index);
+    }
+
+    std::string Database::get_data_tabs(){
+        // 获取锁
+        while (spinlock.test_and_set(std::memory_order_acquire));
+        nlohmann::json json_data;
+        for (auto &datatype : this->data_type_tabs){
+            json_data["data"][datatype] = this->dataContainer_[datatype].raw_data.back();
+        }
+        {
+            double x = robot_pose_x;
+            double y = robot_pose_y;
+            double z = robot_pose_z;
+            json_data["robot_pose"]["x"] = x;
+            json_data["robot_pose"]["y"] = y;
+            json_data["robot_pose"]["z"] = z;
+            json_data["timestamp"] = ros::Time::now().toSec();
+        }
+        // 释放锁
+        spinlock.clear(std::memory_order_release);
+        return json_data.dump();
     }
 } // namespace database
 

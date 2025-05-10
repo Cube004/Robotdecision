@@ -6,9 +6,9 @@ int main(int argc, char **argv){
     ros::NodeHandle n;
     n.setParam("/use_sim_time", true);
     DecisionConfig decision_config;
-
-    decision_config.decision_config_path_ = "/home/cube/Documents/decision/src/decision/config/robot_decision_rule.json";
-    decision_config.referee_topic_ = "/referee/msg";
+    setlocale(LC_ALL, "");
+    decision_config.decision_config_path_ = "/home/cube/Documents/decision/rules/rule_debug.json";
+    decision_config.referee_topic_ = "/referee";
     decision_config.frame_id_ = "odom";
     decision_config.child_frame_id_ = "base_footprint";
 

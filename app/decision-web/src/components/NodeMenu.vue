@@ -303,8 +303,6 @@ const selectedNode = computed<Node | null>(() => {
 // 相关表单数据
 const iconSvgPath = ref('');
 const iconColor = ref('#3B82F6');
-// const spinSpeed = ref(0);
-// const linear = ref(0);
 // 选项卡控制
 const activeTab = ref(0);
 const tabs = ref<{ label: string }[]>([]);
@@ -418,11 +416,6 @@ const updateWaypoint = () => {
   // if (!selectedNode.value) return;
   // selectedNode.value.taskConfig.waypointId = waypointId;
 };
-
-// const updateSpinSpeed = () => {
-//   if (!selectedNode.value) return;
-//   selectedNode.value.taskConfig.spin = spinSpeed.value / 10;
-// };
 
 // 获取边的目标节点名称
 const getEdgeTargetName = (edgeId: EdgeId): string => {

@@ -50,19 +50,23 @@
             <h4>基本属性</h4>
             <div class="form-group">
               <label>名称:</label>
-              <input type="text" v-model="editingName" placeholder="请输入编组名称" />
+              <input type="text" v-model="selectedGroup.name" placeholder="请输入编组名称" />
             </div>
             <div class="form-group">
               <label>颜色:</label>
               <div class="color-control">
-                <input type="color" v-model="editingColor" />
+                <input type="color" v-model="editingColor"
+                  @change="updateColor"
+                />
                 <span class="color-code">{{ editingColor }}</span>
               </div>
             </div>
             <div class="form-group">
               <label>透明度:</label>
               <div class="slider-control">
-                <input type="range" v-model="editingOpacity" min="0" max="1" step="0.01" />
+                <input type="range" v-model="editingOpacity" min="0" max="1" step="0.01"
+                  @change="updateColor"
+                />
                 <span class="slider-value">{{ (editingOpacity * 100).toFixed(0) }}%</span>
               </div>
             </div>
@@ -74,10 +78,10 @@
             <div class="form-group">
               <label>循环:</label>
               <div class="toggle-switch">
-                <input type="checkbox" id="loop-toggle" v-model="editingConfig.Loop" />
+                <input type="checkbox" id="loop-toggle" v-model="selectedGroup.config.Loop" />
                 <label for="loop-toggle" class="toggle-label">
                   <span class="toggle-inner"></span>
-                  <span class="toggle-switch-label">{{ editingConfig.Loop ? '开启' : '关闭' }}</span>
+                  <span class="toggle-switch-label">{{ selectedGroup.config.Loop ? '开启' : '关闭' }}</span>
                 </label>
               </div>
             </div>
@@ -86,26 +90,25 @@
               <div class="slider-control">
                 <input
                   type="range"
-                  v-model.number="editingConfig.ResetTime"
+                  v-model.number="selectedGroup.config.ResetTime"
                   min="0"
                   max="30"
                   step="0.5"
-                  :disabled="!editingConfig.Loop"
+                  :disabled="!selectedGroup.config.Loop"
                 />
-                <span class="slider-value">{{ editingConfig.ResetTime.toFixed(1) }}秒</span>
+                <span class="slider-value">{{ selectedGroup.config.ResetTime.toFixed(1) }}秒</span>
               </div>
             </div>
             <div class="form-group">
               <label>反转执行顺序:</label>
               <div class="toggle-switch">
-                <input type="checkbox" id="reverse-toggle" v-model="editingConfig.Reverse" :disabled="!editingConfig.Loop" />
+                <input type="checkbox" id="reverse-toggle" v-model="selectedGroup.config.Reverse" :disabled="!selectedGroup.config.Loop" />
                 <label for="reverse-toggle" class="toggle-label">
                   <span class="toggle-inner"></span>
-                  <span class="toggle-switch-label">{{ editingConfig.Reverse ? '开启' : '关闭' }}</span>
+                  <span class="toggle-switch-label">{{ selectedGroup.config.Reverse ? '开启' : '关闭' }}</span>
                 </label>
               </div>
             </div>
-            <button class="save-button" @click="saveGroup">保存更改</button>
           </div>
 
           <!-- 节点管理 -->
@@ -163,7 +166,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 import { NodeGroups, nodes } from '@/types/Manger';
-import type { NodeGroup, NodeGroupConfig } from '@/types/Node';
+import type { NodeGroup } from '@/types/Node';
 
 // 接收外部传入的isOpen属性
 const props = defineProps<{
@@ -186,14 +189,9 @@ watch(() => props.isOpen, (newValue) => {
 const selectedGroup = ref<NodeGroup | null>(null);
 
 // 编辑中的字段
-const editingName = ref('');
 const editingColor = ref('#3B82F6'); // 不含透明度的颜色
 const editingOpacity = ref(0.5); // 透明度，0-1之间的值
-const editingConfig = ref<NodeGroupConfig>({
-  Loop: false,
-  ResetTime: 0,
-  Reverse: false
-});
+
 
 // 将颜色和透明度合并成rgba格式
 const getFullColor = (color: string, opacity: number): string => {
@@ -244,34 +242,19 @@ const close = () => {
 // 选择组进行编辑
 const selectGroup = (group: NodeGroup) => {
   selectedGroup.value = group;
-  editingName.value = group.name;
 
   // 拆分颜色和透明度
   const { color, opacity } = splitColor(group.color);
   editingColor.value = color;
   editingOpacity.value = opacity;
-
-  editingConfig.value = { ...group.config };
 };
 
-// 保存组的修改
-const saveGroup = () => {
+const updateColor = () => {
   if (selectedGroup.value) {
-    // 合并颜色和透明度
-    const fullColor = getFullColor(editingColor.value, editingOpacity.value);
-
-    // 更新组信息
-    const groupIndex = NodeGroups.value.findIndex(g => g.id === selectedGroup.value!.id);
-    if (groupIndex >= 0) {
-      NodeGroups.value[groupIndex] = {
-        ...NodeGroups.value[groupIndex],
-        name: editingName.value,
-        color: fullColor,
-        config: { ...editingConfig.value }
-      };
-    }
+    selectedGroup.value.color = getFullColor(editingColor.value, editingOpacity.value);
   }
 };
+
 
 // 创建新组
 const createNewGroup = () => {

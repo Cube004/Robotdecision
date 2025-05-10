@@ -453,7 +453,7 @@ const resetAllPushData = () => {
 };
 
 // 自动发送控制
-const sendFrequency = ref(1000);
+const sendFrequency = ref(300);
 const isAutoSending = ref(false);
 const sendCount = ref(0);
 

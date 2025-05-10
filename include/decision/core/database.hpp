@@ -157,17 +157,17 @@ namespace database
     void debug_info(std::string datatype, ros::Time end, ros::Duration duration, int type, int min_value, int max_value, std::shared_ptr<rules::Graph> graph,bool result){
         try{
             if (type == CURRENT_VALUE){
-                ROS_INFO("current_value %s :%d", datatype.c_str(), result);
+                ROS_INFO("   current_value %s :%d", datatype.c_str(), result);
             }else if (type == TOTAL_INCREMENT){
-                ROS_INFO("total_increment %s :%d", datatype.c_str(), result);
+                ROS_INFO("   total_increment %s :%d", datatype.c_str(), result);
             }else if (type == TOTAL_DECREMENT){
-                ROS_INFO("total_decrement %s :%d", datatype.c_str(), result);
+                ROS_INFO("   total_decrement %s :%d", datatype.c_str(), result);
             }else if (type == HISTORICAL_PRESENCE){
-                ROS_INFO("historical_presence %s :%d", datatype.c_str(), result);
+                ROS_INFO("   historical_presence %s :%d", datatype.c_str(), result);
             }else if (type == IN_REGION){
-                ROS_INFO("in_region %s :%d", graph->areaList[std::stoi(datatype)].name.c_str(), result);
+                ROS_INFO("   in_region %s :%d", graph->areaList[std::stoi(datatype)].name.c_str(), result);
             }else if (type == NEAR_WAYPOINT){
-                ROS_INFO("near_waypoint %s :%d", graph->waypointList[std::stoi(datatype)].name.c_str(), result);
+                ROS_INFO("   near_waypoint %s :%d", graph->waypointList[std::stoi(datatype)].name.c_str(), result);
             }
         }catch(const std::runtime_error& e){
             ROS_ERROR("error: %s", e.what());

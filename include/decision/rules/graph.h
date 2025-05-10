@@ -80,7 +80,7 @@ namespace rules {
                     this->finish = true;
                     return this->finish;
                 }else{
-                    ROS_ERROR("limit_linear or limit_angular not match %f %f %f %f", limit_linear, this->limit_linear, limit_angular, this->limit_angular);
+                    ROS_ERROR("限制任务未完成: 当前 线速度%f 转速%f 预期线速度%f 预期转速%f", limit_linear, limit_angular, this->limit_linear, this->limit_angular);
                 }
             }
             

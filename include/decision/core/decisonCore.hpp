@@ -88,9 +88,21 @@ public:
             ros::Rate(10).sleep();
         }
         while(this->run_decision_){
+            // 清屏
+            ROS_INFO("\033[2J\033[H");
+            // 获取决策结果
             this->decision_result_ = this->getTargetNode();
-            std::cout << "target_node_id = " << this->decision_result_.target_id_ << std::endl;
-            this->decision_result_.nodepath_.push_back(this->decision_result_.target_id_);
+            // 打印决策结果
+            {
+                this->decision_result_.nodepath_.push_back(this->decision_result_.target_id_);
+                std::stringstream ss;
+                for(auto node_id : this->decision_result_.nodepath_){
+                    ss << " " << node_id;
+                }
+                ROS_INFO("nodepath_: %s", ss.str().c_str());
+                ROS_INFO("target_node_id = %d", this->decision_result_.target_id_);
+            }
+            // 发布决策结果
             {
                 nlohmann::json json_data;
                 std::string data_tabs = this->database_.get_data_tabs();
@@ -116,13 +128,13 @@ public:
                 target_node.start_time = result.task_start_time;
                 target_node.end_time = result.task_completed_time;
                 target_node.finish = result.completed;
-                std::cout << "正在执行导航" << std::endl;
+                ROS_INFO("正在执行导航");
             }else if(target_node.mode == rules::NodeMode::STAY){
-                std::cout << "正在执行停留" << std::endl;
+                ROS_INFO("正在执行停留");
                 // 停留, 暂时不实现
                 this->move_base_manager_->cancelAllGoal();
             }else if(target_node.mode == rules::NodeMode::LIMIT){
-                std::cout << "正在执行限制" << std::endl;
+                ROS_INFO("正在执行限制");
                 // 限制, 暂时不实现
                 nh_->setParam("/decision/limit_linear", target_node.limit_linear);
                 nh_->setParam("/decision/limit_angular", target_node.limit_angular);
@@ -144,10 +156,13 @@ public:
 
         // 如果当前节点完成，则继续寻找下一节点, 直到找到未完成的节点
         while(this->graph_->CheckFinish(node_id, this->nh_) == true){
+            ROS_INFO("--------------------------------");
+            ROS_WARN("node_id: %d", node_id);
             decision_result.nodepath_.push_back(node_id);
             int edge_index = 0;
             for(auto edge : *edges){
                 result = 1;
+                ROS_INFO("edge_id: %d", edge.edge_id);
                 // 遍历所有条件, 检测是否存在不满足的条件
                 for(auto condition : edge.rules.conditions){
                     ros::Duration duration = ros::Duration(condition.scope_value);   
@@ -156,12 +171,13 @@ public:
                                     (rules::metricType)condition.metric_type,  
                                     condition.min_value, 
                                     condition.max_value);
-                    std::cout << condition.datatype << "result = " << result << std::endl;
                     if(result == 0) break;// 如果有一个条件不满足，则跳出循环
                 }
 
                 // 如果所有条件都满足，且任务未完成或者目标是分支节点，则跳转到下一节点
-                ROS_ERROR("node_id: %d, %d", node_id,this->graph_->CheckFinish(edge.nodeOut_id, this->nh_));
+                if(result){
+                    ROS_INFO("条件满足, 目标节点ID: %d, 是否完成:%d，若是任务节点已完成则不跳转", edge.nodeOut_id,this->graph_->CheckFinish(edge.nodeOut_id, this->nh_));
+                }
                 if(result && 
                 (this->graph_->CheckFinish(edge.nodeOut_id, this->nh_) == false || this->graph_->nodeList[edge.nodeOut_id].type == rules::NodeType::BRANCH)){
                     node_id = edge.nodeOut_id;
@@ -172,7 +188,7 @@ public:
                 
                 // 如果已经遍历完所有节点，任然无法找到可跳转的下一节点，则返回当前节点
                 else if(edge_index == edges->size() - 1){
-                    std::cout << "遍历完所有节点，任然无法找到可跳转的下一节点，返回当前节点" << std::endl;
+                    ROS_INFO("遍历完所有节点，任然无法找到可跳转的下一节点，返回当前节点");
                     decision_result.duration_ = ros::Time::now() - start_time;
                     decision_result.target_id_ = node_id;
                     return decision_result;

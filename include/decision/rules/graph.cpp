@@ -20,15 +20,15 @@ namespace rules {
         // 检查节点组是否完成, 如果完成则重置节点组
         for (auto& groupIndex : this->nodeList[id].group_id) {
             bool ALLfinish = true;
-            std::cout << "group_id: " << groupIndex << " ";
-            std::cout << "nodes: ";
+            std::stringstream ss;
             if(this->nodeGroupList[groupIndex].Loop == false) continue;
             for (auto& node_id : this->nodeGroupList[groupIndex].nodes) {
-                std::cout << node_id << " ";
+                ss << " " << node_id;
                 ALLfinish = this->nodeList[node_id].get_finish(nh) && ALLfinish;
             }
             if (ALLfinish) {
-                std::cout << "group_id: " << groupIndex << " finish" << "|   now reset" << std::endl;
+                ROS_INFO("group_id: %d all nodes finish", groupIndex);
+                ROS_INFO("now reset nodes: %s", ss.str().c_str());
                 for (auto& node_id : this->nodeGroupList[groupIndex].nodes) {
                     this->nodeList[node_id].finish = false;
                 }

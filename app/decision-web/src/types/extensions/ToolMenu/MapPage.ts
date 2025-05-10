@@ -309,6 +309,9 @@ export function updateObjectPosition() {
   const scale = getScale();
   if (!scale) return;
   const { scaleX, scaleY } = scale;
+  if (!scaleX || !scaleY) {
+    return;
+  }
   [points, MapSettingsPoints].forEach(points => {
     points.value.forEach(point => {
       const x = point.position.x / scaleX * point.scale.x;

@@ -1,0 +1,24 @@
+<launch>
+    <arg name="config_path" default="/home/cube/Documents/decision/rules"/>
+    <arg name="config_file_name" default="rule_debug.json"/>
+    <arg name="referee_topic" default="/referee"/>
+    <arg name="frame_id" default="odom"/>
+    <arg name="child_frame_id" default="base_footprint"/>
+    <arg name="use_sim_time" default="true"/>
+    <arg name="is_debug" default="true"/>
+
+    <node name="decision" pkg="decision" type="decision_node" output="screen">
+        <param name="config_path" value="$(arg config_path)"/>
+        <param name="config_file_name" value="$(arg config_file_name)"/>
+        <param name="referee_topic" value="$(arg referee_topic)"/>
+        <param name="frame_id" value="$(arg frame_id)"/>
+        <param name="child_frame_id" value="$(arg child_frame_id)"/>
+        <param name="use_sim_time" value="$(arg use_sim_time)"/>
+        <param name="is_debug" value="$(arg is_debug)"/>
+    </node>
+
+    <group if="$(arg is_debug)">
+        <node name="decision_websocket" pkg="decision" type="decision_websocket" output="screen"/>
+    </group>
+    
+</launch>

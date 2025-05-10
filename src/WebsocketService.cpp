@@ -15,7 +15,9 @@
 
 
 ros::Publisher driver_pub;
-
+std::string rules_dir = "decision/rules";
+std::string rules_file_name = "rule_debug.json";
+std::string referee_topic = "/referee";
 // WebSocket 相关全局变量
 static struct lws_context *context;
 static std::vector<struct lws *> clients;
@@ -275,14 +277,13 @@ void process_complete_message(const std::string& message) {
                 ROS_INFO("接收到规则文件，开始保存...");
                 
                 // 确保目录存在
-                std::string rules_dir = "/home/cube/Documents/decision/rules";
                 boost::filesystem::create_directories(rules_dir);
                 
                 // 生成文件名，使用当前时间戳
                 auto now = std::chrono::system_clock::now();
                 auto now_time_t = std::chrono::system_clock::to_time_t(now);
                 std::stringstream filename;
-                filename << rules_dir << "/rule_debug" << ".json";
+                filename << rules_dir << "/" << rules_file_name;
                 
                 // 格式化JSON（美化输出）
                 std::string formatted_json = root.dump(4); // 使用4个空格缩进
@@ -314,6 +315,10 @@ int main(int argc, char **argv){
     ros::NodeHandle nh;
 
     setlocale(LC_ALL, "");
+
+    nh.getParam("/decision/config_path", rules_dir);
+    nh.getParam("/decision/config_file_name", rules_file_name);
+    nh.getParam("/decision/referee_topic", referee_topic);
     // 初始化WebSocket服务器
     struct lws_context_creation_info info;
     memset(&info, 0, sizeof(info));
@@ -333,7 +338,7 @@ int main(int argc, char **argv){
     ROS_INFO("WebSocket服务器已启动，监听端口: %d", info.port);
     
     ros::Subscriber decision_sub = nh.subscribe("/decision_status", 10, decision_status_cb);
-    driver_pub = nh.advertise<roborts_msgs::driver>("/referee", 10);
+    driver_pub = nh.advertise<roborts_msgs::driver>(referee_topic, 10);
     // 同时处理ROS和WebSocket事件
     while (ros::ok()) {
         ros::spinOnce();

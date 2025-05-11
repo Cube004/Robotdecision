@@ -87,7 +87,7 @@
             </div>
 
             <!-- 机器人姿态数据 -->
-            <div v-if="activeTab === 1">
+            <div v-if="activeTab === 5">
               <div v-if="poseData" class="data-card">
                 <h4>机器人姿态:</h4>
                 <div class="table-container">
@@ -115,7 +115,7 @@
             </div>
 
             <!-- 其他数据 -->
-            <div v-if="activeTab === 2">
+            <div v-if="activeTab === 4">
               <div v-if="currentDataItems.length > 0" class="data-card">
                 <h4>数据项:</h4>
                 <div class="search-box">
@@ -157,7 +157,7 @@
             </div>
 
             <!-- 推送数据 -->
-            <div v-if="activeTab === 4">
+            <div v-if="activeTab === 1">
               <div class="data-card push-data-card">
                 <h4>推送数据设置</h4>
 
@@ -261,7 +261,7 @@
             </div>
 
             <!-- 规则上传 -->
-            <div v-if="activeTab === 5">
+            <div v-if="activeTab === 2">
               <div class="data-card rules-card">
                 <h4>规则上传</h4>
 
@@ -335,22 +335,22 @@ const searchQuery = ref('');
 const activeTab = ref(0);
 const dataTabs = [
   { name: '路径节点' },
-  { name: '机器人姿态' },
-  { name: '数据项' },
-  { name: '原始数据' },
   { name: '推送数据' },
-  { name: '规则上传' }
+  { name: '规则上传' },
+  { name: '原始数据' },
+  { name: '数据项' },
+  { name: '机器人姿态' },
 ];
 
 // 获取各标签页的项目数量
 const getTabItemCount = (tabIndex: number) => {
   switch (tabIndex) {
     case 0: return pathNodeData.value.length;
-    case 1: return poseData.value ? 1 : 0;
-    case 2: return currentDataItems.value.length;
+    case 1: return pushDataItems.value.length;
+    case 2: return rulePreview.value ? 1 : 0;
     case 3: return rawReceivedData.value ? 1 : 0;
-    case 4: return pushDataItems.value.length;
-    case 5: return rulePreview.value ? 1 : 0;
+    case 4: return currentDataItems.value.length;
+    case 5: return poseData.value ? 1 : 0;
     default: return 0;
   }
 };

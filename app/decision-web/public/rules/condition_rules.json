@@ -61,7 +61,7 @@
     },{
         "type": "remaining_energy",
         "description": "剩余能量",
-        "data": 5
+        "data": 50
     },{
         "type": "enemy_outpost_HP",
         "description": "敌人前哨站血量",

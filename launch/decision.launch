@@ -4,7 +4,6 @@
     <arg name="referee_topic" default="/referee"/>
     <arg name="frame_id" default="odom"/>
     <arg name="child_frame_id" default="base_footprint"/>
-    <arg name="use_sim_time" default="true"/>
     <arg name="is_debug" default="false"/>
 
     <node name="decision" pkg="decision" type="decision_node" output="screen" respawn="true">
@@ -13,7 +12,6 @@
         <param name="referee_topic" value="$(arg referee_topic)"/>
         <param name="frame_id" value="$(arg frame_id)"/>
         <param name="child_frame_id" value="$(arg child_frame_id)"/>
-        <param name="use_sim_time" value="$(arg use_sim_time)"/>
     </node>
 
     <group if="$(arg is_debug)">

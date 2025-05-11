@@ -1,0 +1,11 @@
+<launch>
+    <arg name="config_path" default="/home/qidian2025/rm_qd_driver/src/Robotdecision/config"/>
+    <arg name="config_file_name" default="robot_decision_rule.json"/>
+    <arg name="referee_topic" default="/referee"/>
+
+    <param name="/decision/config_path" value="$(arg config_path)"/>
+    <param name="/decision/config_file_name" value="$(arg config_file_name)"/>
+    <param name="/decision/referee_topic" value="$(arg referee_topic)"/>
+    <node name="decision_websocket" pkg="decision" type="decision_websocket_service" output="screen"/>
+
+</launch>

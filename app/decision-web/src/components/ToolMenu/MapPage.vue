@@ -24,7 +24,7 @@
               </div>
 
               <div class="point-waypoint-text" v-if="point.waypoint" :style="{ fontSize: point.fontSize.value + 'px', color: point.textColor.value }">
-                {{ point.waypoint.x.toFixed(1) }}, {{ point.waypoint.y.toFixed(1) }}
+                {{ point.waypoint.x.toFixed(2) }}, {{ point.waypoint.y.toFixed(2) }}
               </div>
             </div>
           </div>

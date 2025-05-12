@@ -1,15 +1,73 @@
 {
   "version": "1.0",
-  "createdAt": "2025-05-07T13:48:49.975Z",
+  "createdAt": "2025-05-12T16:34:14.012Z",
   "mapSettings": {
-    "points": []
+    "points": [
+      {
+        "id": 1,
+        "position": {
+          "x": 149,
+          "y": 73.25
+        },
+        "waypoint": {
+          "x": -1,
+          "y": -1
+        },
+        "color": "#000000",
+        "text": "LeftTop",
+        "fontSize": 14,
+        "textColor": "#000000",
+        "scale": {
+          "x": 1.6064285714285715,
+          "y": 1.6068027210884355
+        }
+      },
+      {
+        "id": 2,
+        "position": {
+          "x": 1231,
+          "y": 651.25
+        },
+        "waypoint": {
+          "x": -1,
+          "y": -1
+        },
+        "color": "#000000",
+        "text": "RightBottom",
+        "fontSize": 14,
+        "textColor": "#000000",
+        "scale": {
+          "x": 1.6064285714285715,
+          "y": 1.6068027210884355
+        }
+      },
+      {
+        "id": 0,
+        "position": {
+          "x": 296,
+          "y": 340.25
+        },
+        "waypoint": {
+          "x": -1,
+          "y": -1
+        },
+        "color": "#000000",
+        "text": "启动点",
+        "fontSize": 14,
+        "textColor": "#000000",
+        "scale": {
+          "x": 1.6064285714285715,
+          "y": 1.6068027210884355
+        }
+      }
+    ]
   },
   "nodes": [
     {
       "id": 0,
       "position": {
-        "x": 2860,
-        "y": 1471
+        "x": 1648.2762583019742,
+        "y": 670.0053303895031
       },
       "shape": {
         "width": 200,
@@ -31,7 +89,7 @@
       "taskConfig": {
         "nodeType": "root",
         "mode": "Stay",
-        "waypointId": null,
+        "waypointId": -1,
         "spin": 0,
         "linear": 0,
         "resetTime": 0
@@ -42,15 +100,15 @@
       },
       "edges": [
         {
-          "value": 0
+          "value": 18
         }
       ]
     },
     {
       "id": 1,
       "position": {
-        "x": 2860,
-        "y": 1621
+        "x": 2416.482993196159,
+        "y": 1317.6947711107557
       },
       "shape": {
         "width": 200,
@@ -66,57 +124,13 @@
       "text": {
         "size": 14,
         "color": "#334155",
-        "content": "分支节点",
+        "content": "中央高地",
         "fontFamily": "Inter, system-ui, sans-serif"
       },
       "taskConfig": {
         "nodeType": "branch",
         "mode": "Stay",
-        "waypointId": null,
-        "spin": 0,
-        "linear": 0,
-        "resetTime": 0
-      },
-      "icon": {
-        "bgColor": "#3B82F6",
-        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
-      },
-      "edges": [
-        {
-          "value": 1
-        },
-        {
-          "value": 2
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "position": {
-        "x": 3160,
-        "y": 1621
-      },
-      "shape": {
-        "width": 200,
-        "height": 60,
-        "borderWidth": 1,
-        "borderRadius": 8
-      },
-      "color": {
-        "borderColor": "#FEE2E2",
-        "fillColor": "#FFFFFF",
-        "fillOpacity": 1
-      },
-      "text": {
-        "size": 14,
-        "color": "#334155",
-        "content": "任务节点",
-        "fontFamily": "Inter, system-ui, sans-serif"
-      },
-      "taskConfig": {
-        "nodeType": "task",
-        "mode": "Stay",
-        "waypointId": null,
+        "waypointId": -1,
         "spin": 0,
         "linear": 0,
         "resetTime": 0
@@ -125,13 +139,20 @@
         "bgColor": "#EF4444",
         "svgPath": "M4.5 15.75l7.5-7.5 7.5 7.5"
       },
-      "edges": []
+      "edges": [
+        {
+          "value": 42
+        },
+        {
+          "value": 8
+        }
+      ]
     },
     {
-      "id": 3,
+      "id": 9,
       "position": {
-        "x": 3160,
-        "y": 1771
+        "x": 2756.4510315907796,
+        "y": 1414.8284963663614
       },
       "shape": {
         "width": 200,
@@ -140,82 +161,4026 @@
         "borderRadius": 8
       },
       "color": {
-        "borderColor": "#DCF5E8",
+        "borderColor": "#E2E8F0",
         "fillColor": "#FFFFFF",
         "fillOpacity": 1
       },
       "text": {
         "size": 14,
         "color": "#334155",
-        "content": "任务节点",
+        "content": "攻击前哨站",
         "fontFamily": "Inter, system-ui, sans-serif"
       },
       "taskConfig": {
         "nodeType": "task",
+        "mode": "Move",
+        "waypointId": 4,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 5
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 10,
+      "position": {
+        "x": 2819.797360695193,
+        "y": 2283.8157726332606
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "巡逻上C点",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Move",
+        "waypointId": 7,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 5
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 11,
+      "position": {
+        "x": 2816.4031162315555,
+        "y": 2370.6382975705537
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "巡逻上B点",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Move",
+        "waypointId": 8,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 5
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 12,
+      "position": {
+        "x": 2819.5684365127945,
+        "y": 2453.9917316431774
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "巡逻上A点",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Move",
+        "waypointId": 13,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 5
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 14,
+      "position": {
+        "x": 1562.5973427236854,
+        "y": 1147.780973880817
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "堡垒前",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "branch",
         "mode": "Stay",
-        "waypointId": null,
+        "waypointId": -1,
         "spin": 0,
         "linear": 0,
         "resetTime": 0
       },
       "icon": {
-        "bgColor": "#F97316",
-        "svgPath": "M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+        "bgColor": "#EF4444",
+        "svgPath": "M4.5 15.75l7.5-7.5 7.5 7.5"
+      },
+      "edges": [
+        {
+          "value": 48
+        },
+        {
+          "value": 47
+        },
+        {
+          "value": 46
+        },
+        {
+          "value": 12
+        },
+        {
+          "value": 13
+        },
+        {
+          "value": 14
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "position": {
+        "x": 682.4177790291593,
+        "y": 1026.37393477678
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "巡逻下C",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Move",
+        "waypointId": 12,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 5
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 16,
+      "position": {
+        "x": 680.4421683835529,
+        "y": 1100.456544109178
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "巡逻下B",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Move",
+        "waypointId": 10,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 5
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 17,
+      "position": {
+        "x": 675.8062750835458,
+        "y": 1186.7029054579095
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "巡逻下A",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Move",
+        "waypointId": 11,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 5
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 18,
+      "position": {
+        "x": 1394.5658597801323,
+        "y": 1486.58355881611
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "上堡垒-前哨站",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "branch",
+        "mode": "Stay",
+        "waypointId": -1,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#EF4444",
+        "svgPath": "M4.5 15.75l7.5-7.5 7.5 7.5"
+      },
+      "edges": [
+        {
+          "value": 25
+        },
+        {
+          "value": 26
+        },
+        {
+          "value": 36
+        },
+        {
+          "value": 5
+        },
+        {
+          "value": 27
+        },
+        {
+          "value": 16
+        },
+        {
+          "value": 17
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "position": {
+        "x": 857.7736873887358,
+        "y": 1636.8545493880342
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "堡垒出发点",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Move",
+        "waypointId": 9,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 4
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 20,
+      "position": {
+        "x": 861.4241785985631,
+        "y": 1707.9879100032285
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "堡垒",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Move",
+        "waypointId": 5,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 4
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 21,
+      "position": {
+        "x": 2025.771577218934,
+        "y": 1471.0221551994196
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "执行任务",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "branch",
+        "mode": "Stay",
+        "waypointId": -1,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#EF4444",
+        "svgPath": "M4.5 15.75l7.5-7.5 7.5 7.5"
+      },
+      "edges": [
+        {
+          "value": 19
+        },
+        {
+          "value": 38
+        },
+        {
+          "value": 15
+        },
+        {
+          "value": 28
+        },
+        {
+          "value": 11
+        },
+        {
+          "value": 0
+        },
+        {
+          "value": 9
+        },
+        {
+          "value": 7
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "position": {
+        "x": 2179.5744673267122,
+        "y": 1843.8214543749066
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "回血",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "branch",
+        "mode": "Stay",
+        "waypointId": -1,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#EF4444",
+        "svgPath": "M4.5 15.75l7.5-7.5 7.5 7.5"
+      },
+      "edges": [
+        {
+          "value": 22
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "position": {
+        "x": 2253.163909444511,
+        "y": 2179.2860172715764
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "恢复点",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Move",
+        "waypointId": 6,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 13,
+      "position": {
+        "x": 1528.93257253651,
+        "y": 2199.5250946164633
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "上堡垒-功率",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "branch",
+        "mode": "Stay",
+        "waypointId": -1,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#EF4444",
+        "svgPath": "M4.5 15.75l7.5-7.5 7.5 7.5"
+      },
+      "edges": [
+        {
+          "value": 29
+        },
+        {
+          "value": 30
+        },
+        {
+          "value": 31
+        },
+        {
+          "value": 37
+        },
+        {
+          "value": 32
+        },
+        {
+          "value": 33
+        },
+        {
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "position": {
+        "x": 866.106357829954,
+        "y": 1398.8718676399014
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "起伏路段4",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Limit",
+        "waypointId": -1,
+        "spin": 3,
+        "linear": 2,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 29,
+      "position": {
+        "x": 841.8939122986299,
+        "y": 1311.1924901364039
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "坡4",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Limit",
+        "waypointId": -1,
+        "spin": 0,
+        "linear": 5,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 30,
+      "position": {
+        "x": 859.0804720230935,
+        "y": 1560.618815515442
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "上堡垒路段",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Limit",
+        "waypointId": -1,
+        "spin": 0,
+        "linear": 6,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 31,
+      "position": {
+        "x": 875.9167860453916,
+        "y": 2177.8759577438786
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "坡5",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Limit",
+        "waypointId": -1,
+        "spin": 0,
+        "linear": 5,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 32,
+      "position": {
+        "x": 876.9517886494976,
+        "y": 2255.5513515037846
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "起伏路段5",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Limit",
+        "waypointId": -1,
+        "spin": 3,
+        "linear": 2,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 33,
+      "position": {
+        "x": 889.0969609761415,
+        "y": 2428.0127985421295
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "上堡垒路段2",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Limit",
+        "waypointId": -1,
+        "spin": 0,
+        "linear": 6,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 34,
+      "position": {
+        "x": 890.6286342144888,
+        "y": 2498.159419505072
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "堡垒出发点2",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Move",
+        "waypointId": 9,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 6
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 35,
+      "position": {
+        "x": 894.6802034481441,
+        "y": 2572.438188788751
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "堡垒点2",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Move",
+        "waypointId": 5,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 4
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 38,
+      "position": {
+        "x": 857.6319089749259,
+        "y": 1485.1399157456206
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "恢复点2",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Move",
+        "waypointId": 6,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 5
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 39,
+      "position": {
+        "x": 881.3999474981937,
+        "y": 2337.06532551646
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "恢复点3",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Move",
+        "waypointId": 6,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 5
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 40,
+      "position": {
+        "x": 1802.3338577037623,
+        "y": 2076.1784636656726
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "持续回血",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Move",
+        "waypointId": 6,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 37,
+      "position": {
+        "x": 2481.433239136829,
+        "y": 1644.3662593500371
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "高地巡逻",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "branch",
+        "mode": "Stay",
+        "waypointId": -1,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#EF4444",
+        "svgPath": "M4.5 15.75l7.5-7.5 7.5 7.5"
+      },
+      "edges": [
+        {
+          "value": 43
+        },
+        {
+          "value": 44
+        },
+        {
+          "value": 45
+        },
+        {
+          "value": 10
+        },
+        {
+          "value": 34
+        },
+        {
+          "value": 35
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "position": {
+        "x": 2236.8290364177046,
+        "y": 986.0829231830577
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "抬枪口",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Limit",
+        "waypointId": -1,
+        "spin": 6.6,
+        "linear": 5,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 43,
+      "position": {
+        "x": 2806.816666908501,
+        "y": 1215.164727785394
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "补弹",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Move",
+        "waypointId": 6,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 6
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 44,
+      "position": {
+        "x": 3227.4848297245585,
+        "y": 1765.8034398394016
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "有识别到敌人的补弹",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Move",
+        "waypointId": 6,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 5
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 45,
+      "position": {
+        "x": 3224.533552849184,
+        "y": 1848.4391923498868
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "未识别到敌人的补弹",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Move",
+        "waypointId": 6,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 5
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 46,
+      "position": {
+        "x": 3223.549793890726,
+        "y": 1922.2211142342485
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "发现敌人",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Stay",
+        "waypointId": -1,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 8
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 47,
+      "position": {
+        "x": 815.5210417797832,
+        "y": 703.4505884545797
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "有识别到敌人的补弹2",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Move",
+        "waypointId": 6,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 5
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 48,
+      "position": {
+        "x": 801.4094364592121,
+        "y": 769.7320162946155
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "未识别到敌人的补弹2",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Move",
+        "waypointId": 6,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 7
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 49,
+      "position": {
+        "x": 802.4939714449135,
+        "y": 845.1257991247113
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "发现敌人2",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Stay",
+        "waypointId": -1,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 5
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 6,
+      "position": {
+        "x": 860.1780894885594,
+        "y": 1821.7507679047667
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "下堡垒补弹",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "branch",
+        "mode": "Move",
+        "waypointId": 6,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#EF4444",
+        "svgPath": "M4.5 15.75l7.5-7.5 7.5 7.5"
+      },
+      "edges": [
+        {
+          "value": 4
+        },
+        {
+          "value": 6
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "position": {
+        "x": 571.6014077017002,
+        "y": 1843.3180060912998
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "下坡减速",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Limit",
+        "waypointId": -1,
+        "spin": 0,
+        "linear": 2,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 7,
+      "position": {
+        "x": 575.2148474021892,
+        "y": 1921.0069596518156
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "恢复点3",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Move",
+        "waypointId": 6,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 5
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 53,
+      "position": {
+        "x": 1799.390355136704,
+        "y": 962.8960210438729
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "比赛开始",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "branch",
+        "mode": "Stay",
+        "waypointId": -1,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#EF4444",
+        "svgPath": "M4.5 15.75l7.5-7.5 7.5 7.5"
+      },
+      "edges": [
+        {
+          "value": 53
+        },
+        {
+          "value": 54
+        },
+        {
+          "value": 55
+        },
+        {
+          "value": 1
+        },
+        {
+          "value": 39
+        },
+        {
+          "value": 56
+        },
+        {
+          "value": 2
+        },
+        {
+          "value": 21
+        },
+        {
+          "value": 24
+        },
+        {
+          "value": 52
+        }
+      ]
+    },
+    {
+      "id": 54,
+      "position": {
+        "x": 2249.9392665180603,
+        "y": 622.8013236212727
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "坡",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Limit",
+        "waypointId": -1,
+        "spin": 0,
+        "linear": 5,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 55,
+      "position": {
+        "x": 2250.863659695088,
+        "y": 693.9902637800487
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "右高地",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Limit",
+        "waypointId": -1,
+        "spin": 1,
+        "linear": 5,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 56,
+      "position": {
+        "x": 2250.863659695088,
+        "y": 768.0691791685488
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "起伏路段",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Limit",
+        "waypointId": -1,
+        "spin": 3,
+        "linear": 2,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 57,
+      "position": {
+        "x": 2260.6280049010093,
+        "y": 1059.6433712223622
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "默认速度1",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Limit",
+        "waypointId": -1,
+        "spin": 2,
+        "linear": 5,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 4,
+      "position": {
+        "x": 1298.725643680724,
+        "y": 1833.8166190291074
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "下堡垒补弹",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "branch",
+        "mode": "Stay",
+        "waypointId": -1,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#EF4444",
+        "svgPath": "M4.5 15.75l7.5-7.5 7.5 7.5"
+      },
+      "edges": [
+        {
+          "value": 57
+        },
+        {
+          "value": 58
+        }
+      ]
+    },
+    {
+      "id": 58,
+      "position": {
+        "x": 899.5060328801841,
+        "y": 1916.8659541226505
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "下坡减速",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Limit",
+        "waypointId": -1,
+        "spin": 0,
+        "linear": 2,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 59,
+      "position": {
+        "x": 915.533097547359,
+        "y": 2018.8563656410365
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "恢复点4",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Move",
+        "waypointId": 6,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 5
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 2,
+      "position": {
+        "x": 2252.4398068310134,
+        "y": 842.1480945570488
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "敌方起伏路段",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Stay",
+        "waypointId": -1,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 3,
+      "position": {
+        "x": 2256.3009197222264,
+        "y": 1127.7949627881885
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "默认速度2",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Limit",
+        "waypointId": -1,
+        "spin": 2,
+        "linear": 5,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 8,
+      "position": {
+        "x": 1600.3258605993803,
+        "y": 1328.235579073679
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "无能量巡航",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "branch",
+        "mode": "Stay",
+        "waypointId": -1,
+        "spin": 0,
+        "linear": 0,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#EF4444",
+        "svgPath": "M4.5 15.75l7.5-7.5 7.5 7.5"
+      },
+      "edges": [
+        {
+          "value": 23
+        },
+        {
+          "value": 20
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "position": {
+        "x": 2244.4014354805745,
+        "y": 911.4407038490574
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "中央高地 敌方基地被摧毁",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Limit",
+        "waypointId": -1,
+        "spin": 5,
+        "linear": 5,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+      },
+      "edges": []
+    },
+    {
+      "id": 24,
+      "position": {
+        "x": 2257.0165401072336,
+        "y": 1208.7128866084945
+      },
+      "shape": {
+        "width": 200,
+        "height": 60,
+        "borderWidth": 1,
+        "borderRadius": 8
+      },
+      "color": {
+        "borderColor": "#E2E8F0",
+        "fillColor": "#FFFFFF",
+        "fillOpacity": 1
+      },
+      "text": {
+        "size": 14,
+        "color": "#334155",
+        "content": "低功率巡航速度",
+        "fontFamily": "Inter, system-ui, sans-serif"
+      },
+      "taskConfig": {
+        "nodeType": "task",
+        "mode": "Limit",
+        "waypointId": -1,
+        "spin": 0,
+        "linear": 5,
+        "resetTime": 0
+      },
+      "icon": {
+        "bgColor": "#3B82F6",
+        "svgPath": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
       },
       "edges": []
     }
   ],
   "edges": [
     {
-      "id": 0,
-      "sourceId": 0,
-      "targetId": 1,
+      "id": 8,
+      "sourceId": 1,
+      "targetId": 9,
       "config": {
-        "color": "#10B981",
+        "color": "#3B82F6",
         "width": 2,
-        "label": "开始流程",
         "type": "curve",
         "curvature": 0.5
       },
-      "conditions": []
+      "conditions": [
+        {
+          "datetype": "enemy_outpost_HP",
+          "max": 1500,
+          "metricType": 1,
+          "min": 1,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "sourceId": 14,
+      "targetId": 15,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "game_progress",
+          "max": 4,
+          "metricType": 1,
+          "min": 4,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "sourceId": 14,
+      "targetId": 16,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "game_progress",
+          "max": 4,
+          "metricType": 1,
+          "min": 4,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "sourceId": 14,
+      "targetId": 17,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "game_progress",
+          "max": 4,
+          "metricType": 1,
+          "min": 4,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "sourceId": 18,
+      "targetId": 19,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "game_progress",
+          "max": 4,
+          "metricType": 1,
+          "min": 4,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "sourceId": 18,
+      "targetId": 20,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "game_progress",
+          "max": 4,
+          "metricType": 1,
+          "min": 4,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 0,
+      "sourceId": 21,
+      "targetId": 1,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "label": "己方前哨站健康",
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "own_outpost_HP",
+          "max": 1500,
+          "metricType": 1,
+          "min": 301,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        },
+        {
+          "datetype": "remaining_energy",
+          "max": 50,
+          "metricType": 1,
+          "min": 30,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        },
+        {
+          "datetype": "enemy_outpost_HP",
+          "max": 1500,
+          "metricType": 1,
+          "min": 1,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "sourceId": 21,
+      "targetId": 18,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "label": "己方前哨站被摧毁",
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "own_outpost_HP",
+          "max": 0,
+          "metricType": 1,
+          "min": 0,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "sourceId": 21,
+      "targetId": 14,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "label": "己方前哨站残血",
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "own_outpost_HP",
+          "max": 300,
+          "metricType": 1,
+          "min": 1,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "sourceId": 21,
+      "targetId": 22,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "label": "血量过低",
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "current_HP",
+          "max": 150,
+          "metricType": 1,
+          "min": 0,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "sourceId": 22,
+      "targetId": 25,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "game_progress",
+          "max": 4,
+          "metricType": 1,
+          "min": 4,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "sourceId": 18,
+      "targetId": 29,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "2",
+          "max": 100,
+          "metricType": 5,
+          "min": 0,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "sourceId": 18,
+      "targetId": 28,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "0",
+          "max": 100,
+          "metricType": 5,
+          "min": 0,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "sourceId": 18,
+      "targetId": 30,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "3",
+          "max": 100,
+          "metricType": 5,
+          "min": 0,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "sourceId": 21,
+      "targetId": 13,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "label": "剩余能量过低",
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "remaining_energy",
+          "max": 15,
+          "metricType": 1,
+          "min": 1,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "sourceId": 13,
+      "targetId": 31,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "2",
+          "max": 100,
+          "metricType": 5,
+          "min": 0,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "sourceId": 13,
+      "targetId": 32,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "0",
+          "max": 100,
+          "metricType": 5,
+          "min": 0,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "sourceId": 13,
+      "targetId": 33,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "3",
+          "max": 100,
+          "metricType": 5,
+          "min": 0,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "sourceId": 13,
+      "targetId": 34,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "game_progress",
+          "max": 4,
+          "metricType": 1,
+          "min": 4,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "sourceId": 13,
+      "targetId": 35,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "game_progress",
+          "max": 4,
+          "metricType": 1,
+          "min": 4,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "sourceId": 18,
+      "targetId": 38,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "game_progress",
+          "max": 4,
+          "metricType": 1,
+          "min": 4,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 37,
+      "sourceId": 13,
+      "targetId": 39,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "game_progress",
+          "max": 4,
+          "metricType": 1,
+          "min": 4,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 38,
+      "sourceId": 21,
+      "targetId": 40,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "label": "位于恢复区",
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "6",
+          "max": 100,
+          "metricType": 6,
+          "min": 0,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        },
+        {
+          "datetype": "current_HP",
+          "max": 399,
+          "metricType": 1,
+          "min": 0,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "sourceId": 37,
+      "targetId": 10,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "game_progress",
+          "max": 4,
+          "metricType": 1,
+          "min": 4,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "sourceId": 37,
+      "targetId": 11,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "game_progress",
+          "max": 4,
+          "metricType": 1,
+          "min": 4,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "sourceId": 37,
+      "targetId": 12,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "game_progress",
+          "max": 4,
+          "metricType": 1,
+          "min": 4,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "sourceId": 21,
+      "targetId": 37,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "label": "敌方前哨站被摧毁",
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "enemy_outpost_HP",
+          "max": 0,
+          "metricType": 1,
+          "min": 0,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        },
+        {
+          "datetype": "remaining_energy",
+          "max": 50,
+          "metricType": 1,
+          "min": 30,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        },
+        {
+          "datetype": "own_outpost_HP",
+          "max": 1500,
+          "metricType": 1,
+          "min": 301,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "sourceId": 1,
+      "targetId": 43,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "shoot_num",
+          "max": 0,
+          "metricType": 1,
+          "min": 0,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        },
+        {
+          "datetype": "obtain_shoot_num",
+          "max": 700,
+          "metricType": 1,
+          "min": 1,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 43,
+      "sourceId": 37,
+      "targetId": 44,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "vision_status",
+          "max": 3,
+          "metricType": 1,
+          "min": 1,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        },
+        {
+          "datetype": "shoot_num",
+          "max": 0,
+          "metricType": 1,
+          "min": 0,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        },
+        {
+          "datetype": "obtain_shoot_num",
+          "max": 700,
+          "metricType": 1,
+          "min": 1,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 44,
+      "sourceId": 37,
+      "targetId": 45,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "shoot_num",
+          "max": 60,
+          "metricType": 1,
+          "min": 0,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        },
+        {
+          "datetype": "obtain_shoot_num",
+          "max": 700,
+          "metricType": 1,
+          "min": 1,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 45,
+      "sourceId": 37,
+      "targetId": 46,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "vision_status",
+          "max": 3,
+          "metricType": 1,
+          "min": 1,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "sourceId": 14,
+      "targetId": 49,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "vision_status",
+          "max": 3,
+          "metricType": 1,
+          "min": 1,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 47,
+      "sourceId": 14,
+      "targetId": 48,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "obtain_shoot_num",
+          "max": 700,
+          "metricType": 1,
+          "min": 1,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        },
+        {
+          "datetype": "shoot_num",
+          "max": 0,
+          "metricType": 1,
+          "min": 0,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 48,
+      "sourceId": 14,
+      "targetId": 47,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "vision_status",
+          "max": 3,
+          "metricType": 1,
+          "min": 1,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        },
+        {
+          "datetype": "obtain_shoot_num",
+          "max": 700,
+          "metricType": 1,
+          "min": 1,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        },
+        {
+          "datetype": "shoot_num",
+          "max": 0,
+          "metricType": 1,
+          "min": 0,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "sourceId": 18,
+      "targetId": 6,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "shoot_num",
+          "max": 0,
+          "metricType": 1,
+          "min": 0,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        },
+        {
+          "datetype": "obtain_shoot_num",
+          "max": 700,
+          "metricType": 1,
+          "min": 200,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        },
+        {
+          "datetype": "remaining_energy",
+          "max": 50,
+          "metricType": 1,
+          "min": 5,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "sourceId": 6,
+      "targetId": 5,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "5",
+          "max": 100,
+          "metricType": 5,
+          "min": 0,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "sourceId": 6,
+      "targetId": 7,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "game_progress",
+          "max": 4,
+          "metricType": 1,
+          "min": 4,
+          "temporalScope": {
+            "rollingWindow": 0,
+            "type": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "sourceId": 0,
+      "targetId": 53,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "game_progress",
+          "metricType": 1,
+          "temporalScope": {
+            "type": 1,
+            "rollingWindow": 0
+          },
+          "min": 4,
+          "max": 4
+        }
+      ]
+    },
+    {
+      "id": 52,
+      "sourceId": 53,
+      "targetId": 21,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "game_progress",
+          "metricType": 1,
+          "temporalScope": {
+            "type": 1,
+            "rollingWindow": 0
+          },
+          "min": 4,
+          "max": 4
+        }
+      ]
+    },
+    {
+      "id": 53,
+      "sourceId": 53,
+      "targetId": 54,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "2",
+          "metricType": 5,
+          "temporalScope": {
+            "type": 1,
+            "rollingWindow": 0
+          },
+          "min": 0,
+          "max": 100
+        }
+      ]
+    },
+    {
+      "id": 54,
+      "sourceId": 53,
+      "targetId": 55,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "4",
+          "metricType": 5,
+          "temporalScope": {
+            "type": 1,
+            "rollingWindow": 0
+          },
+          "min": 0,
+          "max": 100
+        }
+      ]
+    },
+    {
+      "id": 55,
+      "sourceId": 53,
+      "targetId": 56,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "0",
+          "metricType": 5,
+          "temporalScope": {
+            "type": 1,
+            "rollingWindow": 0
+          },
+          "min": 0,
+          "max": 100
+        }
+      ]
+    },
+    {
+      "id": 56,
+      "sourceId": 53,
+      "targetId": 57,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "7",
+          "metricType": 5,
+          "temporalScope": {
+            "type": 1,
+            "rollingWindow": 0
+          },
+          "min": 0,
+          "max": 100
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "sourceId": 53,
+      "targetId": 36,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "1",
+          "metricType": 5,
+          "temporalScope": {
+            "type": 1,
+            "rollingWindow": 0
+          },
+          "min": 0,
+          "max": 100
+        },
+        {
+          "datetype": "enemy_outpost_HP",
+          "metricType": 1,
+          "temporalScope": {
+            "type": 1,
+            "rollingWindow": 0
+          },
+          "min": 1,
+          "max": 1500
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "sourceId": 13,
+      "targetId": 4,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "shoot_num",
+          "metricType": 1,
+          "temporalScope": {
+            "type": 1,
+            "rollingWindow": 0
+          },
+          "min": 0,
+          "max": 0
+        },
+        {
+          "datetype": "obtain_shoot_num",
+          "metricType": 1,
+          "temporalScope": {
+            "type": 1,
+            "rollingWindow": 0
+          },
+          "min": 200,
+          "max": 700
+        },
+        {
+          "datetype": "remaining_energy",
+          "metricType": 1,
+          "temporalScope": {
+            "type": 1,
+            "rollingWindow": 0
+          },
+          "min": 5,
+          "max": 50
+        }
+      ]
+    },
+    {
+      "id": 57,
+      "sourceId": 4,
+      "targetId": 58,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "5",
+          "metricType": 5,
+          "temporalScope": {
+            "type": 1,
+            "rollingWindow": 0
+          },
+          "min": 0,
+          "max": 100
+        }
+      ]
+    },
+    {
+      "id": 58,
+      "sourceId": 4,
+      "targetId": 59,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "game_progress",
+          "metricType": 1,
+          "temporalScope": {
+            "type": 1,
+            "rollingWindow": 0
+          },
+          "min": 4,
+          "max": 4
+        }
+      ]
     },
     {
       "id": 1,
-      "sourceId": 1,
+      "sourceId": 53,
       "targetId": 2,
       "config": {
         "color": "#3B82F6",
         "width": 2,
-        "label": "分支一流程",
         "type": "curve",
         "curvature": 0.5
       },
-      "conditions": []
+      "conditions": [
+        {
+          "datetype": "6",
+          "metricType": 5,
+          "temporalScope": {
+            "type": 1,
+            "rollingWindow": 0
+          },
+          "min": 0,
+          "max": 100
+        }
+      ]
     },
     {
       "id": 2,
-      "sourceId": 1,
+      "sourceId": 53,
       "targetId": 3,
       "config": {
-        "color": "#EF4444",
+        "color": "#3B82F6",
         "width": 2,
-        "label": "分支二流程",
         "type": "curve",
-        "curvature": 0.4
+        "curvature": 0.5
       },
-      "conditions": []
+      "conditions": [
+        {
+          "datetype": "8",
+          "metricType": 5,
+          "temporalScope": {
+            "type": 1,
+            "rollingWindow": 0
+          },
+          "min": 0,
+          "max": 100
+        },
+        {
+          "datetype": "remaining_energy",
+          "metricType": 1,
+          "temporalScope": {
+            "type": 1,
+            "rollingWindow": 0
+          },
+          "min": 1,
+          "max": 50
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "sourceId": 21,
+      "targetId": 8,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "remaining_energy",
+          "metricType": 1,
+          "temporalScope": {
+            "type": 1,
+            "rollingWindow": 0
+          },
+          "min": 0,
+          "max": 0
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "sourceId": 8,
+      "targetId": 14,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "game_progress",
+          "metricType": 1,
+          "temporalScope": {
+            "type": 1,
+            "rollingWindow": 0
+          },
+          "min": 4,
+          "max": 4
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "sourceId": 53,
+      "targetId": 23,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "1",
+          "metricType": 5,
+          "temporalScope": {
+            "type": 1,
+            "rollingWindow": 0
+          },
+          "min": 0,
+          "max": 100
+        },
+        {
+          "datetype": "enemy_outpost_HP",
+          "metricType": 1,
+          "temporalScope": {
+            "type": 1,
+            "rollingWindow": 0
+          },
+          "min": 0,
+          "max": 0
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "sourceId": 8,
+      "targetId": 4,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "5",
+          "metricType": 5,
+          "temporalScope": {
+            "type": 1,
+            "rollingWindow": 0
+          },
+          "min": 0,
+          "max": 100
+        },
+        {
+          "datetype": "obtain_shoot_num",
+          "metricType": 1,
+          "temporalScope": {
+            "type": 1,
+            "rollingWindow": 0
+          },
+          "min": 1,
+          "max": 700
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "sourceId": 53,
+      "targetId": 24,
+      "config": {
+        "color": "#3B82F6",
+        "width": 2,
+        "type": "curve",
+        "curvature": 0.5
+      },
+      "conditions": [
+        {
+          "datetype": "8",
+          "metricType": 5,
+          "temporalScope": {
+            "type": 1,
+            "rollingWindow": 0
+          },
+          "min": 0,
+          "max": 100
+        },
+        {
+          "datetype": "remaining_energy",
+          "metricType": 1,
+          "temporalScope": {
+            "type": 1,
+            "rollingWindow": 0
+          },
+          "min": 0,
+          "max": 0
+        }
+      ]
     }
   ],
-  "points": [],
-  "areas": [],
+  "points": [
+    {
+      "id": 0,
+      "position": {
+        "x": 467.3333282470703,
+        "y": 544.25
+      },
+      "waypoint": {
+        "x": 4.433764501772615,
+        "y": -5.294117647058824
+      },
+      "color": "#8e24aa",
+      "text": "路线A点",
+      "fontSize": 14,
+      "textColor": "#000000",
+      "scale": {
+        "x": 1.6064285714285715,
+        "y": 1.6068027210884355
+      }
+    },
+    {
+      "id": 1,
+      "position": {
+        "x": 327.3333282470703,
+        "y": 571.25
+      },
+      "waypoint": {
+        "x": 0.8108439842125404,
+        "y": -5.994809688581315
+      },
+      "color": "#8e24aa",
+      "text": "路线B点",
+      "fontSize": 14,
+      "textColor": "#000000",
+      "scale": {
+        "x": 1.6064285714285715,
+        "y": 1.6068027210884355
+      }
+    },
+    {
+      "id": 2,
+      "position": {
+        "x": 610.3333282470703,
+        "y": 580.25
+      },
+      "waypoint": {
+        "x": 8.134319030423262,
+        "y": -6.228373702422145
+      },
+      "color": "#8e24aa",
+      "text": "路线C点",
+      "fontSize": 14,
+      "textColor": "#000000",
+      "scale": {
+        "x": 1.6064285714285715,
+        "y": 1.6068027210884355
+      }
+    },
+    {
+      "id": 3,
+      "position": {
+        "x": 676.3333282470703,
+        "y": 470.25
+      },
+      "waypoint": {
+        "x": 9.842267274415867,
+        "y": -3.3737024221453287
+      },
+      "color": "#8e24aa",
+      "text": "路线D点",
+      "fontSize": 14,
+      "textColor": "#000000",
+      "scale": {
+        "x": 1.6064285714285715,
+        "y": 1.6068027210884355
+      }
+    },
+    {
+      "id": 4,
+      "position": {
+        "x": 739.3333282470702,
+        "y": 272.25
+      },
+      "waypoint": {
+        "x": 11.472581507317898,
+        "y": 1.7647058823529411
+      },
+      "color": "#ea4335",
+      "text": "前哨站攻击点",
+      "fontSize": 14,
+      "textColor": "#000000",
+      "scale": {
+        "x": 1.6064285714285715,
+        "y": 1.6068027210884355
+      }
+    },
+    {
+      "id": 5,
+      "position": {
+        "x": 405.3333282470703,
+        "y": 360.2500000000001
+      },
+      "waypoint": {
+        "x": 2.8293282725674387,
+        "y": -0.5190311418685151
+      },
+      "color": "#4285f4",
+      "text": "堡垒点",
+      "fontSize": 14,
+      "textColor": "#000000",
+      "scale": {
+        "x": 1.6064285714285715,
+        "y": 1.6068027210884355
+      }
+    },
+    {
+      "id": 6,
+      "position": {
+        "x": 218.33332824707028,
+        "y": 558.25
+      },
+      "waypoint": {
+        "x": -2.0098584187449466,
+        "y": -5.657439446366782
+      },
+      "color": "#4285f4",
+      "text": "恢复点",
+      "fontSize": 14,
+      "textColor": "#000000",
+      "scale": {
+        "x": 1.6064285714285715,
+        "y": 1.6068027210884355
+      }
+    },
+    {
+      "id": 7,
+      "position": {
+        "x": 761.3333282470703,
+        "y": 306.2499999999999
+      },
+      "waypoint": {
+        "x": 12.04189758864877,
+        "y": 0.8823529411764734
+      },
+      "color": "#137333",
+      "text": "巡逻上C点",
+      "fontSize": 14,
+      "textColor": "#000000",
+      "scale": {
+        "x": 1.6064285714285715,
+        "y": 1.6068027210884355
+      }
+    },
+    {
+      "id": 8,
+      "position": {
+        "x": 671.3333282470703,
+        "y": 266.25
+      },
+      "waypoint": {
+        "x": 9.712877255931579,
+        "y": 1.9204152249134947
+      },
+      "color": "#137333",
+      "text": "巡逻上B点",
+      "fontSize": 14,
+      "textColor": "#000000",
+      "scale": {
+        "x": 1.6064285714285715,
+        "y": 1.6068027210884355
+      }
+    },
+    {
+      "id": 9,
+      "position": {
+        "x": 340.3333282470703,
+        "y": 397.25
+      },
+      "waypoint": {
+        "x": 1.14725803227169,
+        "y": -1.4792387543252594
+      },
+      "color": "#4285f4",
+      "text": "堡垒出发点",
+      "fontSize": 14,
+      "textColor": "#000000",
+      "scale": {
+        "x": 1.6064285714285715,
+        "y": 1.6068027210884355
+      }
+    },
+    {
+      "id": 10,
+      "position": {
+        "x": 502.3333282470703,
+        "y": 361.24999999999994
+      },
+      "waypoint": {
+        "x": 5.339494631162633,
+        "y": -0.5449826989619363
+      },
+      "color": "#b06000",
+      "text": "巡逻下B点",
+      "fontSize": 14,
+      "textColor": "#000000",
+      "scale": {
+        "x": 1.6064285714285715,
+        "y": 1.6068027210884355
+      }
+    },
+    {
+      "id": 11,
+      "position": {
+        "x": 498,
+        "y": 278.25
+      },
+      "waypoint": {
+        "x": 5.22735674676525,
+        "y": 1.6089965397923875
+      },
+      "color": "#b06000",
+      "text": "巡逻下A点",
+      "fontSize": 14,
+      "textColor": "#000000",
+      "scale": {
+        "x": 1.6064285714285715,
+        "y": 1.6068027210884355
+      }
+    },
+    {
+      "id": 12,
+      "position": {
+        "x": 500.99999999999994,
+        "y": 448.25
+      },
+      "waypoint": {
+        "x": 5.304990757855821,
+        "y": -2.8027681660899653
+      },
+      "color": "#b06000",
+      "text": "巡逻下C点",
+      "fontSize": 14,
+      "textColor": "#000000",
+      "scale": {
+        "x": 1.6064285714285715,
+        "y": 1.6068027210884355
+      }
+    },
+    {
+      "id": 13,
+      "position": {
+        "x": 619,
+        "y": 264.25
+      },
+      "waypoint": {
+        "x": 8.358595194085028,
+        "y": 1.9723183391003458
+      },
+      "color": "#137333",
+      "text": "巡逻上A点",
+      "fontSize": 14,
+      "textColor": "#000000",
+      "scale": {
+        "x": 1.6064285714285715,
+        "y": 1.6068027210884355
+      }
+    },
+    {
+      "id": 14,
+      "position": {
+        "x": 130,
+        "y": 668.25
+      },
+      "waypoint": {
+        "x": -4.295748613678374,
+        "y": -8.512110726643598
+      },
+      "color": "#4285f4",
+      "text": "参考点",
+      "fontSize": 14,
+      "textColor": "#000000",
+      "scale": {
+        "x": 1.6064285714285715,
+        "y": 1.6068027210884355
+      }
+    }
+  ],
+  "areas": [
+    {
+      "id": 2,
+      "name": "坡",
+      "leftTop": {
+        "x": 359.3333282470703,
+        "y": 509.24999999999983
+      },
+      "rightBottom": {
+        "x": 458.3333282470703,
+        "y": 576.25
+      },
+      "color": "rgba(239, 68, 68, 0.2)",
+      "scale": {
+        "x": 1.6064285714285715,
+        "y": 1.6068027210884355
+      },
+      "leftTopWaypoint": {
+        "x": 1.6389401025119859,
+        "y": -4.385813148788923
+      },
+      "rightBottomWaypoint": {
+        "x": 4.200862468500896,
+        "y": -6.124567474048443
+      }
+    },
+    {
+      "id": 1,
+      "name": "中央高地",
+      "leftTop": {
+        "x": 575.3333282470703,
+        "y": 251.25
+      },
+      "rightBottom": {
+        "x": 818.3333282470701,
+        "y": 463.24999999999994
+      },
+      "color": "rgba(59, 130, 246, 0.2)",
+      "scale": {
+        "x": 1.6064285714285715,
+        "y": 1.6068027210884355
+      },
+      "leftTopWaypoint": {
+        "x": 7.228588901033243,
+        "y": 2.309688581314879
+      },
+      "rightBottomWaypoint": {
+        "x": 13.51694379936965,
+        "y": -3.192041522491348
+      }
+    },
+    {
+      "id": 3,
+      "name": "上堡垒",
+      "leftTop": {
+        "x": 334.33332824707037,
+        "y": 360.2500000000001
+      },
+      "rightBottom": {
+        "x": 386.3333282470703,
+        "y": 410.25
+      },
+      "color": "rgba(34, 197, 94, 0.2)",
+      "scale": {
+        "x": 1.6064285714285715,
+        "y": 1.6068027210884355
+      },
+      "leftTopWaypoint": {
+        "x": 0.9919900100905457,
+        "y": -0.5190311418685151
+      },
+      "rightBottomWaypoint": {
+        "x": 2.337646202327143,
+        "y": -1.8166089965397922
+      }
+    },
+    {
+      "id": 4,
+      "name": "右高地",
+      "leftTop": {
+        "x": 293.3999938964844,
+        "y": 578.9833374023438
+      },
+      "rightBottom": {
+        "x": 679.3999938964844,
+        "y": 648.9833374023438
+      },
+      "color": "rgba(59, 130, 246, 0.2)",
+      "scale": {
+        "x": 1.6064285714285715,
+        "y": 1.6068027210884355
+      },
+      "leftTopWaypoint": {
+        "x": -0.06728296755862985,
+        "y": -6.195501835700963
+      },
+      "rightBottomWaypoint": {
+        "x": 9.921626459428431,
+        "y": -8.012110832240754
+      }
+    },
+    {
+      "id": 0,
+      "name": "起伏路段",
+      "leftTop": {
+        "x": 608.3999938964844,
+        "y": 476.98333740234375
+      },
+      "rightBottom": {
+        "x": 744.3999938964844,
+        "y": 548.9833374023438
+      },
+      "color": "rgba(239, 68, 68, 0.2)",
+      "scale": {
+        "x": 1.6064285714285715,
+        "y": 1.6068027210884355
+      },
+      "leftTopWaypoint": {
+        "x": 8.084288196951537,
+        "y": -3.5484430121715507
+      },
+      "rightBottomWaypoint": {
+        "x": 11.60369669972418,
+        "y": -5.4169551228981945
+      }
+    },
+    {
+      "id": 6,
+      "name": "敌方起伏路段",
+      "leftTop": {
+        "x": 645.3999938964844,
+        "y": 169.98333740234375
+      },
+      "rightBottom": {
+        "x": 769.3999938964844,
+        "y": 218.98333740234375
+      },
+      "color": "rgba(239, 68, 68, 0.2)",
+      "scale": {
+        "x": 1.6064285714285715,
+        "y": 1.6068027210884355
+      },
+      "leftTopWaypoint": {
+        "x": 9.04177433373527,
+        "y": 4.4186850155101105
+      },
+      "rightBottomWaypoint": {
+        "x": 12.250646792145622,
+        "y": 3.147058717932256
+      }
+    },
+    {
+      "id": 5,
+      "name": "下堡垒区域",
+      "leftTop": {
+        "x": 357,
+        "y": 323.25
+      },
+      "rightBottom": {
+        "x": 446.00000000000006,
+        "y": 399.25
+      },
+      "color": "rgba(168, 85, 247, 0.2)",
+      "scale": {
+        "x": 1.6064285714285715,
+        "y": 1.6068027210884355
+      },
+      "leftTopWaypoint": {
+        "x": 1.578558225508318,
+        "y": 0.4411764705882353
+      },
+      "rightBottomWaypoint": {
+        "x": 3.8817005545286523,
+        "y": -1.5311418685121108
+      }
+    },
+    {
+      "id": 7,
+      "name": "默认速度区域1",
+      "leftTop": {
+        "x": 146,
+        "y": 256.25
+      },
+      "rightBottom": {
+        "x": 278,
+        "y": 578.25
+      },
+      "color": "rgba(59, 130, 246, 0.2)",
+      "scale": {
+        "x": 1.6064285714285715,
+        "y": 1.6068027210884355
+      },
+      "leftTopWaypoint": {
+        "x": -3.881700554528651,
+        "y": 2.179930795847751
+      },
+      "rightBottomWaypoint": {
+        "x": -0.46580406654343803,
+        "y": -6.1764705882352935
+      }
+    },
+    {
+      "id": 8,
+      "name": "默认速度区域2",
+      "leftTop": {
+        "x": 285,
+        "y": 414.24999999999994
+      },
+      "rightBottom": {
+        "x": 521,
+        "y": 506.25
+      },
+      "color": "rgba(59, 130, 246, 0.2)",
+      "scale": {
+        "x": 1.6064285714285715,
+        "y": 1.6068027210884355
+      },
+      "leftTopWaypoint": {
+        "x": -0.2846580406654344,
+        "y": -1.9204152249134934
+      },
+      "rightBottomWaypoint": {
+        "x": 5.8225508317929755,
+        "y": -4.307958477508651
+      }
+    }
+  ],
   "nodeGroups": [
     {
       "id": 0,
       "name": "主流程组",
       "color": "rgba(59, 130, 246, 0.4)",
       "nodesId": [
-        0,
-        1
+        0
       ],
       "config": {
         "Loop": false,
@@ -225,15 +4190,141 @@
     },
     {
       "id": 1,
-      "name": "任务组",
+      "name": "前进路线",
       "color": "rgba(249, 115, 22, 0.4)",
+      "nodesId": [],
+      "config": {
+        "Loop": false,
+        "ResetTime": 5,
+        "Reverse": false
+      }
+    },
+    {
+      "id": 2,
+      "name": "高地巡逻前",
+      "color": "rgba(99, 102, 241, 0.4)",
       "nodesId": [
-        2,
-        3
+        44,
+        45,
+        46
+      ],
+      "config": {
+        "Loop": false,
+        "ResetTime": 0,
+        "Reverse": false
+      }
+    },
+    {
+      "id": 3,
+      "name": "堡垒前巡逻前",
+      "color": "rgba(239, 68, 68, 0.4)",
+      "nodesId": [
+        49,
+        48,
+        47
+      ],
+      "config": {
+        "Loop": false,
+        "ResetTime": 0,
+        "Reverse": false
+      }
+    },
+    {
+      "id": 4,
+      "name": "上堡垒-前哨站",
+      "color": "rgba(236, 72, 153, 0.4)",
+      "nodesId": [
+        19,
+        20,
+        29,
+        30,
+        28,
+        38
+      ],
+      "config": {
+        "Loop": false,
+        "ResetTime": 0,
+        "Reverse": false
+      }
+    },
+    {
+      "id": 5,
+      "name": "回血",
+      "color": "rgba(139, 92, 246, 0.4)",
+      "nodesId": [
+        25
+      ],
+      "config": {
+        "Loop": false,
+        "ResetTime": 0,
+        "Reverse": false
+      }
+    },
+    {
+      "id": 6,
+      "name": "上堡垒-功率",
+      "color": "rgba(59, 130, 246, 0.4)",
+      "nodesId": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        39
+      ],
+      "config": {
+        "Loop": false,
+        "ResetTime": 0,
+        "Reverse": false
+      }
+    },
+    {
+      "id": 7,
+      "name": "高地巡逻",
+      "color": "rgba(59, 130, 246, 0.4)",
+      "nodesId": [
+        10,
+        11,
+        12
       ],
       "config": {
         "Loop": true,
-        "ResetTime": 5,
+        "ResetTime": 0,
+        "Reverse": false
+      }
+    },
+    {
+      "id": 8,
+      "name": "堡垒前巡逻",
+      "color": "rgba(239, 68, 68, 0.4)",
+      "nodesId": [
+        15,
+        16,
+        17
+      ],
+      "config": {
+        "Loop": true,
+        "ResetTime": 0,
+        "Reverse": false
+      }
+    },
+    {
+      "id": 9,
+      "name": "速度预设",
+      "color": "rgba(236, 72, 153, 0.4)",
+      "nodesId": [
+        54,
+        55,
+        57,
+        56,
+        36,
+        2,
+        3,
+        24
+      ],
+      "config": {
+        "Loop": false,
+        "ResetTime": 0,
         "Reverse": false
       }
     }

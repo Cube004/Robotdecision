@@ -97,15 +97,6 @@ watch(edges, (newVal) => {
     console.log("新增的边", addedEdges);
   }
 
-
-  edges.value.forEach(edge => {
-    if (!nodes.value[edge.sourceId].edges.includes(edge.id)) {
-      const sourceNode = nodes.value.find(node => node.id.value === edge.sourceId);
-      if (sourceNode) {
-        sourceNode.updataEdges(edge.id.value);
-      }
-    }
-  });
   oldVal = [...newVal];
 }, { deep: true }); // 添加深度监听选项
 

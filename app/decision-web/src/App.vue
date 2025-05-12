@@ -146,6 +146,7 @@
   import ConfirmWindow from '@/components/ConfirmWindow.vue';
   import { layers } from '@/types/Layers';
   import WebSocketDemo from './components/WebSocketDemo.vue';
+  import { importRule } from '@/types/extensions/MangerTool/Export.ts'
   // 是否显示坐标信息
   const showCoordinates = ref(true);
 
@@ -501,12 +502,26 @@
         x: (viewportWidth - canvasWidth) / 2,
         y: (viewportHeight - canvasHeight) / 2
       };
-      const init_position = {
-        x: Math.abs((viewportWidth - canvasWidth) / 2),
-        y: Math.abs((viewportHeight - canvasHeight) / 2)
-      }
-      example(init_position);
+      // const init_position = {
+      //   x: Math.abs((viewportWidth - canvasWidth) / 2),
+      //   y: Math.abs((viewportHeight - canvasHeight) / 2)
+      // }
+      // example(init_position);
     }
+    fetch('robot_decision_rule.json')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('无法加载文件: ' + response.statusText);
+        }
+        return response.text();
+      })
+      .then(data => {
+          importRule(data);
+      })
+      .catch(error => {
+        console.error('加载文件时出错:', error);
+      });
+
     // 示例：监听全局错误事件
     window.addEventListener('error', (event) => {
       showError(`发生错误: ${event.message}`);
